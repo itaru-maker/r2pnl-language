@@ -1,0 +1,78 @@
+(define-library (mylang builtin math-func)
+  (export math-func-dict)
+  (import (scheme base)
+	  (scheme write)
+          (mylang values)
+	  (mylang interpreter))
+  (begin
+  (define (add-func interp)
+    (let* ((a (stack-pop! interp))
+	   (b (stack-pop! interp)))
+      (if (and (number? a) (number? b))
+	  (stack-push! interp (+ a b))
+	  (interp-error! interp "TypeError" "func \"add\" expects two numbers args"))))
+
+  (define (sub-func interp)
+    (let* ((a (stack-pop! interp))
+	   (b (stack-pop! interp)))
+      (if (and (number? a) (number? b))
+	  (stack-push! interp (- b a))
+	  (interp-error! interp "TypeError" "func \"sub\" expects two numbers args"))))
+
+  (define (mul-func interp)
+    (let* ((a (stack-pop! interp))
+	   (b (stack-pop! interp)))
+      (if (and (number? a) (number? b))
+	  (stack-push! interp (* a b))
+	  (interp-error! interp "TypeError" (string-append "func \"mul\" expects two numbers args but," (value->write-string a)"and" (value->write-string b))))))
+
+  (define (div-func interp)
+    (let* ((a (stack-pop! interp))
+	   (b (stack-pop! interp)))
+      (if (and (number? a) (number? b))
+          (if (zero? a)
+              (interp-error! interp "ZeroDivError" "division of zero")
+	      (stack-push! interp (/ b a)))
+	  (interp-error! interp "TypeError" "func \"div\" expects two numbers args"))))
+
+  (define (mod-func interp)
+    (let* ((a (stack-pop! interp))
+	   (b (stack-pop! interp)))
+      (if (and (number? a) (number? b))
+          (if (zero? a)
+              (interp-error! interp "ZeroDivError" "modulo of zero")
+	      (stack-push! interp (modulo b a)))
+	  (interp-error! interp "TypeError" "func \"mod\" expects two numbers args"))))
+
+  (define (expt-func interp)
+    (let* ((a (stack-pop! interp))
+	   (b (stack-pop! interp)))
+      (if (and (number? a) (number? b))
+	  (stack-push! interp (expt b a))
+	  (interp-error! interp "TypeError" (string-append "func \"expt\" expects two numbers args but," (value->write-string a)"and" (value->write-string b))))))
+
+  
+  ;;floor-divはあとで
+
+  (define (int-func interp)
+    (let ((a (stack-pop! interp)))
+      (if (number? a)
+          (stack-push! interp (floor a))
+          (interp-error! interp "TypeError" "func \"int\" expects a number args"))))
+  
+
+  (define math-func-dict
+    `(("add" . ,add-func)
+      ("sub" . ,sub-func)
+      ("mul" . ,mul-func)
+      ("div" . ,div-func)
+      ("mod" . ,mod-func)
+      ("expt" . ,expt-func)
+      ("+" . ,add-func)
+      ("-" . ,sub-func)
+      ("*" . ,mul-func)
+      ("/" . ,div-func)
+      ("%" . ,mod-func)
+      ("**" . ,expt-func)
+      ("int" . ,int-func)))))
+  
