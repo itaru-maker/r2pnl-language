@@ -36,7 +36,6 @@
 
 
          ;;tokenとか 
-	 ((string=? item ";") the-semicolon)
 	 ((string=? item "{") the-l-paren)
 	 ((string=? item "}") the-r-paren)
 

@@ -7,7 +7,7 @@
    make-block-value block-value? block-value-items block-value-items-set!
    block-value-append!
    make-builtin-func builtin-func? builtin-func-name builtin-func-proc
-   make-lambda-value lambda-value? lambda-value-params lambda-value-body lambda-value-env lambda-value-line 
+   make-lambda-value lambda-value? lambda-value-body lambda-value-env lambda-value-line 
    value->write-string
    value->display-string)
   (import (scheme base)
@@ -55,20 +55,6 @@
       (line lambda-value-line))
 
 
-    (define (block-value->string block)
-      (if (null? (block-value-items block))
-          "()"
-          (let ((string-list
-                 (map (lambda (x) (value->write-string (car x)))
-                      (block-value-items block))))
-            (let loop
-                ((rest (cdr string-list))
-                 (acc (string-append "(" (car string-list))))
-              (if (null? rest)
-                  (string-append acc ")")
-                  (loop (cdr rest) (string-append acc " " (car rest))))))))
-
-    
     (define (value->write-string value)
       (cond ((number? value) (number->string value))
 	    ((string? value) (string-append "\"" value "\""))
@@ -85,7 +71,6 @@
 	     ((lambda-value? value)
 	      (string-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value)))) ">"))
 	    ;;tokens
-	    ((semicolon? value) "<semicolon>")
 	    ((r-paren? value) "<r-paren>")
 	    ((l-paren? value) "<l-paren>")
 	
@@ -108,11 +93,7 @@
 	     ((lambda-value? value)
 	      (string-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value)))) ">"))
 	    ;;tokens
-	    ((semicolon? value) "<semicolon>")
 	    ((r-paren? value) "<r-paren>")
 	    ((l-paren? value) "<l-paren>")
 	
   	    (else (write "debug:unknown-type") (write  value))))))
-
-
-   

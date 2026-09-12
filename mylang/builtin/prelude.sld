@@ -11,6 +11,7 @@
           (mylang builtin comp-func)
           (mylang builtin block-func)
           (mylang builtin value-func)
+          (mylang builtin list-func)
 ;;          (mylang builtin higher-order-func)
 ;;          (mylang builtin string-func)
 ;;          (mylang builtin logic-func)
@@ -28,6 +29,7 @@
        comp-func-dict
        block-func-dict
        value-func-dict
+       list-func-dict
 ;;       higher-order-func-dict
 ;;       string-func-dict
 ;;       logic-func-dict|#
