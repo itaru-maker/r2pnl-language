@@ -1,0 +1,33 @@
+(define-library (mylang builtin var-func)
+  (export var-func-dict)
+  (import (scheme base)
+	  (mylang values)
+	  (mylang interpreter)
+	  (mylang env))
+  (begin
+      (define  (let-func interp)
+	(let* ((value (stack-pop! interp))
+	       (name (stack-pop! interp)))
+	  (if (symbol-value? name)
+	      (if (in-env? (interp-env interp) (symbol-value-token name))
+		  (interp-error! interp "VarError" "symbol is already defined! please use func \"set\"")
+		  (env-define (interp-env interp) (symbol-value-token name) value))
+	      (interp-error!
+	       interp "TypeError" (string-append "func \"let\" expect symbol-value and any-value, but value "
+						 (value->write-string name)
+						 " is passed as symbol")))))
+    
+      (define (set-func interp)
+	(let* ((value (stack-pop! interp))
+	       (name (stack-pop! interp)))
+	  (if (symbol-value? name)
+	      (if (in-env? (interp-env interp) (symbol-value-token name))
+		  (env-set! (interp-env interp) (symbol-value-token name) value)
+		  (interp-error! interp "VarError" "symbol is not defined. please use func \"let\""))
+	      (interp-error! interp "TypeError" (string-append "func \"set\" expect symbol-value and any-value, but value "
+							       (value->write-string name)
+							       " is passed as symbol")))))
+
+      (define var-func-dict
+	`(("let" . ,let-func)
+	  ("set" . ,set-func)))))
