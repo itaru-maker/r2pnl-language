@@ -1,0 +1,28 @@
+'counter {
+    'count 0 let
+    {
+        'count count 1 + set
+        count
+    } fn
+} fn let
+
+"====counter-a====" print
+newline
+'counter-a counter let
+
+6 {
+    counter-a print
+    newline
+} repeat
+
+
+"====counter-b====" print
+newline
+'counter-b counter let
+
+6 {
+    counter-b print
+    newline
+} repeat
+
+
