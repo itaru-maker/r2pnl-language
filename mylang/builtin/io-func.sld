@@ -19,7 +19,7 @@
         (display "\n"))
 
       (define (write-stack-func interp)
-        (display "=====debug=====\nbottom\n")
+        (display "\n=====debug=====\nbottom\n")
         (for-each (lambda (item) (write item) (newline))
                   (reverse (interp-stack interp)))
         (display "top\n==============="))

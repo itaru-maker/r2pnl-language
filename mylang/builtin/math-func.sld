@@ -5,52 +5,58 @@
           (mylang values)
 	  (mylang interpreter))
   (begin
-  (define (add-func interp)
-    (let* ((a (stack-pop! interp))
-	   (b (stack-pop! interp)))
-      (if (and (number? a) (number? b))
-	  (stack-push! interp (+ a b))
-	  (interp-error! interp "TypeError" "func \"add\" expects two numbers args"))))
+    (define (add-func interp)
+      (let* ((a (stack-pop! interp))
+	     (b (stack-pop! interp)))
+        (if (and (number? a) (number? b))
+	    (stack-push! interp (+ a b))
+	    (interp-error! interp "TypeError" (string-append "the \"add\" func expects two numbers, but got "
+                                                (value->write-string b) " and " (value->write-string a))))))
 
-  (define (sub-func interp)
-    (let* ((a (stack-pop! interp))
-	   (b (stack-pop! interp)))
-      (if (and (number? a) (number? b))
-	  (stack-push! interp (- b a))
-	  (interp-error! interp "TypeError" "func \"sub\" expects two numbers args"))))
+    (define (sub-func interp)
+      (let* ((a (stack-pop! interp))
+	     (b (stack-pop! interp)))
+        (if (and (number? a) (number? b))
+	    (stack-push! interp (- b a))
+	    (interp-error! interp "TypeError" (string-append "the \"sub\" func expects two numbers, but got "
+                                                (value->write-string b) " and " (value->write-string a))))))
 
-  (define (mul-func interp)
-    (let* ((a (stack-pop! interp))
-	   (b (stack-pop! interp)))
-      (if (and (number? a) (number? b))
-	  (stack-push! interp (* a b))
-	  (interp-error! interp "TypeError" (string-append "func \"mul\" expects two numbers args but," (value->write-string a)"and" (value->write-string b))))))
+    (define (mul-func interp)
+      (let* ((a (stack-pop! interp))
+	     (b (stack-pop! interp)))
+        (if (and (number? a) (number? b))
+	    (stack-push! interp (* b a))
+	    (interp-error! interp "TypeError" (string-append "the \"mul\" func expects two numbers, but got "
+                                                 (value->write-string b) " and " (value->write-string a))))))
 
   (define (div-func interp)
     (let* ((a (stack-pop! interp))
 	   (b (stack-pop! interp)))
       (if (and (number? a) (number? b))
           (if (zero? a)
-              (interp-error! interp "ZeroDivError" "division of zero")
+              (interp-error! interp "ZeroDivisionError" "division of zero")
 	      (stack-push! interp (/ b a)))
-	  (interp-error! interp "TypeError" "func \"div\" expects two numbers args"))))
+	  (interp-error! interp "TypeError" (string-append  "the \"sub\" func expects two numbers, but got "
+                                                 (value->write-string b) " and " (value->write-string a))))))
+
 
   (define (mod-func interp)
     (let* ((a (stack-pop! interp))
 	   (b (stack-pop! interp)))
       (if (and (number? a) (number? b))
           (if (zero? a)
-              (interp-error! interp "ZeroDivError" "modulo of zero")
+              (interp-error! interp "ZeroDivisionError" "modulo of zero")
 	      (stack-push! interp (modulo b a)))
-	  (interp-error! interp "TypeError" "func \"mod\" expects two numbers args"))))
+	  (interp-error! interp "TypeError" (string-append  "the \"mod\" func expects two numbers, but got "
+                                                           (value->write-string b) " and " (value->write-string a))))))
 
-  (define (expt-func interp)
-    (let* ((a (stack-pop! interp))
-	   (b (stack-pop! interp)))
-      (if (and (number? a) (number? b))
-	  (stack-push! interp (expt b a))
-	  (interp-error! interp "TypeError" (string-append "func \"expt\" expects two numbers args but," (value->write-string a)"and" (value->write-string b))))))
-
+    (define (expt-func interp)
+      (let* ((a (stack-pop! interp))
+	     (b (stack-pop! interp)))
+        (if (and (number? a) (number? b))
+	    (stack-push! interp (expt b a))
+	    (interp-error! interp "TypeError" (string-append "the \"expt\" func expects two numbers, but got "
+                                                 (value->write-string b) " and " (value->write-string a))))))
   
   ;;floor-divはあとで
 
@@ -58,25 +64,31 @@
     (let* ((a (stack-pop! interp)))
       (if (number? a)
           (stack-push! interp (floor a))
-          (interp-error! interp "TypeError" "the \"int\" func expects a number args"))))
+          (interp-error! interp "TypeError" (string-append "the \"int\" func expects one numbers, but got "
+                                               (value->write-string a))))))
 
   (define (neg-func interp)
-    (let* ((num (stack-pop! interp)))
-      (if (number? num)
-          (stack-push! interp (- num))
-          (interp-error! interp "TypeError" "the neg func expects a number args"))))
-
+    (let* ((a (stack-pop! interp)))
+      (if (number? a)
+          (stack-push! interp (- a))
+          (interp-error! interp "TypeError" (string-append "the \"neg\" func expects one numbers, but got "
+                                               (value->write-string a))))))
+  
   (define (even?-func interp)
-    (let* ((num (stack-pop! interp)))
-      (if (number? num)
-          (stack-push! interp (even? num))
-          (interp-error! interp "TypeError" "the even? func expects one number"))))
+    (let* ((a (stack-pop! interp)))
+      (if (number? a)
+          (stack-push! interp (even? a))
+          (interp-error! interp "TypeError" (string-append "the \"even\" func expects one numbers, but got "
+                                               (value->write-string a))))))
+
 
   (define (odd?-func interp)
-    (let* ((num (stack-pop! interp)))
-      (if (number? num)
-          (stack-push! interp (odd? num))
-          (interp-error! interp "TypeError" "the even? func expects one number"))))
+    (let* ((a (stack-pop! interp)))
+      (if (number? a)
+          (stack-push! interp (odd? a))
+          (interp-error! interp "TypeError" (string-append "the \"odd\" func expects one numbers, but got "
+                                               (value->write-string a))))))
+
 
   (define math-func-dict
     `(("add" . ,add-func)

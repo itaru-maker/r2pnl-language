@@ -76,7 +76,7 @@
              (b (stack-pop! interp)))
         (if (and (number? a) (number? b))
             (stack-push! interp (= a b))
-            (interp-error! interp "TypeError" "= func expects two number args"))))
+            (interp-error! interp "TypeError" "the \"=\" func expects two number args"))))
 
     (define (ne-number-func interp)
       (let* ((a (stack-pop! interp))

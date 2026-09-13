@@ -14,9 +14,8 @@
             (interp-error! interp
                            "TypeError"
                            (string-append
-                            "the exec func is expects block args but"
+                            "the \"exec\" func is expects a block, but got "
                             (value->write-string block)))
-
             (exec-block block interp))))
 
     (define (if-func interp)
@@ -25,12 +24,15 @@
            (true-then (stack-pop! interp))
            (condition (stack-pop! interp)))
         (if (not (and (block-value? true-then) (block-value? false-then)))
-            (interp-error! interp "TypeError" "if-exec func expects one any value and two block args."))
+            (interp-error! interp "TypeError" (string-append "the \"if\" func expects one any value and two block, but got "
+                                                             (value->write-string true-then)
+                                                             " and "
+                                                             (value->write-string false-then)))
         (if (or
              (eq? #f condition)
              (nil-value? condition))
             (exec-block false-then interp)
-            (exec-block true-then interp))))
+            (exec-block true-then interp)))))
 
     
 
@@ -39,7 +41,11 @@
           ((body (stack-pop! interp))
            (cond-block (stack-pop! interp)))
         (if (or (not (block-value? cond-block)) (not (block-value? body)))
-            (interp-error! interp "TypeError" "the while func expects two block args")
+            (interp-error! interp "TypeError" (string-append
+                                               "the \"while\" func expects two block, but got "
+                                               (value->write-string body)
+                                               " and "
+                                               (value->write-string cond-block)))
             (let loop ()                ;このループを回す
               (exec-block cond-block interp)
               (let ((now-cond (stack-pop! interp)))
@@ -57,7 +63,10 @@
                   (number? repeat-count)
                   (< 0 repeat-count)
                   (block-value? repeat-body)))
-            (interp-error! interp "TypeError" "the repeat func expects a positive number and a block value")
+            (interp-error! interp "TypeError" (string-append "the \"repeat\" func expects a positive number and a block value, but got "
+                                                 (value->write-string repeat-count)
+                                                 " and "
+                                                 (value->write-string repeat-body)))
             (let loop ((current-num 0) (limit (truncate repeat-count)))
               (if (< limit current-num)
                   '()
@@ -68,10 +77,11 @@
     (define (cond-func interp)
       (let* ((cond-block (stack-pop! interp)))
         (if (not (block-value? cond-block))
-            (interp-error! interp "TypeError" "the cond func expects one block value")
+            (interp-error! interp "TypeError" (string-append  "the \"cond\" func expects one block value, but got"
+                                                 (value->write-string cond-block)))
             (let ((block-items (block-value-items cond-block)))
               (if (odd? (length block-items))
-                  (interp-error! interp "ValueError" "cond expected one block-value of even elements.")
+                  (interp-error! interp "ValueError" "the \"cond\" func expects one block-value of even elements.")
                   (let loop ((rest block-items))
                     (if (null? rest)
                         (interp-error! interp "ValueError" "No clause in the cond expression was executed. Did you forget { #true } { ... }?")
