@@ -1,6 +1,4 @@
 !古いやつ
-                
-'count 1 let
 
 'fizzbuzz-cond {
     dup 15 mod 0 = { drop "fizzbuzz" } {
@@ -23,7 +21,4 @@
 } fn let
 
 
-fizzbuzz
-
-
-
+100 fizzbuzz
