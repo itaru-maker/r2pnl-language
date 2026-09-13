@@ -55,11 +55,28 @@
   ;;floor-divはあとで
 
   (define (int-func interp)
-    (let ((a (stack-pop! interp)))
+    (let* ((a (stack-pop! interp)))
       (if (number? a)
           (stack-push! interp (floor a))
-          (interp-error! interp "TypeError" "func \"int\" expects a number args"))))
-  
+          (interp-error! interp "TypeError" "the \"int\" func expects a number args"))))
+
+  (define (neg-func interp)
+    (let* ((num (stack-pop! interp)))
+      (if (number? num)
+          (stack-push! interp (- num))
+          (interp-error! interp "TypeError" "the neg func expects a number args"))))
+
+  (define (even?-func interp)
+    (let* ((num (stack-pop! interp)))
+      (if (number? num)
+          (stack-push! interp (even? num))
+          (interp-error! interp "TypeError" "the even? func expects one number"))))
+
+  (define (odd?-func interp)
+    (let* ((num (stack-pop! interp)))
+      (if (number? num)
+          (stack-push! interp (odd? num))
+          (interp-error! interp "TypeError" "the even? func expects one number"))))
 
   (define math-func-dict
     `(("add" . ,add-func)
@@ -74,5 +91,8 @@
       ("/" . ,div-func)
       ("%" . ,mod-func)
       ("**" . ,expt-func)
-      ("int" . ,int-func)))))
+      ("int" . ,int-func)
+      ("neg" . ,neg-func)
+      ("even?" . ,even?-func)
+      ("odd?" . ,odd?-func)))))
   

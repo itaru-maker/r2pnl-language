@@ -1,25 +1,4 @@
-'factorial {
-    'n swap let ! 引数としてもらって定義
-    n 0 = {
-        1
-    } {
-        n n 1 - factorial *
-    } if
-} fn let
-
-10 factorial print !-> 3628800
-
-(
-! 一時的な変数使いたくない人はこれ
-
-'factorial {
-    dup 0 = {
-       drop 1
-    } {
-        dup 1 - factorial *
-    } if
-} fn let
-
-10 factorial print !-> 3628800
-)
+{ 1 2 3 4 5 } { 2 + } map print
+12345 odd? print
+12344 even? print
 

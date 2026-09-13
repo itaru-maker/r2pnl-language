@@ -12,7 +12,7 @@
           (mylang builtin block-func)
           (mylang builtin value-func)
           (mylang builtin list-func)
-;;          (mylang builtin higher-order-func)
+          (mylang builtin higher-order-func)
           (mylang builtin string-func)
           (mylang builtin logic-func)
           (mylang builtin convert-func)
@@ -31,7 +31,7 @@
        block-func-dict
        value-func-dict
        list-func-dict
-;;       higher-order-func-dict
+       higher-order-func-dict
        string-func-dict
        logic-func-dict
        convert-func-dict

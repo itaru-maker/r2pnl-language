@@ -1,0 +1,14 @@
+'pi {
+    'n swap let
+    'total 0 let
+    'i 1 let
+    n {
+        'total 1 i / total + set
+        'i i 2 + set
+        'total total 1 i / - set
+        'i i 2 + set
+    } repeat
+    total 4.0 *
+} fn let
+
+10000 pi print
