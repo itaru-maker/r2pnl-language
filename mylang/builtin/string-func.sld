@@ -12,7 +12,7 @@
             (interp-error! interp "TypeError" "The \"string-concat\" func expects two string")
             (stack-push! interp (string-append b a)))))
 
-    (define (string-len-func interp)
+    (define (string-length-func interp)
       (let* ((a (stack-pop! interp)))
         (if (string? a)
             (stack-push! interp (string-length a))
@@ -34,5 +34,5 @@
 
     (define string-func-dict
       `(("string-concat" . ,string-concat-func)
-        ("string-len" . ,string-len-func)
+        ("string-length" . ,string-length-func)
         ("string-nth" . ,string-nth-func)))))

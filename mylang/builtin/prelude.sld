@@ -15,8 +15,7 @@
           (mylang builtin higher-order-func)
           (mylang builtin string-func)
           (mylang builtin logic-func)
-          (mylang builtin convert-func)
-          )
+          (mylang builtin convert-func))
 
   (begin
     (define all-builtins
@@ -34,5 +33,4 @@
        higher-order-func-dict
        string-func-dict
        logic-func-dict
-       convert-func-dict
-       ))))
+       convert-func-dict))))

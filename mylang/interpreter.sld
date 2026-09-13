@@ -1,16 +1,14 @@
 (define-library (mylang interpreter)
   (export
    make-interp make-interp-raw interp? interp-stack interp-stack-set! interp-env interp-env-set! interp-token-line interp-token-line-set!
-
    stack-push! stack-pop!
-   
    interp-error!
    call-lambda!
    invoke!
-
    exec-block
    apply-callable!
    interp-run)
+  
   (import
    (scheme base)
    (scheme write)
@@ -23,7 +21,7 @@
   
   (begin
     (define-record-type <interp>
-      (make-interp-raw stack env token-line) ;__init__みたいなの
+      (make-interp-raw stack env token-line)
       interp?
       (stack interp-stack interp-stack-set!)
       (env interp-env interp-env-set!)
@@ -35,11 +33,11 @@
     (define (stack-pop! interp)
       (let ((s (interp-stack interp)))
 	(if (null? s)
-	    (interp-error! interp "Stack underflow" "pop from empty stack")
+	    (interp-error! interp "StackOverflowError" "pop from empty stack")
 	    (begin (interp-stack-set! interp (cdr s))
 		   (car s)))))
     
-    (define (interp-error! interp error-name message . opt-line);基本builtinはこいつを投げる
+    (define (interp-error! interp error-name message . opt-line);builtinはこいつを投げる
       (let ((error-line (if (not (null? opt-line)) (car opt-line) (interp-token-line interp))))
 	(raise (make-mylang-error error-name message error-line '())))) ;一番最初に起動した時だから、traceは空
 
@@ -67,7 +65,6 @@
 
           (interp-env-set! interp caller-env);戻す
           (interp-token-line-set! interp caller-line))))
-
 
     (define (invoke! interp call-func)
       (cond
@@ -116,7 +113,7 @@
       (guard (e;エラーをキャッチ
 	      ((mylang-error? e)
                (newline)
-               (display "==ERROR==")
+               (display "-====ERROR====-")
                (newline)
 	       (for-each (lambda (x) (display x))
 			 (reverse (mylang-error-trace e)))
