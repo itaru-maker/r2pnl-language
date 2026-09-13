@@ -20,12 +20,18 @@
 
       (define (write-stack-func interp)
         (display "\n=====debug=====\nbottom\n")
-        (for-each (lambda (item) (write item) (newline))
+        (for-each (lambda (item) (display (value->write-string)) (newline))
                   (reverse (interp-stack interp)))
         (display "top\n==============="))
+
+      (define (read-line-func interp)
+        (flush-output-port)
+        (let ((input (read-line)))
+          (stack-push! interp (if (eof-object? input) "" input))))
 
       (define io-func-dict
 	`(("." . ,write-func)
           ("print" . ,print-func)
           ("newline" . ,newline-func)
-          (".s" . ,write-stack-func)))))
+          (".s" . ,write-stack-func)
+          ("read-line" . ,read-line-func)))))
