@@ -14,7 +14,8 @@
           (mylang builtin list-func)
 ;;          (mylang builtin higher-order-func)
           (mylang builtin string-func)
-;;          (mylang builtin logic-func)
+          (mylang builtin logic-func)
+          (mylang builtin convert-func)
           )
 
   (begin
@@ -32,5 +33,6 @@
        list-func-dict
 ;;       higher-order-func-dict
        string-func-dict
-;;       logic-func-dict|#
+       logic-func-dict
+       convert-func-dict
        ))))

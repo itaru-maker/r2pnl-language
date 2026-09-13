@@ -10,7 +10,7 @@
              (b (stack-pop! interp)))
         (if (not (and (string? b) (string? a)))
             (interp-error! interp "TypeError" "The \"string-concat\" func expects two string")
-            (stack-push! interp (string-append a b)))))
+            (stack-push! interp (string-append b a)))))
 
     (define (string-len-func interp)
       (let* ((a (stack-pop! interp)))

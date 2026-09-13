@@ -77,6 +77,14 @@
         (if (and (number? a) (number? b))
             (stack-push! interp (= a b))
             (interp-error! interp "TypeError" "= func expects two number args"))))
+
+    (define (ne-number-func interp)
+      (let* ((a (stack-pop! interp))
+             (b (stack-pop! interp)))
+        (if (and (number? a) (number? b))
+            (stack-push! interp (not (= a b)))
+            (interp-error! interp "TypeError" "/= func expects two number args"))))
+
     
     (define (lt-func interp)
       (let* ((num-1 (stack-pop! interp))
@@ -111,10 +119,13 @@
       `(("is" . ,is-func)
         ("equal" . ,equal-func)
         ("=" . ,eq-number-func)
+        ("/=" . ,ne-number-func)
         ("<" . ,lt-func)
         (">" . ,gt-func)
         ("<=" . ,le-func)
         (">=" . ,ge-func)
+        ("number-eq" . ,eq-number-func)
+        ("number-ne" . ,ne-number-func)
         ("lt" . ,lt-func)
         ("gt" . ,gt-func)
         ("le" . ,le-func)

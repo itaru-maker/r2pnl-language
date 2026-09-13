@@ -48,7 +48,7 @@
         ("string?" . ,string?-func)
         ("true?" . ,true?-func)
         ("false?" . ,false?-func)
-        ("ninl?" . ,nil?-func)
+        ("nil?" . ,nil?-func)
         ("symbol?" .,symbol?-func)
         ("lazy?" . ,lazy?-func)
         ("block?" . ,block?-func)
