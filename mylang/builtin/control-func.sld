@@ -65,11 +65,31 @@
                    (exec-block repeat-body interp)
                    (loop (+ current-num 1) limit)))))))
 
+    (define (cond-func interp)
+      (let* ((cond-block (stack-pop! interp)))
+        (if (not (block-value? cond-block))
+            (interp-error! interp "TypeError" "the cond func expects one block value")
+            (let ((block-items (block-value-items cond-block)))
+              (if (odd? (length block-items))
+                  (interp-error! interp "ValueError" "cond expected one block-value of even elements.")
+                  (let loop ((rest block-items))
+                    (if (null? rest)
+                        (interp-error! interp "ValueError" "No clause in the cond expression was executed. Did you forget { #true } { ... }?")
+                        (let ((condition (caar rest))
+                              (body  (caar (cdr rest))))
+                          (begin
+                            (exec-block condition interp)
+                            (let ((result (stack-pop! interp)))
+                              (if (or (eq? #f result) (eq? the-nil result))
+                                  (loop (cddr rest))
+                                  (exec-block body interp))))))))))))
+
 
     (define control-func-dict
       `(("do" . ,do-func)
         ("if" . ,if-func)
         ("while" . ,while-func)
-        ("repeat" . ,repeat-func)))))
+        ("repeat" . ,repeat-func)
+        ("cond" . , cond-func)))))
 
 

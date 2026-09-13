@@ -1,7 +1,6 @@
 (define-library (mylang values)
   (export
    nil-value? the-nil ;にlは一つでいいので
-   ;;   make-label-value label-value? label-value-token
    make-symbol-value symbol-value? symbol-value-token
    make-lazy-value lazy-value? lazy-value-token
    make-block-value block-value? block-value-items block-value-items-set!
@@ -15,7 +14,7 @@
 	  (mylang tokens))
   (begin
     ;;float str true false はschemeの機能を借りる
-    ;;nil label symbol lazy block lambdaは自作する
+    ;;nil symbol lazy block lambdaは自作する
     (define-record-type <nil-value>
       (make-nil-value)
       nil-value?)
@@ -73,6 +72,7 @@
 	    ;;tokens
 	    ((r-paren? value) "<r-paren>")
 	    ((l-paren? value) "<l-paren>")
+            ((list-marker? value) "<list-marker>")
 	
   	    (else (write "debug:unknown-type") (write  value))))
 
@@ -95,5 +95,6 @@
 	    ;;tokens
 	    ((r-paren? value) "<r-paren>")
 	    ((l-paren? value) "<l-paren>")
+            ((list-marker? value) "<list-marker>")
 	
   	    (else (write "debug:unknown-type") (write  value))))))

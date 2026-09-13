@@ -83,28 +83,28 @@
              (num-2 (stack-pop! interp)))
         (if (not (and (number? num-1) (number? num-2)))
             (interp-error! interp "TypeError" "< func expects two number args")
-            (stack-push! interp (< num-1 num-2)))))
+            (stack-push! interp (< num-2 num-1)))))
 
     (define (gt-func interp)
       (let* ((num-1 (stack-pop! interp))
              (num-2 (stack-pop! interp)))
         (if (not (and (number? num-1) (number? num-2)))
             (interp-error! interp "TypeError" "> func expects two number args")
-            (stack-push! interp (> num-1 num-2)))))
+            (stack-push! interp (> num-2 num-1)))))
 
     (define (le-func interp)
       (let* ((num-1 (stack-pop! interp))
              (num-2 (stack-pop! interp)))
         (if (not (and (number? num-1) (number? num-2)))
             (interp-error! interp "TypeError" "<= func expects two number args")
-            (stack-push! interp (<= num-1 num-2)))))
+            (stack-push! interp (<= num-2 num-1)))))
 
     (define (ge-func interp)
       (let* ((num-1 (stack-pop! interp))
              (num-2 (stack-pop! interp)))
         (if (not (and (number? num-1) (number? num-2)))
             (interp-error! interp "TypeError" ">= func expects two number args")
-            (stack-push! interp (>= num-1 num-2)))))
+            (stack-push! interp (>= num-2 num-1)))))
 
     
     (define comp-func-dict

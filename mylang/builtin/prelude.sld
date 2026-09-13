@@ -13,7 +13,7 @@
           (mylang builtin value-func)
           (mylang builtin list-func)
 ;;          (mylang builtin higher-order-func)
-;;          (mylang builtin string-func)
+          (mylang builtin string-func)
 ;;          (mylang builtin logic-func)
           )
 
@@ -31,6 +31,6 @@
        value-func-dict
        list-func-dict
 ;;       higher-order-func-dict
-;;       string-func-dict
+       string-func-dict
 ;;       logic-func-dict|#
        ))))

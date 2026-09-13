@@ -1,4 +1,5 @@
-
+!古いやつ
+                
 'count 1 let
 
 'fizzbuzz-cond {
@@ -13,7 +14,8 @@
 
 
 'fizzbuzz {
-    99 {
+    'count 1 let
+    1 - { !引数としてもらうやつ
         count fizzbuzz-cond print
         newline
         'count count 1 + set

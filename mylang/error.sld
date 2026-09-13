@@ -6,7 +6,6 @@
    raise-mylang-error!)
   (import (scheme base))
   (begin
-    ;;ここに処理を
     (define-record-type <mylang-error>
       (make-mylang-error error-name message line trace)
       mylang-error?

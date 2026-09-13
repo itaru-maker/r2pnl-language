@@ -1,5 +1,3 @@
-;;作りかけ
-
 (define-library (mylang builtin list-func)
   (export list-func-dict)
   (import (scheme base)

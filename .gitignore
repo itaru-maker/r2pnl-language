@@ -7,3 +7,12 @@
 *.scm#*
 .#*.scm
 
+*.sld~
+*.sld#*
+.#*.sld
+
+#--> r2pnl
+*.r2pnl~
+*.r2pnl#*
+.#*.r2pnl
+
