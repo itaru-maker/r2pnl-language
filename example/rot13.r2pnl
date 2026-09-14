@@ -1,5 +1,4 @@
 !あくまで「もどき」です。（小文字のみ）
-
 'alphabet "abcdefghijklmnopqrstuvwxyz" let
 
 'find-index {
