@@ -48,12 +48,11 @@
 } fn let
 
 'a "emacs is a best text editor in the world!!!" rot13 let
-a print
-! -> rznpf vf n orfg grkg rqvgbe va gur jbeyq!!!
-newline
 'b a rot13 let
-b print
-! -> emacs is a best text editor in the world!!
+
+a print ! -> rznpf vf n orfg grkg rqvgbe va gur jbeyq!!!
+newline
+b print ! -> emacs is a best text editor in the world!!
 
 
 

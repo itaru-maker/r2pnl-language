@@ -24,7 +24,7 @@
                   (reverse (interp-stack interp)))
         (display "top\n==============="))
 
-      (define (read-line-func interp)
+      (define (input-func interp)
         (flush-output-port)
         (let ((input (read-line)))
           (stack-push! interp (if (eof-object? input) "" input))))
@@ -34,4 +34,4 @@
           ("print" . ,print-func)
           ("newline" . ,newline-func)
           (".s" . ,write-stack-func)
-          ("read-line" . ,read-line-func)))))
+          ("input" . ,input-func)))))
