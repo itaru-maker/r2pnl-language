@@ -1,0 +1,47 @@
+! おそいけどfibonacciです
+'fib {
+    'n swap let
+    n 0 <= {
+        0
+    } {
+        n 1 = {
+            1
+        } {
+            n 1 - fib n 2 - fib +
+        } if
+    } if
+} fn let
+
+17 fib print
+
+
+(
+! 一時的な変数を使いたくない人向け
+'fib {
+    dup 0 <= {
+        drop 0
+    } {
+       dup 1 = {
+            drop 1
+        } {
+            dup 1 - fib swap 2 - fib +
+        } if
+    } if
+} fn let
+
+17 fib print
+)
+
+(
+!condも使える
+'fib {
+    'n swap let
+    {
+        { n 0 <= } { 0 }
+        { n 1 = } { 1 }
+        { #true } { n 1 - fib n 2 - fib + }
+    } cond
+} fn let
+
+17 fib print
+)
