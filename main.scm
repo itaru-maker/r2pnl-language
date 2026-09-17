@@ -46,15 +46,24 @@ cyclone
         current
         (loop (car rest) (cdr rest)))))
 
-(define (get-code arg-path)
-  (if (file-exists? arg-path)
-      (call-with-input-file arg-path
+(define (read-all-text file-path)
+  (call-with-input-file file-path
+    (lambda (port)
+      (let loop ((acc '()))
+        (let ((chr (read-char port)))
+          (if (eof-object? chr)
+              (list->string (reverse acc))
+              (loop (cons chr acc))))))))
+
+(define (get-code file-path)
+  (if (file-exists? file-path)
+      (call-with-input-file file-path
         (lambda (port)
-          (let ((content (read-string 10000 port)))
+          (let ((content (read-all-text file-path)))
             (if (eof-object? content)
                 ""
                 (string-copy content)))))
-        (fatal-error! (string-append "can't open file '" arg-path "'"))))
+        (fatal-error! (string-append "can't open file '" file-path "'"))))
 
 ;;V 将来的にはmain.scmをエントリポイントにして、その一つ後を受け取るようにする
 (define (target-file-path)
