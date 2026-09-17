@@ -31,8 +31,20 @@ cyclone
 
 (define mylang (make-interp all-builtins));インスタンス化
 
-(import (scheme base)
-        (scheme file))
+(define (fatal-error! message)
+  (newline)
+  (display "-====ERROR====-")
+  (newline)
+  (display message)
+  (newline)
+  (exit 1))
+
+(define (last-item lst)
+  (let loop ((current (car lst))
+             (rest (cdr lst)))
+    (if (null? rest)
+        current
+        (loop (car rest) (cdr rest)))))
 
 (define (get-code arg-path)
   (if (file-exists? arg-path)
@@ -42,14 +54,17 @@ cyclone
             (if (eof-object? content)
                 ""
                 (string-copy content)))))
-      (begin
-        (display (string-append "-====ERROR====-\ncan't open file '" arg-path "'"));少しやり方が汚い可能性あり
-        "")))
+        (fatal-error! (string-append "can't open file '" arg-path "'"))))
+
+;;V 将来的にはmain.scmをエントリポイントにして、その一つ後を受け取るようにする
+(define (target-file-path)
+  (let ((user-command (command-line)))
+    (last-item user-command)))
 
 (define mylang-code
-  (get-code "test.r2pnl"))
+  (get-code (target-file-path)))
 
-(interp-run mylang mylang-code);実行する
+(interp-run mylang mylang-code)
 (newline)
 
 
