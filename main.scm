@@ -19,6 +19,7 @@ cyclone
 (import (scheme base)
         (scheme write)
         (scheme file)
+        (scheme process-context)
         (mylang values)
         (mylang tokens)
         (mylang env)
@@ -33,13 +34,20 @@ cyclone
 (import (scheme base)
         (scheme file))
 
+(define (get-code arg-path)
+  (if (file-exists? arg-path)
+      (call-with-input-file arg-path
+        (lambda (port)
+          (let ((content (read-string 10000 port)))
+            (if (eof-object? content)
+                ""
+                (string-copy content)))))
+      (begin
+        (display (string-append "-====ERROR====-\ncan't open file '" arg-path "'"));少しやり方が汚い可能性あり
+        "")))
+
 (define mylang-code
-  (call-with-input-file "test.r2pnl"
-    (lambda (port)
-      (let  ((content (read-string 10000 port)))
-        (if (eof-object? content)
-            ""
-            (string-copy content))))))
+  (get-code "test.r2pnl"))
 
 (interp-run mylang mylang-code);実行する
 (newline)
