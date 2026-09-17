@@ -4,6 +4,7 @@
 	  (scheme write)
           (mylang values)
 	  (mylang interpreter))
+  
   (begin
     (define (add-func interp)
       (let* ((a (stack-pop! interp))
@@ -34,7 +35,7 @@
 	   (b (stack-pop! interp)))
       (if (and (number? a) (number? b))
           (if (zero? a)
-              (interp-error! interp "ZeroDivisionError" "division of zero")
+              (interp-error! interp "ZeroDivisionError" "division by zero")
 	      (stack-push! interp (/ b a)))
 	  (interp-error! interp "TypeError" (string-append  "the \"sub\" func expects two numbers, but got "
                                                  (value->write-string b) " and " (value->write-string a))))))
@@ -45,7 +46,7 @@
 	   (b (stack-pop! interp)))
       (if (and (number? a) (number? b))
           (if (zero? a)
-              (interp-error! interp "ZeroDivisionError" "modulo of zero")
+              (interp-error! interp "ZeroDivisionError" "modulo by zero")
 	      (stack-push! interp (modulo b a)))
 	  (interp-error! interp "TypeError" (string-append  "the \"mod\" func expects two numbers, but got "
                                                            (value->write-string b) " and " (value->write-string a))))))
@@ -56,9 +57,18 @@
         (if (and (number? a) (number? b))
 	    (stack-push! interp (expt b a))
 	    (interp-error! interp "TypeError" (string-append "the \"expt\" func expects two numbers, but got "
-                                                 (value->write-string b) " and " (value->write-string a))))))
-  
-  ;;floor-divはあとで
+                                                             (value->write-string b) " and " (value->write-string a))))))
+
+  (define (floor-div-func interp)
+    (let* ((a (stack-pop! interp))
+	   (b (stack-pop! interp)))
+      (if (and (number? a) (number? b))
+          (if (zero? a)
+              (interp-error! interp "ZeroDivisionError" "floor-div by zero")
+	      (stack-push! interp (floor (/ b a))))
+	  (interp-error! interp "TypeError" (string-append  "the \"floor-div\" func expects two numbers, but got "
+                                                           (value->write-string b) " and " (value->write-string a))))))
+
 
   (define (int-func interp)
     (let* ((a (stack-pop! interp)))
@@ -97,12 +107,14 @@
       ("div" . ,div-func)
       ("mod" . ,mod-func)
       ("expt" . ,expt-func)
+      ("floor-div" . ,floor-div-func)
       ("+" . ,add-func)
       ("-" . ,sub-func)
       ("*" . ,mul-func)
       ("/" . ,div-func)
       ("%" . ,mod-func)
       ("**" . ,expt-func)
+      ("//" . ,floor-div-func)
       ("int" . ,int-func)
       ("neg" . ,neg-func)
       ("even?" . ,even?-func)

@@ -1,14 +1,14 @@
 #|実行方法：お使いの処理系に応じて使い分けてください！
 gauche （エラーコードがわかりやすい）
-gosh -r7 -I. main.scm
+gosh -r7 -I. main.scm 実行したいファイル.r2pnl
 chibi（r7rsに忠実）
-chibi-scheme main.scm
+chibi-scheme main.scm 実行したいファイル.r2pnl
 kawa
-kawa -Dkawa.import.path="./*.sld" --r7rs main.scm
+kawa -Dkawa.import.path="./*.sld" --r7rs main.scm 実行したいファイル.r2pnl
 sash
-sash -r7 -L . main.scm
+sash -r7 -L . main.scm 実行したいファイル.r2pnl
 guile（速い！）
-guile --r7rs -L . main.scm
+guile --r7rs -L . main.scm 実行したいファイル.r2pnl
 chicken
  むりだった！(r7rs-eggがsldファイルに非対応のため)
 cyclone

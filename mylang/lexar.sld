@@ -4,17 +4,17 @@
           (mylang error))
   (begin
 
-    (define cmt-chr #\!);コメント記号
+    (define cmt-chr #\!)
     
     ;; plain-codeを受け取り、((token . line) (token . line)) の形で返す
     (define (lexar plain-code)
       (let ((code-len (string-length plain-code)))
-	(let loop ((i 0) ; カウンター
+	(let loop ((i 0) ;何文字目
 		   (chars '()) ; 現在のtoken の、文字ごとのリスト (逆向き)
 		   (in-str? #f)
                    (comment-depth 0)
                    (in-line-cmt? #f)
-		   (line 0) ; 現在地
+		   (line 0) ; 現在のline
 		   (tokens '())); 返すやつ(逆向き)
 	  
 	  (define (flash-chars chars tokens line)
