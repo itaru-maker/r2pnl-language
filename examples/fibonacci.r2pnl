@@ -45,3 +45,16 @@
 
 17 fib print
 )
+
+(
+!condも使える&一時的な変数を使いたくない人向け
+'fib {
+    {
+        { dup 0 <= } { drop 0 }
+        { dup 1 = } { drop 1 }
+        { #true } { dup 1 - fib swap 2 - fib + }
+    } cond
+} fn let
+
+17 fib print
+)

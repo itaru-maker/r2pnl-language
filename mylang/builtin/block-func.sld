@@ -1,6 +1,7 @@
 (define-library (mylang builtin block-func)
   (export
    block-func-dict)
+  
   (import (scheme base)
           (scheme write)
           (mylang values)
@@ -85,16 +86,32 @@
                   (interp-error! interp "IndexError" "block index out of range")
                   (stack-push! interp (car (list-ref (block-value-items block) (exact i)))))))))
 
+    (define (block-slice-func interp)
+      (let* ((end (stack-pop! interp))
+             (start (stack-pop! interp))
+             (block (stack-pop! interp)))
+        (if (not (and (number? end) (number? start) (block-value? block) (integer? end) (<= 0 end) (integer? start) (<= 0 start)))
+            (interp-error! interp "TypeError" "the block-slice func expects two positive integer and a block-value")
+            (if (null? (block-value-items block))
+                (stack-push! interp (make-block-value '()))
+                (let loop ((rest (block-value-items block)) (i 0) (acc '()))
+                  (cond
+                   ((null? rest) (stack-push! interp (make-block-value (reverse acc))))
+                   ((>= i end) (stack-push! interp (make-block-value (reverse acc))))
+                   ((>= i start) (loop (cdr rest) (+ i 1) (cons (car rest) acc)))
+                   (else (loop (cdr rest) (+ i 1) acc))))))))
+
 
     (define block-func-dict
-      `(("block-head" . ,block-head-func)
-        ("block-tail" . ,block-tail-func)
+      `(("head" . ,block-head-func)
+        ("tail" . ,block-tail-func)
         ("block-pack" . ,block-pack-func)
         ("null-block?" . ,null-block?-func)
-        ("block-cons" . ,block-cons-func)
+        ("cons" . ,block-cons-func)
         ("block-concat" . ,block-concat-func)
         ("block-length" . , block-length-func)
-        ("block-nth" . ,block-nth-func)))))
+        ("block-nth" . ,block-nth-func)
+        ("block-slice" . ,block-slice-func)))))
 
 
 

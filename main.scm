@@ -4,7 +4,7 @@ gosh -r7 -I. main.scm 実行したいファイル.r2pnl
 chibi（r7rsに忠実）
 chibi-scheme main.scm 実行したいファイル.r2pnl
 kawa
-kawa -Dkawa.import.path="./*.sld" --r7rs main.scm 実行したいファイル.r2pnl
+kawa -Dkawa.import.path="./*.sld" --r7rs main.scm 実行したいファイル.r2pnln
 sash
 sash -r7 -L . main.scm 実行したいファイル.r2pnl
 guile（速い！）

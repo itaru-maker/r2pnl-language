@@ -18,6 +18,7 @@
                     (stack-push! interp (car (car items)))
                     (apply-callable! interp proc)
                     (loop (cdr items)
-                           (cons (cons (stack-pop! interp) (interp-token-line interp)) acc))))))))
+                          (cons (cons (stack-pop! interp) (interp-token-line interp)) acc))))))))
+
     (define higher-order-func-dict
       `(("map" . ,map-func)))))

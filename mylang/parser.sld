@@ -68,13 +68,13 @@
 	 ((r-paren? (car (car rest)))
 	  (if (null? (cdr stack)) ;すでにblockが解決している場合
 	      (raise-mylang-error! "ParseError" "extra closing paren" (cdr (car rest)))
-	      (let ((new-block (car stack))
-		    (rest-stack (cdr stack))
+	      (let ((new-block (car (car stack)))
+		    (rest-stack(cdr stack))
 		    (line (cdr (car rest)))) ;自身((car (car rest))) が持ってるline
 		(block-value-items-set! new-block (reverse (block-value-items new-block))) ; ここでも裏返す
-		(block-value-append! (car rest-stack) (cons new-block line))
+		(block-value-append! (car (car rest-stack)) (cons new-block line))
 		(loop (cdr rest) rest-stack))))
 	 (else
-	  (block-value-append! (car (car stack)) (car rest))
+	  (block-value-append! (car (car stack))(car rest))
 	  (loop (cdr rest) stack)))))))
 
