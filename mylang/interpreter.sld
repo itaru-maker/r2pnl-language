@@ -72,7 +72,7 @@
        ((lambda-value? call-func) (call-lambda! interp call-func) )
        (else (interp-error! interp "TypeError" "not callable value is passd"))))
 
-    (define (exec-block block interp)
+    (define (exec-block block interp);execute-bodyの超々薄いラッパーなので、もしかしたら統合するかも
       ;;blockを実行（外には渡さない）
       (execute-body interp (block-value-items block)))
 

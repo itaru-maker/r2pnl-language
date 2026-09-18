@@ -2,6 +2,7 @@
   (export control-func-dict)
   (import (scheme base)
           (mylang values)
+          (mylang env)
           (mylang tokens)
           (mylang interpreter)
           (mylang parser))
@@ -107,13 +108,40 @@
                                   (loop (cddr rest))
                                   (exec-block body interp))))))))))))
 
+    (define (for-func interp)
+      (let* ((body (stack-pop! interp))
+             (end (stack-pop! interp))
+             (start (stack-pop! interp))
+             (label (stack-pop! interp)))
+        (if (not (and
+                  (block-value? body)
+                  (number? end)
+                  (number? start)
+                  (symbol-value? label)))
+            (interp-error! interp "TypeError" "the \"for\" func expects a symbol, two number and a block")
+            (let*
+                ((caller-env (interp-env interp));一旦interp側のenvを退避
+                 (loop-env (make-env caller-env)));退避させたやつを親にしたenvを作る
+              (let ((var-name (symbol-value-token label)))
+                (env-define loop-env var-name start)
+                (interp-env-set! interp loop-env)
+                (let loop ((current-num start))
+                  (if (< end current-num)
+                      (interp-env-set! interp caller-env);戻す
+                      (begin
+                        (exec-block body interp)
+                        (env-set! loop-env var-name current-num)
+                        (loop (+ current-num 1))
+                        (interp-env-set! interp caller-env)))))))))
 
-    (define control-func-dict
+
+    (deine control-func-dict
       `(("do" . ,do-func)
         ("if" . ,if-func)
         ("when" . ,when-func)
         ("while" . ,while-func)
         ("repeat" . ,repeat-func)
-        ("cond" . , cond-func)))))
+        ("cond" . , cond-func)
+        ("for" . ,for-func)))))
 
 
