@@ -11,6 +11,6 @@
 100 fizzbuzz
 !こうなる(forで少し可読性up)
 
-!'fizzbuzz { 'i 1 rot { { { i 15 % 0 = } { "fizzbuzz" } { i 5 % 0 = } { "buzz" } { i 3 % 0 = } { "fizz" } { 1 } { i } } cond print newline } for } fn let 100 fizzbuzz
+!'fizzbuzz { 'i 1 rot { { { i 15 % 0 = } { 'fizzbuzz } { i 5 % 0 = } { 'buzz } { i 3 % 0 = } { 'fizz } { 1 } { i } } cond . newline } for } fn set 100 fizzbuzz
 
-!コードゴルフ、普通に弱い　
+!codegolf、普通に弱い　
