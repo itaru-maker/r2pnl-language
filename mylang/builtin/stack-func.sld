@@ -56,8 +56,8 @@
 
     (define stack-func-dict
       `(("dup" . ,dup-func)
-	("swap" . ,swap-func)
-	("drop" . ,drop-func)
+        ("swap" . ,swap-func)
+        ("drop" . ,drop-func)
         ("over" . ,over-func)
         ("rot" . ,rot-func)
         ("nip" . ,nip-func)
