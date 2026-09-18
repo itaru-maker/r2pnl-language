@@ -129,13 +129,13 @@
                   (if (< end current-num)
                       (interp-env-set! interp caller-env);戻す
                       (begin
-                        (exec-block body interp)
                         (env-set! loop-env var-name current-num)
+                        (exec-block body interp)
                         (loop (+ current-num 1))
                         (interp-env-set! interp caller-env)))))))))
 
 
-    (deine control-func-dict
+    (define control-func-dict
       `(("do" . ,do-func)
         ("if" . ,if-func)
         ("when" . ,when-func)
