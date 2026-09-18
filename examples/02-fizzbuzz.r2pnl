@@ -1,0 +1,22 @@
+! cond実装した！
+
+'fizzbuzz-cond {
+    {
+         { dup 15 mod 0 = } { drop "fizzbuzz" }
+         { dup 5 mod 0 = } { drop "buzz" }
+         { dup 3 mod 0 = } { drop "fizz" }
+         { #true } { noop }
+    } cond
+} fn let
+
+'fizzbuzz {
+    'limit swap let ! 引数としてもらってlimitにする
+    'count 1 let
+    limit 1 - {
+        count fizzbuzz-cond print
+        newline
+        'count count 1 + set
+    } repeat
+} fn let
+
+100 fizzbuzz

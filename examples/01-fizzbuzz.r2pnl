@@ -1,0 +1,24 @@
+!古いやつ
+
+'fizzbuzz-cond {
+    dup 15 mod 0 = { drop "fizzbuzz" } {
+        dup 5 mod 0 = { drop "buzz" } {
+            dup 3 mod 0 = { drop "fizz" } {
+                noop
+            } if
+        } if 
+    } if 
+} fn let
+
+
+'fizzbuzz {
+    'count 1 let
+    1 - { !引数としてもらうやつ
+        count fizzbuzz-cond print
+        newline
+        'count count 1 + set
+    } repeat
+} fn let
+
+
+100 fizzbuzz
