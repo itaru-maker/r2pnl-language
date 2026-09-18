@@ -1,4 +1,4 @@
-('fizzbuzz {
+'fizzbuzz {
     'i 1 rot {
         {
             { i 15 % 0 = } { "fizzbuzz" }
@@ -10,7 +10,7 @@
 } fn let
 100 fizzbuzz
 !こうなる(forで少し可読性up)
-)
+
 !'i 1 100 { { { i 15 % 0 = } { 'fizzbuzz } { i 5 % 0 = } { 'buzz } { i 3 % 0 = } { 'fizz } { 1 } { i } } cond . newline } for
 !codegolf、普通に弱い
 
