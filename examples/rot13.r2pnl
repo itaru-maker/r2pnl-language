@@ -42,7 +42,7 @@
 'rot13 {
     'acc "" let
     'roted swap string->block { char-rot } map let
-    roted { 'acc acc rot string-concat set #nil } map drop !副作用なのでdrop (将来的にはfor-eachも欲しい)
+    roted { 'acc acc rot string-concat set } each
     acc
 } fn let
 

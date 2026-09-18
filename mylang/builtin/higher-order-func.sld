@@ -20,5 +20,21 @@
                     (loop (cdr items)
                           (cons (cons (stack-pop! interp) (interp-token-line interp)) acc))))))))
 
+    (define (each-func interp)
+      (let* ((proc (stack-pop! interp))
+             (lst (stack-pop! interp)))
+        (if (not (block-value? lst))
+            (interp-error! interp  "TypeError" "the \"each\" func excepts a block as second arg.")
+            (let loop ((items (block-value-items lst)))
+              (if (null? items)
+                  '();何も返さない
+                  (begin
+                    (stack-push! interp (car (car items)))
+                    (apply-callable! interp proc)
+                    (loop (cdr items))))))))
+
+
+
     (define higher-order-func-dict
-      `(("map" . ,map-func)))))
+      `(("map" . ,map-func)
+        ("each" . , each-func)))))
