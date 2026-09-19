@@ -36,7 +36,7 @@
             (exec-block true-then interp)))))
 
     (define (when-func interp)
-      (let ((true-then (stack-pop! interp))
+      (let* ((true-then (stack-pop! interp))
             (condition (stack-pop! interp)))
         (if (block-value? true-then)
             (if(eq? #f condition)
