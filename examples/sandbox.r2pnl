@@ -1,14 +1,57 @@
-(
-"あいうえお
-あいうえお
-あいうえお" print
+'chars "abcdefghijklmnopqrstuvwxyznopqrstuvwxyzabcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZNOPQRSTUVWXYZABCDEFGHIJKLM" let
 
+!完成
+'find-idx {
+    'char swap let
+    'found #false let
+
+    'i 0 103 {
+        chars i string-nth char equal found not and { !見つかってなくて、charと一緒
+            'found i set
+        } when
+    } for
+    found
+} fn let
+
+!完成
+'char-rot {
+    'char swap let
+    'idx char find-idx let
+
+    idx false? not { !falseでなければ
+        chars idx 26 + string-nth
+    } {
+        char
+    } if
+} fn let
+
+'rot13 {
+    'str swap let
+    'len str string-length let
+    'acc "" let
+
+    'i 0 len 1 - {
+        'acc acc str i string-nth char-rot string-concat set
+    } for
+    acc
+} fn let
+
+!==============例1================
+'a "I can eat glass, it does not hurt me." rot13 let
+'b a rot13 let
+
+
+a print
 newline
+b print
+newline
+!================================
+!=============例2================
+'c "emacs is the best text editor in the world!!!" rot13 let
+'d c rot13 let
 
-"あいうえお\
-あいうえお\
-あいうえお" print
-)
-
-
-1 101 range { print newline } each
+c print
+newline
+d print
+newline
+!===============================

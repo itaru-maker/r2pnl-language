@@ -1,55 +1,57 @@
-!あくまで「もどき」です。（小文字のみ）
-'alphabet "abcdefghijklmnopqrstuvwxyz" let
+'chars "abcdefghijklmnopqrstuvwxyznopqrstuvwxyzabcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZNOPQRSTUVWXYZABCDEFGHIJKLM" let
 
-'find-index {
+!完成
+'find-idx {
     'char swap let
-    'i 0 let
-    'found -1 let
-    25 {
-        alphabet i string-nth char equal {
+    'found #false let
+
+    'i 0 103 {
+        chars i string-nth char equal found not and { !見つかってなくて、charと一緒
             'found i set
-        } {
-            noop
-        } if
-        'i i 1 + set 
-    } repeat
+        } when
+    } for
     found
 } fn let
 
+!完成
 'char-rot {
     'char swap let
-    'idx char find-index let
-    idx -1 /= {
-        alphabet idx 13 + 26 mod string-nth 
+    'idx char find-idx let
+
+    idx false? not { !falseでなければ
+        chars idx 26 + string-nth
     } {
         char
     } if
 } fn let
 
-'string->block {
-    'string swap let
-    'i 0 let
-    'len string string-length let
-    'return { } let
-    len 1 - {
-        'return return [ string i string-nth ] block-concat set
-        'i i 1 + set
-    } repeat
-    return
-} fn let
-
-
 'rot13 {
+    'str swap let
+    'len str string-length let
     'acc "" let
-    'roted swap string->block { char-rot } map let
-    roted { 'acc acc rot string-concat set } each
+
+    'i 0 len 1 - {
+        'acc acc str i string-nth char-rot string-concat set
+    } for
     acc
 } fn let
 
-'a "emacs is the best text editor in the world!!!" rot13 let
-a print
-! -> rznpf vf gur orfg grkg rqvgbe va gur jbeyq!!!
-newline
+!==============例1================
+'a "I can eat glass, it does not hurt me." rot13 let
 'b a rot13 let
+
+
+a print
+newline
 b print
-! -> emacs is the best text editor in the world!!!
+newline
+!================================
+!=============例2================
+'c "emacs is the best text editor in the world!!!" rot13 let
+'d c rot13 let
+
+c print
+newline
+d print
+newline
+!===============================
