@@ -1,6 +1,14 @@
-"\'hello world\'" print
-!"\蟹" print
-!流石にエラーにした
-10 {
-    "\n" print
-} repeat
+(
+"あいうえお
+あいうえお
+あいうえお" print
+
+newline
+
+"あいうえお\
+あいうえお\
+あいうえお" print
+)
+
+
+1 101 range { print newline } each

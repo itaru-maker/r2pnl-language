@@ -101,6 +101,16 @@
                    ((>= i start) (loop (cdr rest) (+ i 1) (cons (car rest) acc)))
                    (else (loop (cdr rest) (+ i 1) acc))))))))
 
+    (define (range-func interp)
+      (let* ((end (stack-pop! interp))
+             (start (stack-pop! interp)))
+        (if (not (and (number? end) (number? start) (integer? end) (integer? start)))
+            (interp-error! interp "TypeError" "the \"iota\" func expects two positive integer.")
+            (let loop ((current start) (acc '()))
+              (if (>= current end)
+                  (stack-push! interp (make-block-value (reverse acc)))
+                  (loop (+ current 1) (cons (cons current (interp-token-line interp)) acc)))))))
+
 
     (define block-func-dict
       `(("head" . ,block-head-func)
@@ -111,7 +121,8 @@
         ("block-concat" . ,block-concat-func)
         ("block-length" . , block-length-func)
         ("block-nth" . ,block-nth-func)
-        ("block-slice" . ,block-slice-func)))))
+        ("block-slice" . ,block-slice-func)
+        ("range" . ,range-func)))))
 
 
 
