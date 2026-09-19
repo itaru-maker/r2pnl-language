@@ -20,6 +20,6 @@
     } if
 } fn let
 
-100 factorial print !-> 3628800
+10 factorial print !-> 3628800
 )
 

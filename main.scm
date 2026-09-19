@@ -1,4 +1,6 @@
-#|実行方法：お使いの処理系に応じて使い分けてください！
+#|
+-================実行方法===============-
+お使いの処理系に応じて使い分けてください！
 gauche （エラーコードがわかりやすい）
 gosh -r7 -I. main.scm 実行したいファイル
 chibi（r7rsに忠実）
@@ -13,7 +15,7 @@ chicken
 むりだった！(r7rs-eggがsldファイルに非対応のため)
 cyclone
 むりだった！(apple silicon macとの相性が悪かった)
-==================
+-=======================================-
 |#
 
 (import (scheme base)
@@ -65,7 +67,7 @@ cyclone
                 (string-copy content)))))
         (fatal-error! (string-append "can't open file '" file-path "'"))))
 
-;;V 将来的にはmain.scmをエントリポイントにして、その一つ後を受け取るようにする
+;;V 将来的にはmain.scmをエントリポイントにして、その一つ後を受け取るようにしたい
 (define (target-file-path)
   (let ((user-command (command-line)))
     (last-item user-command)))
