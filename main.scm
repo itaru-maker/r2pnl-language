@@ -1,16 +1,16 @@
 #|実行方法：お使いの処理系に応じて使い分けてください！
 gauche （エラーコードがわかりやすい）
-gosh -r7 -I. main.scm 実行したいファイル.r2pnl
+gosh -r7 -I. main.scm 実行したいファイル
 chibi（r7rsに忠実）
-chibi-scheme main.scm 実行したいファイル.r2pnl
+chibi-scheme main.scm 実行したいファイル
 kawa
-kawa -Dkawa.import.path="./*.sld" --r7rs main.scm 実行したいファイル.r2pnln
+kawa -Dkawa.import.path="./*.sld" --r7rs main.scm 実行したいファイル
 sash
-sash -r7 -L . main.scm 実行したいファイル.r2pnl
+sash -r7 -L . main.scm 実行したいファイル
 guile（速い！）
-guile --r7rs -L . main.scm 実行したいファイル.r2pnl
+guile --r7rs -L . main.scm 実行したいファイル
 chicken
- むりだった！(r7rs-eggがsldファイルに非対応のため)
+むりだった！(r7rs-eggがsldファイルに非対応のため)
 cyclone
 むりだった！(apple silicon macとの相性が悪かった)
 ==================
