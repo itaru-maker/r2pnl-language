@@ -1,3 +1,6 @@
-'i 1 7 {
-    i print
-} for
+"\'hello world\'" print
+!"\蟹" print
+!流石にエラーにした
+10 {
+    "\n" print
+} repeat

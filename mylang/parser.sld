@@ -8,6 +8,30 @@
 	  (mylang tokens)
 	  (mylang error))
   (begin
+    (define (remove-esc str line)
+      (let ((len (string-length str)))
+        (let loop ((i 0) (acc '()))
+          (if (<= len i)
+              (list->string (reverse acc))
+              (let ((current (string-ref str i)))
+                (if (and (char=? current #\\) (< (+ i 1) len));esc?&nextは取れる？（取れないなら自動的に取らずに進める）
+                    (let ((next (string-ref str (+ i 1))))
+                      (case next
+                        ((#\') (loop (+ i 2) (cons #\" acc)));lexar複雑化したくなかった（ゆるして）
+                        ((#\n) (loop (+ i 2) (cons #\newline acc)))
+                        ((#\\) (loop (+ i 2) (cons #\\ acc)))
+                        ((#\t) (loop (+ i 2) (cons #\tab acc)))
+                        ((#\b) (loop (+ i 2) (cons #\backspace acc)))
+                        ((#\a) (loop (+ i 2) (cons #\alarm acc)))
+                        ((#\newline) (loop (+ i 2) acc))
+                        (else (raise-mylang-error!
+                               "ParseError"
+                               (string-append
+                                "unknown escape:"
+                                (string next))
+                               line))))
+                    (loop (+ i 1) (cons current acc))))))))
+    
     (define (parse-one-token item line)
       ;;一つのtokenを受け取って、変換して返す
       (let ((token-len (string-length item))
@@ -21,7 +45,7 @@
 	 ((and (< 1 token-len)
 	       (char=? (string-ref item 0) #\")
 	       (char=? (string-ref item (- token-len 1)) #\"))
-	  (substring item 1 (- token-len 1)))
+	  (remove-esc (substring item 1 (- token-len 1)) line))
 
 	 ;;真偽地&nil
 	 ((string=? item "#true") #t) ;true
