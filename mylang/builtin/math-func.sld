@@ -82,6 +82,20 @@
       (if (number? a)
           (stack-push! interp (- a))
           (interp-error! interp "TypeError" (string-append "the \"neg\" func expects one numbers, but got "
+                                                           (value->write-string a))))))
+
+  (define (sqrt-func interp)
+    (let* ((a (stack-pop! interp)))
+      (if (and (< 0 a) (number? a))
+          (stack-push! interp (sqrt a))
+          (interp-error! interp "TypeError" (string-append "the \"sqrt\" func expects one positive numbers, but got "
+                                                           (value->write-string a))))))
+  
+  (define (abs-func interp)
+    (let* ((a (stack-pop! interp)))
+      (if (number? a)
+          (stack-push! interp (abs a))
+          (interp-error! interp "TypeError" (string-append "the \"abs\" func expects one numbers, but got "
                                                (value->write-string a))))))
   
   (define (even?-func interp)
@@ -97,7 +111,9 @@
       (if (number? a)
           (stack-push! interp (odd? a))
           (interp-error! interp "TypeError" (string-append "the \"odd\" func expects one numbers, but got "
-                                               (value->write-string a))))))
+                                                           (value->write-string a))))))
+
+
 
 
   (define math-func-dict
@@ -117,6 +133,8 @@
       ("//" . ,floor-div-func)
       ("int" . ,int-func)
       ("neg" . ,neg-func)
+      ("sqrt" . ,sqrt-func)
+      ("abs" . ,abs-func)
       ("even?" . ,even?-func)
       ("odd?" . ,odd?-func)))))
   
