@@ -112,17 +112,24 @@
                   (loop (+ current 1) (cons (cons current (interp-token-line interp)) acc)))))))
 
 
+    (define (reverse-func interp)
+      (let* ((block (stack-pop! interp)))
+        (if (block-value? block)
+            (stack-push! interp (make-block-value (reverse (block-value-items block))))
+            (interp-error! interp "TypeError" "the \"reverse\" func expects a block" ))))
+    
     (define block-func-dict
       `(("head" . ,block-head-func)
         ("tail" . ,block-tail-func)
-        ("block-pack" . ,block-pack-func)
+        ("pack" . ,block-pack-func)
         ("null-block?" . ,null-block?-func)
         ("cons" . ,block-cons-func)
-        ("block-concat" . ,block-concat-func)
-        ("block-length" . , block-length-func)
-        ("block-nth" . ,block-nth-func)
-        ("block-slice" . ,block-slice-func)
-        ("range" . ,range-func)))))
+        ("concat" . ,block-concat-func)
+        ("length" . , block-length-func)
+        ("nth" . ,block-nth-func)
+        ("slice" . ,block-slice-func)
+        ("range" . ,range-func)
+        ("reverse" . ,reverse-func)))))
 
 
 
