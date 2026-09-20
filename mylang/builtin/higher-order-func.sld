@@ -37,7 +37,7 @@
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
         (if (not (block-value? lst))
-            (interp-error! interp "TypeError" "the" "\"each\" func expects a block as second arg.")
+            (interp-error! interp "TypeError" "the" "\"filter\" func expects a block as second arg.")
             (let ((items (block-value-items lst)))
               (let loop ((rest items) (acc '()))
                 (if (null? rest)
