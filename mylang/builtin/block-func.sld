@@ -34,12 +34,12 @@
 
     (define (block-pack-func interp)
       (let* ((args-count (stack-pop! interp)))
-        (if (number? args-count)
+        (if (and (number? args-count) (integer? args-count) (<= 0 args-count)) 
             (let loop ((count args-count) (acc-block '()))
               (if (zero? count)
                   (stack-push! interp (make-block-value (reverse acc-block)))
                   (loop (- count 1) (cons (cons (stack-pop! interp) (interp-token-line interp)) acc-block))))
-            (interp-error! interp "TypeError" "The first arg of the \"pack\" func must be a number"))))
+            (interp-error! interp "TypeError" "The first arg of the \"pack\" func must be a positive integer"))))
 
     (define (null-block?-func interp)
       (let* ((block (stack-pop! interp)))

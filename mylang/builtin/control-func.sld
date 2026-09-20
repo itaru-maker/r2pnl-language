@@ -39,7 +39,7 @@
       (let* ((true-then (stack-pop! interp))
             (condition (stack-pop! interp)))
         (if (block-value? true-then)
-            (if(eq? #f condition)
+            (if (or (eq? #f condition) (eq? the-nil condition))
                '();何もしない
                (exec-block true-then interp))
             (interp-error!
@@ -75,7 +75,7 @@
            (repeat-count (stack-pop! interp)))
         (if (not (and
                   (number? repeat-count)
-                  (< 0 repeat-count)
+                  (<= 0 repeat-count)
                   (block-value? repeat-body)))
             (interp-error! interp "TypeError" (string-append "the \"repeat\" func expects a positive number and a block value, but got "
                                                  (value->write-string repeat-count)
@@ -88,7 +88,7 @@
                    (exec-block repeat-body interp)
                    (loop (+ current-num 1) limit)))))))
 
-    (define (cond-func interp)
+    (define (cond-func interp) ;malformedチェックが必要
       (let* ((cond-block (stack-pop! interp)))
         (if (not (block-value? cond-block))
             (interp-error! interp "TypeError" (string-append  "the \"cond\" func expects one block value, but got"
