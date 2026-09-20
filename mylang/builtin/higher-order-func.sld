@@ -33,8 +33,26 @@
                     (apply-callable! interp proc)
                     (loop (cdr items))))))))
 
+    (define (filter-func interp)
+      (let* ((proc (stack-pop! interp))
+             (lst (stack-pop! interp)))
+        (if (not (block-value? lst))
+            (interp-error! interp "TypeError" "the" "\"each\" func expects a block as second arg.")
+            (let ((items (block-value-items lst)))
+              (let loop ((rest items) (acc '()))
+                (if (null? rest)
+                    (stack-push! interp (make-block-value (reverse acc)))
+                    (begin
+                      (stack-push! interp (car (car rest)))
+                      (apply-callable! interp proc)
+                      (let ((result (stack-pop! interp)))
+                        (if (or (eq? result #f) (eq? result the-nil))
+                            (loop (cdr rest) acc)
+                            (loop (cdr rest) (cons (car rest) acc)))))))))))
+
 
 
     (define higher-order-func-dict
       `(("map" . ,map-func)
-        ("each" . , each-func)))))
+        ("each" . , each-func)
+        ("filter" . ,filter-func)))))
