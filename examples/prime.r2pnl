@@ -1,1 +1,22 @@
-!素数判定です（作ろうと思ったけどfilter関数を作ってなかったのでちょっと待って）
+! その辺に転がってたpythonのコードをそのまま訳したので汚いどころじゃないです。今度（気が向いたら）直す
+'divisible? {
+    % 0 =
+} fn let
+
+
+'sieve {
+    'limit swap let
+    'numbers 2 limit 1 + range let
+    'acc { } let
+    'p 0 let
+    { numbers null-block? not } {
+        'p numbers head set
+        'numbers numbers tail set
+        'acc p acc cons set !生き残ってるやつは素数
+
+        'numbers numbers { p divisible? not } filter set
+    } while
+    acc reverse
+} fn let
+
+100 sieve print
