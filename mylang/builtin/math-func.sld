@@ -2,6 +2,7 @@
   (export math-func-dict)
   (import (scheme base)
 	  (scheme write)
+          (scheme inexact)
           (mylang values)
 	  (mylang interpreter))
   

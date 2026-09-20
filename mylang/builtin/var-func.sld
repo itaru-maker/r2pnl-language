@@ -33,7 +33,21 @@
 	    (interp-error! interp "TypeError" (string-append "func \"set\" expect symbol-value and any-value, but value "
 							     (value->write-string name)
 							     " is passed as symbol")))))
+
+    (define (deref-func interp)
+      (let* ((name (stack-pop! interp)))
+        (if (symbol-value? name)
+            (if (in-env? (interp-env interp)(symbol-value-token name))
+                (stack-push! interp (env-get (interp-env interp) (symbol-value-token name)))
+                (interp-error! interp "UnderfinedError" (string-append
+                                                         "the \"deref\" func expects a defined symbol, but \""
+                                                         (symbol-value-token name)
+                                                         "\" is not defined yet") ))
+            (interp-error! interp "TypeError" (string-append "func \"deref\" expect symbol-value, but value "
+							     (value->write-string name)
+							     " is passed as symbol")))))
     
     (define var-func-dict
       `(("let" . ,let-func)
-	("set" . ,set-func)))))
+	("set" . ,set-func)
+        ("deref" . ,deref-func)))))
