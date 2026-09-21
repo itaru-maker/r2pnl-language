@@ -1,19 +1,18 @@
-!===注意===!
-!めんどくさくて挫折しました。暇になったらやります (ブロック処理がよわよわだった)
-(
+!とりあえず完成かな？
+
 'bubble {
     'lst swap let
     'i 0 lst length 1 - {
         'j 0 lst length i - 1 - {
             lst j nth lst j 1 + nth > {
-                
+                'lst lst j lst j 1 + nth set-nth j 1 + lst j nth set-nth set
             } when
         } for
     } for
     lst
 } fn let
-)
 
-!{ 1 2 5 3 9 } bubble print
 
-"まだ未完成です\n" print
+{ 1 2 5 3 9 } bubble print
+
+

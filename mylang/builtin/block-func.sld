@@ -117,6 +117,24 @@
         (if (block-value? block)
             (stack-push! interp (make-block-value (reverse (block-value-items block))))
             (interp-error! interp "TypeError" "the \"reverse\" func expects a block" ))))
+
+    (define (set-nth-func interp)
+      (let* ((v (stack-pop! interp))
+             (i (stack-pop! interp))
+             (block (stack-pop! interp)))
+        (if (not (and (block-value? block) (number? i) (integer? i) (positive? i)))
+            (interp-error! interp "TypeError" "the \"set-nth\" func expects a block, a positive integer, and a any value")
+            (let ((items (block-value-items block)))
+              (if (<= (length items) i)
+                  (interp-error! interp "IndexError" "the \"block index out of range (the \"set-nth\" func)")
+                  (let loop ((rest items) (idx 0) (acc '()));accは前側のいじらなくてもいいところ
+                    (if (>= idx i)
+                        (stack-push! interp
+                                    (make-block-value
+                                     (append
+                                      (reverse acc)
+                                      (cons (cons v (interp-token-line interp)) (cdr rest)))))
+                        (loop (cdr rest) (+ idx 1) (cons (car rest) acc)))))))))
     
     (define block-func-dict
       `(("head" . ,block-head-func)
@@ -129,7 +147,8 @@
         ("nth" . ,block-nth-func)
         ("slice" . ,block-slice-func)
         ("range" . ,range-func)
-        ("reverse" . ,reverse-func)))))
+        ("reverse" . ,reverse-func)
+        ("set-nth" . ,set-nth-func)))))
 
 
 
