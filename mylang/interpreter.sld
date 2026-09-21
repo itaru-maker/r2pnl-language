@@ -12,6 +12,7 @@
   (import
    (scheme base)
    (scheme write)
+   (scheme process-context)
    (mylang values)
    (mylang tokens)
    (mylang env)
@@ -33,7 +34,7 @@
     (define (stack-pop! interp)
       (let ((s (interp-stack interp)))
 	(if (null? s)
-	    (interp-error! interp "StackOverflowError" "pop from empty stack")
+	    (interp-error! interp "StackUnderflowError" "pop from empty stack")
 	    (begin (interp-stack-set! interp (cdr s))
 		   (car s)))))
     
@@ -113,11 +114,13 @@
       (guard (e;エラーをキャッチ
 	      ((mylang-error? e)
                (newline)
-               (display "-====ERROR====-")
-               (newline)
-	       (for-each (lambda (x) (display x))
-			 (reverse (mylang-error-trace e)))
-	       (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e))))))
+               (display "-====ERROR====-" (current-error-port))
+               (newline (current-error-port))
+	       (for-each (lambda (x) (display x (current-error-port)))
+			 (mylang-error-trace e))
+	       (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e))) (current-error-port))
+               (newline (current-error-port))
+               (exit 1)))
 
 	(let*
 	    ((raw-tokens (lexar code))

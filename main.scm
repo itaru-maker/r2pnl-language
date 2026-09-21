@@ -35,10 +35,10 @@ cyclone
 
 (define (fatal-error! message)
   (newline)
-  (display "-====ERROR====-")
-  (newline)
-  (display message)
-  (newline)
+  (display "-====ERROR====-" (current-error-port))
+
+  (display message (current-error-port))
+  (newline (current-error-port))
   (exit 1))
 
 (define (last-item lst)
