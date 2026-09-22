@@ -122,7 +122,7 @@
       (let* ((v (stack-pop! interp))
              (i (stack-pop! interp))
              (block (stack-pop! interp)))
-        (if (not (and (block-value? block) (number? i) (integer? i) (positive? i)))
+        (if (not (and (block-value? block) (number? i) (integer? i) (<= 0 i)))
             (interp-error! interp "TypeError" "the \"set-nth\" func expects a block, a positive integer, and a any value")
             (let ((items (block-value-items block)))
               (if (<= (length items) i)

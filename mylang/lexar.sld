@@ -9,28 +9,28 @@
     ;; plain-codeを受け取り、((token . line) (token . line)) の形で返す
     (define (lexar plain-code)
       (let ((code-len (string-length plain-code)))
-	(let loop ((i 0) ;何文字目
-		   (chars '()) ; 現在のtoken の、文字ごとのリスト (逆向き)
-		   (in-str? #f)
+        (let loop ((i 0) ;何文字目
+                   (chars '()) ; 現在のtoken の、文字ごとのリスト (逆向き)
+                   (in-str? #f)
                    (comment-depth 0)
                    (in-line-cmt? #f)
-		   (line 0) ; 現在のline
-		   (tokens '())); 返すやつ(逆向き)
-	  
-	  (define (flash-chars chars tokens line)
-	    (if (null? chars)
-		tokens
-		(cons (cons (list->string (reverse chars)) line) tokens)))
+                   (line 0) ; 現在のline
+                   (tokens '())); 返すやつ(逆向き)
+          
+          (define (flash-chars chars tokens line)
+            (if (null? chars)
+                tokens
+                (cons (cons (list->string (reverse chars)) line) tokens)))
 
-	  (if (= i code-len) ;終了だったら、
-	      (begin
+          (if (= i code-len) ;終了だったら、
+              (begin
                 (if (> comment-depth 0);コメントが閉じているか
                     (raise-mylang-error! "parse-error" "unclosed comment" line)
                     (reverse (flash-chars chars tokens line))))
               
-	      (let ((chr (string-ref plain-code i)))
+              (let ((chr (string-ref plain-code i)))
                 
-		(cond
+                (cond
                  ((< 0 comment-depth)
                   (cond
                    ((char=? #\newline chr)
@@ -57,48 +57,48 @@
                   (loop (+ i 1) '() #f 0 #t line (flash-chars chars tokens line)))
 
                  
-		 ((char=? #\" chr)
-		  (loop (+ i 1)
-			(cons chr chars)
-			(not in-str?)
-                        0
-                        #f
-			line
-			tokens))
-
-		 (in-str?
-		  (loop (+ i 1)
-			(cons chr chars)
-			in-str?
-                        0
-                        #f
-			line
-			tokens))
-
-		 ((char=? #\newline chr)
-		  (loop (+ i 1)
-			'()
-			#f
-                        0
-                        #f
-			(+ line 1)
-			(flash-chars chars tokens line)))
-
-		 ((or (char=? #\space chr) (char=? #\tab chr) (char=? #\, chr));試験的に,も
-		  (loop (+ i 1)
-			'()
-			#f
-                        0
-                        #f
-			line
-			(flash-chars chars tokens line)))
-
-		 (else
-		  (loop (+ i 1)
-			(cons chr chars)
-			#f
+                 ((char=? #\" chr)
+                  (loop (+ i 1)
+                        (cons chr chars)
+                        (not in-str?)
                         0
                         #f
                         line
-			tokens))))))))))
+                        tokens))
+
+                 (in-str?
+                  (loop (+ i 1)
+                        (cons chr chars)
+                        in-str?
+                        0
+                        #f
+                        line
+                        tokens))
+
+                 ((char=? #\newline chr)
+                  (loop (+ i 1)
+                        '()
+                        #f
+                        0
+                        #f
+                        (+ line 1)
+                        (flash-chars chars tokens line)))
+
+                 ((or (char=? #\space chr) (char=? #\tab chr) (char=? #\, chr));試験的に,も
+                  (loop (+ i 1)
+                        '()
+                        #f
+                        0
+                        #f
+                        line
+                        (flash-chars chars tokens line)))
+
+                 (else
+                  (loop (+ i 1)
+                        (cons chr chars)
+                        #f
+                        0
+                        #f
+                        line
+                        tokens))))))))))
 
