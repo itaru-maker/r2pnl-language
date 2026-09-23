@@ -15,7 +15,7 @@ guile --r7rs -L . main.scm 実行したいファイル
 gambit（一応動くけど）
 このファイルの先頭のコメントを外す
 インタプリタ->gsi -:r7rs,search=. main.scm 実行したいファイル
-コンパイラ->gsc -:r7rs,search=. -exe -nopreload main.scm
+コンパイラ->gsc -:r7rs,search=. -exe -nopreload main.scm からの./main
 で動くはず!
 chicken
 むりだった！(r7rs-eggがsldファイルに非対応のため)
@@ -87,7 +87,7 @@ cyclone
     (begin
       (display "-====WARNING====-\n" (current-error-port))
       (display "stack is not empty at end of program\n" (current-error-port))
-      (display "-===top= ===-\n" (current-error-port))
+      (display "-===top====-\n" (current-error-port))
       (for-each (lambda (v)
                   (display (value->write-string v)(current-error-port))
                   (newline (current-error-port)))
