@@ -1,3 +1,4 @@
+;;#!/usr/bin/env -S gsi -:r7rs,search=. ;gambit用
 #|
 -================実行方法===============-
 お使いの処理系に応じて使い分けてください！
@@ -11,6 +12,11 @@ sash
 sash -r7 -L . main.scm 実行したいファイル
 guile（速い！）
 guile --r7rs -L . main.scm 実行したいファイル
+gambit（一応動くけど）
+このファイルの先頭のコメントを外す
+インタプリタ->gsi -:r7rs,search=. main.scm 実行したいファイル
+コンパイラ->gsc -:r7rs,search=. -exe -nopreload main.scm
+で動くはず!
 chicken
 むりだった！(r7rs-eggがsldファイルに非対応のため)
 cyclone
@@ -76,6 +82,19 @@ cyclone
   (get-code (target-file-path)))
 
 (interp-run mylang mylang-code)
+
+(if (not (null? (interp-stack mylang)));安全確認　（これはいらないっていう人もいるかも）
+    (begin
+      (display "-====WARNING====-\n" (current-error-port))
+      (display "stack is not empty at end of program\n" (current-error-port))
+      (display "-===top= ===-\n" (current-error-port))
+      (for-each (lambda (v)
+                  (display (value->write-string v)(current-error-port))
+                  (newline (current-error-port)))
+                (interp-stack mylang))
+      (display "-==bottom==-" (current-error-port))
+      (exit 1)))
+
 (newline)
 
 

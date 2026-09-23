@@ -1,17 +1,1 @@
-(
-'dog {
-    { name age } args
-    name print
-    "は" print
-    age print
-    "才です\n" print
-} fn let
-
-"ポチ" 426 dog
-)
-
-
-
-3 {
-    "あ" print
-} repeat
+3
