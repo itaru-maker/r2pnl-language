@@ -1,5 +1,17 @@
-'lst { 1 2 "たこ焼き" 4 5 6 7 8 9 0 } let
+(
+'dog {
+    { name age } args
+    name print
+    "は" print
+    age print
+    "才です\n" print
+} fn let
 
-'lst lst 2 3 set-nth set
+"ポチ" 426 dog
+)
 
-lst print
+
+
+3 {
+    "あ" print
+} repeat

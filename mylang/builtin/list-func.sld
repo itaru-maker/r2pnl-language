@@ -6,6 +6,7 @@
           (mylang interpreter))
 
   (begin
+    ;;動的に配列を作りやすくするために作った。（{ }はparse時にやるので { 2 3 + } が3要素になってしまう ）
     (define (list-marker-func interp)
       (stack-push! interp the-list-marker))
 

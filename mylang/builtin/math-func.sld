@@ -87,7 +87,7 @@
 
   (define (sqrt-func interp)
     (let* ((a (stack-pop! interp)))
-      (if (and (< 0 a) (number? a))
+      (if (and (number? a) (< 0 a))
           (stack-push! interp (sqrt a))
           (interp-error! interp "TypeError" (string-append "the \"sqrt\" func expects one positive numbers, but got "
                                                            (value->write-string a))))))

@@ -75,14 +75,14 @@
            (repeat-count (stack-pop! interp)))
         (if (not (and
                   (number? repeat-count)
-                  (<= 0 repeat-count)
+                  (< 0 repeat-count)
                   (block-value? repeat-body)))
             (interp-error! interp "TypeError" (string-append "the \"repeat\" func expects a positive number and a block value, but got "
                                                  (value->write-string repeat-count)
                                                  " and "
                                                  (value->write-string repeat-body)))
             (let loop ((current-num 0) (limit (truncate repeat-count)))
-              (if (< limit current-num)
+              (if (<= limit current-num)
                   '()
                   (begin
                    (exec-block repeat-body interp)
