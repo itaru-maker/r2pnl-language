@@ -24,7 +24,7 @@
       (let* ((a (stack-pop! interp)))
         (cond
          ((not (block-value? a))
-          (interp-error! interp "TypeError"  "the \"head\" func expects 1 block value."))
+          (interp-error! interp "TypeError"  "the \"tail\" func expects 1 block value."))
 
          ((null? (block-value-items a))
           (interp-error! interp "ValueError" "the \"tail\" func expects a not null block"))

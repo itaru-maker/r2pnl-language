@@ -15,7 +15,7 @@
     newline
 } def 
 
-'names { "Sato" "Suzuki" "Takahashi" "Tanaka" "Ito" "Watanabe" "Yamamoto" "Nakamura Kobayashi" "Kato" } let
+'names { "Sato" "Suzuki" "Takahashi" "Tanaka" "Ito" "Watanabe" "Yamamoto" "Nakamura" "Kobayashi" "Kato" } let
 names { greet } each
 !names 'greet deref each
 !どっちがいいんだろう

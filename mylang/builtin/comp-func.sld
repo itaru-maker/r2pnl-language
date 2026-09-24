@@ -57,6 +57,9 @@
 
        ((and (lambda-value? a) (lambda-value? b))
         (equal? a b))
+
+       ((and (proc-value? a) (proc-value? b))
+        (equal? a b))
            
        ((and (r-paren? a) (r-paren? b))
         #t)

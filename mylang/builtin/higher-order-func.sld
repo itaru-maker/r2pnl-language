@@ -12,7 +12,7 @@
     (define (map-func interp)
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
-        (if (not (callable? lst))
+        (if (not (callable? proc))
             (interp-error! interp  "TypeError" "the \"map\" func excepts a callable (block, lambda or builtin) as second arg.")
             (let loop ((items (block-value-items lst)) (acc '()))
               (if (null? items)
@@ -26,7 +26,7 @@
     (define (each-func interp)
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
-        (if (not (callable? lst))
+        (if (not (callable? proc))
             (interp-error! interp  "TypeError" "the \"each\" func excepts a callable (block, lambda or builtin) as second arg.")
             (let loop ((items (block-value-items lst)))
               (if (null? items)
@@ -39,8 +39,8 @@
     (define (filter-func interp)
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
-        (if (not (callable? lst))
-            (interp-error! interp "TypeError" "the" "\"filter\" func expects a callable (block, lambda or builtin) as second arg.")
+        (if (not (callable? proc))
+            (interp-error! interp "TypeError" "the \"filter\" func expects a callable (block, lambda or builtin) as second arg.")
             (let ((items (block-value-items lst)))
               (let loop ((rest items) (acc '()))
                 (if (null? rest)
@@ -53,9 +53,29 @@
                             (loop (cdr rest) acc)
                             (loop (cdr rest) (cons (car rest) acc)))))))))))
 
+    (define (fold-func interp)
+      (let* ((proc (stack-pop! interp))
+             (init (stack-pop! interp))
+             (lst (stack-pop! interp)))
+        (cond
+         ((not (callable? proc))
+          (interp-error! interp "TypeError" "the \"fold\" func expects a callable (block, lambda or builtin) as third arg "))
+         ((not (block-value? lst))
+          (interp-error! interp "TypeError" "the \"fold\" func expects a block-value as first arg"))
+         (else
+          (let loop ((rest (block-value-items lst)) (acc init))
+            (if (null? rest)
+                (stack-push! interp acc)
+                (begin
+                  (stack-push! interp acc)
+                  (stack-push! interp (car (car rest)))
+                  (apply-callable! interp proc)
+                  (loop (cdr rest) (stack-pop! interp)))))))))
+
 
 
     (define higher-order-func-dict
       `(("map" . ,map-func)
         ("each" . , each-func)
-        ("filter" . ,filter-func)))))
+        ("filter" . ,filter-func)
+        ("fold" . ,fold-func)))))

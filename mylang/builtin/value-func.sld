@@ -37,6 +37,9 @@
     (define (lambda?-func interp)
       (stack-push! interp (lambda-value? (stack-pop! interp))))
 
+    (define (proc?-func interp)
+      (stack-push! interp (proc-value? (stack-pop! interp))))
+
     (define (r-paren?-func interp)
       (stack-push! interp (eq? the-r-paren (stack-pop! interp))))
     
@@ -54,5 +57,6 @@
         ("block?" . ,block?-func)
         ("builtin?" . ,builtin-func?-func)
         ("lambda?" . ,lambda?-func)
+        ("proc?" . ,proc?-func)
         ("r-paren?" . ,r-paren?-func)
         ("l-paren?" . ,l-paren?-func)))))
