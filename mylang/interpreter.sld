@@ -74,8 +74,8 @@
                   e
                   (cons (string-append "at line" (number->string caller-line) "\n")
                         (mylang-error-trace e)))
-                 (raise e));終わったら上に流す)
-          (exec-block (proc-value-body proc) interp)))))
+                 (raise e)));終わったら上に流す)
+          (exec-block (proc-value-body proc) interp))))
 
     (define (invoke! interp call-func)
       (cond
