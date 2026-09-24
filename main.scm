@@ -87,7 +87,7 @@ cyclone
     (begin
       (display "-====WARNING====-\n" (current-error-port))
       (display "stack is not empty at end of program\n" (current-error-port))
-      (display "-===top====-\n" (current-error-port))
+      (display "-===top=z===-\n" (current-error-port))
       (for-each (lambda (v)
                   (display (value->write-string v)(current-error-port))
                   (newline (current-error-port)))

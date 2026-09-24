@@ -27,27 +27,26 @@
       (stack interp-stack interp-stack-set!)
       (env interp-env interp-env-set!)
       (token-line interp-token-line interp-token-line-set!))
-
+    
     (define (stack-push! interp value)
       (interp-stack-set! interp (cons value (interp-stack interp))))
     
     (define (stack-pop! interp)
       (let ((s (interp-stack interp)))
-	(if (null? s)
-	    (interp-error! interp "StackUnderflowError" "pop from empty stack")
-	    (begin (interp-stack-set! interp (cdr s))
-		   (car s)))))
+        (if (null? s)
+            (interp-error! interp "StackUnderflowError" "pop from empty stack")
+            (begin (interp-stack-set! interp (cdr s))
+                   (car s)))))
     
     (define (interp-error! interp error-name message . opt-line);builtinはこいつを投げる
       (let ((error-line (if (not (null? opt-line)) (car opt-line) (interp-token-line interp))))
-	(raise (make-mylang-error error-name message error-line '())))) ;一番最初に起動した時だから、traceは空
+        (raise (make-mylang-error error-name message error-line '())))) ;一番最初に起動した時だから、traceは空
 
     (define (call-lambda! interp lmb)
       (let*
           ((lambda-env (make-env(lambda-value-env lmb)));lambdaの中のenv
            (caller-line (interp-token-line interp))
            (caller-env (interp-env interp)));interpが元々持っていたenv
-
         (guard (e
                 ((mylang-error? e)
                  (mylang-error-trace-set!
@@ -67,10 +66,22 @@
           (interp-env-set! interp caller-env);戻す
           (interp-token-line-set! interp caller-line))))
 
+    (define (call-proc! interp proc)
+      (let ((caller-line (interp-token-line interp)))
+        (guard (e
+                ((mylang-error? e)
+                 (mylang-error-trace-set!
+                  e
+                  (cons (string-append "at line" (number->string caller-line) "\n")
+                        (mylang-error-trace e)))
+                 (raise e));終わったら上に流す)
+          (exec-block (proc-value-body proc) interp)))))
+
     (define (invoke! interp call-func)
       (cond
        ((builtin-func? call-func) ((builtin-func-proc call-func) interp))
        ((lambda-value? call-func) (call-lambda! interp call-func) )
+       ((proc-value? call-func) (call-proc! interp call-func))
        (else (interp-error! interp "TypeError" "not callable value is passd"))))
 
     (define (exec-block block interp);execute-bodyの超々薄いラッパーなので、もしかしたら統合するかも
@@ -85,54 +96,56 @@
         (call-lambda! interp value))
        ((builtin-func? value)
         ((builtin-func-proc value) interp))
+       ((proc-value? value)
+        (call-proc! interp value))
        (else
         (interp-error! interp "TypeError" "expects callable"))))
 
     (define (execute-body interp sentence)
       (for-each
        (lambda (pair)
-	 (let ((item (car pair)) (item-line (cdr pair))) ;ここで分離
-	   (interp-token-line-set! interp item-line)
-	   (cond
-	    ((symbol-value? item)
-	     (if (in-env? (interp-env interp) (symbol-value-token item)) ;安全確認
+         (let ((item (car pair)) (item-line (cdr pair))) ;ここで分離
+           (interp-token-line-set! interp item-line)
+           (cond
+            ((symbol-value? item)
+             (if (in-env? (interp-env interp) (symbol-value-token item)) ;安全確認
                  (let ((v (env-get (interp-env interp) (symbol-value-token item))))
-                   (if (or (builtin-func? v) (lambda-value? v))
+                   (if (or (builtin-func? v) (lambda-value? v) (proc-value? v))
                        (invoke! interp v)
                        (stack-push! interp v)))
-		 (interp-error! interp "NameError" (string-append "unknown-name:" (symbol-value-token item)))))
+                 (interp-error! interp "NameError" (string-append "unknown-name:" (symbol-value-token item)))))
             
-	    ((lazy-value? item)
-	     (stack-push! interp (parse-one-token (lazy-value-token item) item-line)))
+            ((lazy-value? item)
+             (stack-push! interp (parse-one-token (lazy-value-token item) item-line)))
             
-	    (else
-	     (stack-push! interp item)))))
+            (else
+             (stack-push! interp item)))))
        sentence))
 
     
     (define (interp-run interp code)
       (guard (e;エラーをキャッチ
-	      ((mylang-error? e)
+              ((mylang-error? e)
                (newline)
                (display "-====ERROR====-" (current-error-port))
                (newline (current-error-port))
-	       (for-each (lambda (x) (display x (current-error-port)))
-			 (mylang-error-trace e))
-	       (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e))) (current-error-port))
+               (for-each (lambda (x) (display x (current-error-port)))
+                         (mylang-error-trace e))
+               (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e))) (current-error-port))
                (newline (current-error-port))
                (exit 1)))
 
-	(let*
-	    ((raw-tokens (lexar code))
-	     (types (sorting-types raw-tokens))
-	     (structure-types (parse-paren types)))
+        (let*
+            ((raw-tokens (lexar code))
+             (types (sorting-types raw-tokens))
+             (structure-types (parse-paren types)))
           (execute-body interp structure-types))))
 
     (define (make-interp builtins);決まりきった引数を削り取ったやつ
       (let* ((env (make-env #f))
-	     (interp (make-interp-raw '() env #f)));初期化用の、空スタック、親がいないenv(外側)、lineは#f を作る。
-	(for-each
-	 (lambda (entry);(name . proc)のリストをもらう
-	   (env-define env (car entry) (make-builtin-func (car entry) (cdr entry))))
-	 builtins)
-	interp))));for-eachは返さないから、interpを返す。
+             (interp (make-interp-raw '() env #f)));初期化用の、空スタック、親がいないenv(外側)、lineは#f を作る。
+        (for-each
+         (lambda (entry);(name . proc)のリストをもらう
+           (env-define env (car entry) (make-builtin-func (car entry) (cdr entry))))
+         builtins)
+        interp))));for-eachは返さないから、interpを返す。

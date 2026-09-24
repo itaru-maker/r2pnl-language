@@ -6,11 +6,14 @@
           (mylang interpreter))
 
   (begin
+    (define (callable? v)
+      (or (block-value? v) (builtin-func? v) (lambda-value? v)))
+    
     (define (map-func interp)
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
-        (if (not (block-value? lst))
-            (interp-error! interp  "TypeError" "the \"map\" func excepts a block as second arg.")
+        (if (not (callable? lst))
+            (interp-error! interp  "TypeError" "the \"map\" func excepts a callable (block, lambda or builtin) as second arg.")
             (let loop ((items (block-value-items lst)) (acc '()))
               (if (null? items)
                   (stack-push! interp (make-block-value (reverse acc)))
@@ -23,8 +26,8 @@
     (define (each-func interp)
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
-        (if (not (block-value? lst))
-            (interp-error! interp  "TypeError" "the \"each\" func excepts a block as second arg.")
+        (if (not (callable? lst))
+            (interp-error! interp  "TypeError" "the \"each\" func excepts a callable (block, lambda or builtin) as second arg.")
             (let loop ((items (block-value-items lst)))
               (if (null? items)
                   '();何も返さない
@@ -36,8 +39,8 @@
     (define (filter-func interp)
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
-        (if (not (block-value? lst))
-            (interp-error! interp "TypeError" "the" "\"filter\" func expects a block as second arg.")
+        (if (not (callable? lst))
+            (interp-error! interp "TypeError" "the" "\"filter\" func expects a callable (block, lambda or builtin) as second arg.")
             (let ((items (block-value-items lst)))
               (let loop ((rest items) (acc '()))
                 (if (null? rest)
