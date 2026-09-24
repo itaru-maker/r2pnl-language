@@ -1,3 +1,19 @@
-'hello { "hello world" print } proc let
+!可読性が死んでるけど無理やり実装
+'def {
+    ! bottom ( name params body ) top
+    [ rot ]  !name body { params }
+    { args } !name body { params } { args }
+    rot !name { params } { args } body
+    concat concat
+    fn let 
+} proc let
 
-hello
+'greet { name } {
+    "Hello, " print
+    name print
+    "!" print
+    newline
+} def 
+
+{ "Sato" "Suzuki" "Takahashi" "Tanaka" "Ito" "Watanabe" "Yamamoto" "Nakamura Kobayashi" "Kato" } { greet } each
+

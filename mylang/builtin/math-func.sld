@@ -12,7 +12,7 @@
 	     (b (stack-pop! interp)))
         (if (and (number? a) (number? b))
 	    (stack-push! interp (+ a b))
-	    (interp-error! interp "TypeError" (string-append "the \"add\" func expects two numbers, but got "
+	    (interp-error! interp "TypeError" (string-append "the \"+\" func expects two numbers, but got "
                                                 (value->write-string b) " and " (value->write-string a))))))
 
     (define (sub-func interp)
@@ -20,7 +20,7 @@
 	     (b (stack-pop! interp)))
         (if (and (number? a) (number? b))
 	    (stack-push! interp (- b a))
-	    (interp-error! interp "TypeError" (string-append "the \"sub\" func expects two numbers, but got "
+	    (interp-error! interp "TypeError" (string-append "the \"-\" func expects two numbers, but got "
                                                 (value->write-string b) " and " (value->write-string a))))))
 
     (define (mul-func interp)
@@ -28,7 +28,7 @@
 	     (b (stack-pop! interp)))
         (if (and (number? a) (number? b))
 	    (stack-push! interp (* b a))
-	    (interp-error! interp "TypeError" (string-append "the \"mul\" func expects two numbers, but got "
+	    (interp-error! interp "TypeError" (string-append "the \"*\" func expects two numbers, but got "
                                                  (value->write-string b) " and " (value->write-string a))))))
 
   (define (div-func interp)
@@ -38,7 +38,7 @@
           (if (zero? a)
               (interp-error! interp "ZeroDivisionError" "division by zero")
 	      (stack-push! interp (/ b a)))
-	  (interp-error! interp "TypeError" (string-append  "the \"sub\" func expects two numbers, but got "
+	  (interp-error! interp "TypeError" (string-append  "the \"/\" func expects two numbers, but got "
                                                  (value->write-string b) " and " (value->write-string a))))))
 
 
@@ -49,7 +49,7 @@
           (if (zero? a)
               (interp-error! interp "ZeroDivisionError" "modulo by zero")
 	      (stack-push! interp (modulo b a)))
-	  (interp-error! interp "TypeError" (string-append  "the \"mod\" func expects two numbers, but got "
+	  (interp-error! interp "TypeError" (string-append  "the \"%\" func expects two numbers, but got "
                                                            (value->write-string b) " and " (value->write-string a))))))
 
     (define (expt-func interp)
@@ -57,7 +57,7 @@
 	     (b (stack-pop! interp)))
         (if (and (number? a) (number? b))
 	    (stack-push! interp (expt b a))
-	    (interp-error! interp "TypeError" (string-append "the \"expt\" func expects two numbers, but got "
+	    (interp-error! interp "TypeError" (string-append "the \"**\" func expects two numbers, but got "
                                                              (value->write-string b) " and " (value->write-string a))))))
 
   (define (floor-div-func interp)
@@ -67,7 +67,7 @@
           (if (zero? a)
               (interp-error! interp "ZeroDivisionError" "floor-div by zero")
 	      (stack-push! interp (floor (/ b a))))
-	  (interp-error! interp "TypeError" (string-append  "the \"floor-div\" func expects two numbers, but got "
+	  (interp-error! interp "TypeError" (string-append  "the \"//\" func expects two numbers, but got "
                                                            (value->write-string b) " and " (value->write-string a))))))
 
 
@@ -118,14 +118,7 @@
 
 
   (define math-func-dict
-    `(("add" . ,add-func)
-      ("sub" . ,sub-func)
-      ("mul" . ,mul-func)
-      ("div" . ,div-func)
-      ("mod" . ,mod-func)
-      ("expt" . ,expt-func)
-      ("floor-div" . ,floor-div-func)
-      ("+" . ,add-func)
+    `(("+" . ,add-func)
       ("-" . ,sub-func)
       ("*" . ,mul-func)
       ("/" . ,div-func)
