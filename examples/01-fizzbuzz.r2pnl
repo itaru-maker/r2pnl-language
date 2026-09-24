@@ -1,9 +1,9 @@
 !古いやつ
 
 'fizzbuzz-cond {
-    dup 15 mod 0 = { drop "fizzbuzz" } {
-        dup 5 mod 0 = { drop "buzz" } {
-            dup 3 mod 0 = { drop "fizz" } {
+    dup 15 % 0 = { drop "fizzbuzz" } {
+        dup 5 % 0 = { drop "buzz" } {
+            dup 3 % 0 = { drop "fizz" } {
                 noop
             } if
         } if 
