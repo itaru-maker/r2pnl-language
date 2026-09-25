@@ -1,1 +1,1 @@
-"aiueo" 1 3 substring print
+"MyError" "Emacs must be used instead of VSCode or Vim" raise

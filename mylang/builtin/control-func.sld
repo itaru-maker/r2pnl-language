@@ -2,6 +2,7 @@
   (export control-func-dict)
   (import (scheme base)
           (mylang values)
+          (mylang error)
           (mylang env)
           (mylang tokens)
           (mylang interpreter)
@@ -118,7 +119,7 @@
                   (number? end)
                   (number? start)
                   (symbol-value? label)))
-            (interp-error! interp "TypeError" "the \"for\" func expects a symbol, two number and a block")
+            (interp-error! interp "TypeError" "the \"for\" func expects a symbol, two numbers and a block")
             (let*
                 ((caller-env (interp-env interp));一旦interp側のenvを退避
                  (loop-env (make-env caller-env)));退避させたやつを親にしたenvを作る
@@ -135,6 +136,27 @@
                         (interp-env-set! interp caller-env)))))))))
 
 
+    (define (try-func interp)
+      (let* ((handler (stack-pop! interp))
+             (body (stack-pop! interp)))
+        (if (not (and (block-value? handler) (block-value? body)))
+            (interp-error! interp "TypeError" "the \"try\" func expects two blocks")
+            (guard
+                (e
+                 ((mylang-error? e)
+                  (stack-push! interp (mylang-error-name e))
+                  (stack-push! interp (mylang-error-message e))
+                  (exec-block handler interp)))
+              (exec-block body interp)))))
+
+    (define (raise-func interp)
+      (let* ((msg (stack-pop! interp))
+             (name (stack-pop! interp)))
+        (if (not (and (string? msg) (string? name)))
+            (interp-error! interp "TypeError" "the \"raise\" func expects two strings")
+            (raise-mylang-error! name msg (interp-token-line interp)))))
+
+
     (define control-func-dict
       `(("do" . ,do-func)
         ("if" . ,if-func)
@@ -142,6 +164,8 @@
         ("while" . ,while-func)
         ("repeat" . ,repeat-func)
         ("cond" . , cond-func)
-        ("for" . ,for-func)))))
+        ("for" . ,for-func)
+        ("try" . ,try-func)
+        ("raise" . ,raise-func)))))
 
 
