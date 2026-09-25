@@ -44,15 +44,15 @@
             (integer? start)
             (positive? end)
             (positive? start)
-            (string? str))
-           (interp-error! interp "TypeError" "the \"substring\" func expects a string and two positive integer")))
+            (string? str)))
+          (interp-error! interp "TypeError" "the \"substring\" func expects a string and two positive integer"))
 
          ((< end start)
           (interp-error! interp "IndexError" "The start value must be greater than the end value"))
          ((<= (string-length str) end)
           (interp-error! interp "IndexError" "string index out of range"))
-
-         (stack-pop! interp (substring str start end)))))
+         (else
+          (stack-push! interp (substring str start end))))))
 
 
     (define string-func-dict
