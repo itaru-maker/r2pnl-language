@@ -6,7 +6,7 @@
   (begin
     (define (to-string-func interp)
       (let* ((v (stack-pop! interp)))
-        (stack-push! interp (value->write-string v))));writeの方でいいのかは不明
+        (stack-push! interp (value->write-string v))));displayの方がいい気がしてきた
 
     (define (string->number-func interp)
       (let* ((str (stack-pop! interp)))
@@ -22,7 +22,7 @@
             (stack-push! interp (make-symbol-value str))
             (interp-error! interp "TypeError" "the string->symbol func expects one string."))))
 
-    (define (symbol->string-func interp)
+    (define (symbol->string-func interp);string経由で変なsymbolも作れちゃうのは内緒
       (let* ((sym (stack-pop! interp)))
         (if (symbol-value? sym)
             (stack-push! interp (symbol-value-token sym))

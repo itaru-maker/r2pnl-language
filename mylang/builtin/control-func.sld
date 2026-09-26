@@ -61,15 +61,18 @@
                                                (value->write-string body)
                                                " and "
                                                (value->write-string cond-block)))
-            (let loop ()                ;このループを回す
-              (exec-block cond-block interp)
-              (let ((now-cond (stack-pop! interp)))
-                (if (or (eq? the-nil now-cond) (eq? #f now-cond))
-                    '()                 ;終わり。何もしない
-                    (begin
-                      (exec-block body interp)
-                      (loop))))))))
-
+            (let loop ();このループを回す
+              (let ((before-len (length (interp-stack interp))))
+                (exec-block cond-block interp)
+                (if (not (= (+ before-len 1) (length (interp-stack interp))))
+                    (interp-error! interp "StackError" "the condition block of the \"while\" func must push exactly one value")
+                    (let ((now-cond (stack-pop! interp)))
+                      (if (or (eq? the-nil now-cond) (eq? #f now-cond))
+                          '()                 ;終わり。何もしない
+                          (begin
+                            (exec-block body interp)
+                            (loop))))))))))
+      
     (define (repeat-func interp)
       (let*
           ((repeat-body (stack-pop! interp))
@@ -128,7 +131,7 @@
                 (interp-env-set! interp loop-env)
                 (let loop ((current-num start))
                   (if (< end current-num)
-                      (interp-env-set! interp caller-env);戻す
+                      (interp-envppp-set! interp caller-env);戻す
                       (begin
                         (env-set! loop-env var-name current-num)
                         (exec-block body interp)
@@ -141,14 +144,16 @@
              (body (stack-pop! interp)))
         (if (not (and (block-value? handler) (block-value? body)))
             (interp-error! interp "TypeError" "the \"try\" func expects two blocks")
-            (guard
-                (e
-                 ((mylang-error? e)
-                  (stack-push! interp (mylang-error-name e))
-                  (stack-push! interp (mylang-error-message e))
-                  (exec-block handler interp)))
-              (exec-block body interp)))))
-
+            (let ((saved-stack (interp-stack interp)));元の環境を汚さないためにコピーを作っておく
+              (guard
+                  (e
+                   ((mylang-error? e)
+                    (interp-stack-set! interp saved-stack)
+                    (stack-push! interp (mylang-error-name e))
+                    (stack-push! interp (mylang-error-message e))
+                    (exec-block handler interp)))
+                (exec-block body interp))))))
+    
     (define (raise-func interp)
       (let* ((msg (stack-pop! interp))
              (name (stack-pop! interp)))
