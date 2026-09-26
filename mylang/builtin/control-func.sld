@@ -131,7 +131,7 @@
                 (interp-env-set! interp loop-env)
                 (let loop ((current-num start))
                   (if (< end current-num)
-                      (interp-envppp-set! interp caller-env);戻す
+                      (interp-env-set! interp caller-env);戻す
                       (begin
                         (env-set! loop-env var-name current-num)
                         (exec-block body interp)
