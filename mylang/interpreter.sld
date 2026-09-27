@@ -49,20 +49,29 @@
           ((lambda-env (make-env(lambda-value-env lmb)));lambdaの中のenv
            (caller-line (interp-token-line interp))
            (caller-file (current-file))
-           (caller-env (interp-env interp)));interpが元々持っていたenv
+           (caller-env (interp-env interp));interpが元々持っていたenv
+           (saved-stack (interp-call-stack interp)))
           ;;切り替え！
           (interp-env-set! interp lambda-env)
           (interp-token-line-set! interp (lambda-value-line lmb))
 
+          (interp-call-stack-set! interp
+           (cons (make-frame caller-file caller-line) (interp-call-stack interp)))
+          
           (execute-body interp (block-value-items (lambda-value-body lmb)));ここで実行
 
           (interp-env-set! interp caller-env);戻す
-          (interp-token-line-set! interp caller-line)))
+          (interp-token-line-set! interp caller-line)
+          (interp-call-stack-set! interp saved-stack)));戻す
 
     (define (call-proc! interp proc)
       (let ((caller-line (interp-token-line interp))
-            (caller-file (current-file)))
-          (exec-block (proc-value-body proc) interp)))
+            (caller-file (current-file))
+            (saced-stack (interp-call-stack interp)))
+        (interp-call-stack-set! interp
+           (cons (make-frame caller-file caller-line) (interp-call-stack interp)))
+        (exec-block (proc-value-body proc) interp)
+        (interp-call-stack-set! interp saved-stack)));戻す
 
     (define (invoke! interp call-func)
       (cond
@@ -119,12 +128,13 @@
                (for-each (lambda (frame)
                            (display
                             (string-append
-                             "from"
+                             "from "
                              (frame-file frame)
                              " at line "
                              (number->string (frame-line frame))
                              "\n") (current-error-port)))
-                         (mylang-error-call-stack e))
+                         (reverse (mylang-error-call-stack e)))
+               (display (string-append "from " (mylang-error-file e) " at line" (number->string (mylang-error-line e)) "\n") (current-error-port))
                (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e))) (current-error-port))
                (newline (current-error-port))
                (exit 1)))

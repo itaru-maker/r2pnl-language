@@ -1,6 +1,9 @@
 (define-library (mylang error)
   (export
    current-file
+   make-frame
+   frame-file
+   frame-line
    make-mylang-error mylang-error?
    mylang-error-name mylang-error-message
    mylang-error-line 
