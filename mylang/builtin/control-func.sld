@@ -159,7 +159,7 @@
              (name (stack-pop! interp)))
         (if (not (and (string? msg) (string? name)))
             (interp-error! interp "TypeError" "the \"raise\" func expects two strings")
-            (raise-mylang-error! name msg (interp-token-line interp)))))
+            (raise-mylang-error! name msg (interp-token-line interp) (interp-call-stack interp)))))
 
 
     (define control-func-dict

@@ -3,22 +3,28 @@
    current-file
    make-mylang-error mylang-error?
    mylang-error-name mylang-error-message
-   mylang-error-line mylang-error-trace mylang-error-trace-set!
+   mylang-error-line 
    mylang-error-file
+   mylang-error-call-stack
    raise-mylang-error!)
   (import (scheme base))
   (begin
     (define current-file (make-parameter "<toplevel>"))
-    
+
+    (define-record-type <frame>
+      (make-frame file line)
+      frame?
+      (file frame-file)
+      (line frame-line))
     (define-record-type <mylang-error>
-      (make-mylang-error error-name message line file trace)
+      (make-mylang-error error-name message line file call-stack)
       mylang-error?
       (error-name mylang-error-name)
       (message mylang-error-message)
       (line mylang-error-line)
       (file mylang-error-file)
-      (trace mylang-error-trace mylang-error-trace-set!))
+      (call-stack mylang-error-call-stack))
     
     
-    (define (raise-mylang-error! name message line)
-      (raise (make-mylang-error name message line (current-file) '())))));グローバルのcurrentを
+    (define (raise-mylang-error! name message line call-stack)
+      (raise (make-mylang-error name message line (current-file) call-stack)))));グローバルのcurrentを

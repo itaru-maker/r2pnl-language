@@ -1,6 +1,6 @@
 (define-library (mylang interpreter)
   (export
-   make-interp make-interp-raw interp? interp-stack interp-stack-set! interp-env interp-env-set! interp-token-line interp-token-line-set!
+   make-interp make-interp-raw interp? interp-stack interp-stack-set! interp-env interp-env-set! interp-token-line interp-token-line-set! interp-call-stack interp-call-stack-set!
    stack-push! stack-pop!
    interp-error!
    call-lambda!
@@ -23,11 +23,12 @@
   
   (begin
     (define-record-type <interp>
-      (make-interp-raw stack env token-line)
+      (make-interp-raw stack env token-line call-stack) 
       interp?
       (stack interp-stack interp-stack-set!)
       (env interp-env interp-env-set!)
-      (token-line interp-token-line interp-token-line-set!))
+      (token-line interp-token-line interp-token-line-set!)
+      (call-stack interp-call-stack interp-call-stack-set!))
     
     (define (stack-push! interp value)
       (interp-stack-set! interp (cons value (interp-stack interp))))
@@ -41,7 +42,7 @@
     
     (define (interp-error! interp error-name message . opt-line);builtinはこいつを投げる
       (let ((error-line (if (not (null? opt-line)) (car opt-line) (interp-token-line interp))))
-        (raise (make-mylang-error error-name message error-line (current-file) '())))) ;一番最初に起動した時だから、traceは空
+        (raise (make-mylang-error error-name message error-line (current-file) (interp-call-stack interp))))) ;一番最初に起動した時だから、traceは空
 
     (define (call-lambda! interp lmb)
       (let*
@@ -49,16 +50,6 @@
            (caller-line (interp-token-line interp))
            (caller-file (current-file))
            (caller-env (interp-env interp)));interpが元々持っていたenv
-        (guard (e
-                ((mylang-error? e)
-                 (mylang-error-trace-set!
-                  e
-                  (cons (string-append "from " caller-file" at line " (number->string caller-line) "\n")
-                        (mylang-error-trace e)))
-                 (interp-env-set! interp caller-env)
-                 (interp-token-line-set! interp caller-line)
-                 (raise e)));終わったら、そのまま上に流す
-
           ;;切り替え！
           (interp-env-set! interp lambda-env)
           (interp-token-line-set! interp (lambda-value-line lmb))
@@ -66,19 +57,12 @@
           (execute-body interp (block-value-items (lambda-value-body lmb)));ここで実行
 
           (interp-env-set! interp caller-env);戻す
-          (interp-token-line-set! interp caller-line))))
+          (interp-token-line-set! interp caller-line)))
 
     (define (call-proc! interp proc)
       (let ((caller-line (interp-token-line interp))
             (caller-file (current-file)))
-        (guard (e
-                ((mylang-error? e)
-                 (mylang-error-trace-set!
-                  e
-                  (cons (string-append "from " caller-file " at line " (number->string caller-line) "\n")
-                        (mylang-error-trace e)))
-                 (raise e)));終わったら上に流す)
-          (exec-block (proc-value-body proc) interp))))
+          (exec-block (proc-value-body proc) interp)))
 
     (define (invoke! interp call-func)
       (cond
@@ -132,12 +116,18 @@
                (newline)
                (display "-====ERROR====-" (current-error-port))
                (newline (current-error-port))
-               (for-each (lambda (x) (display x (current-error-port)))
-                         (mylang-error-trace e))
-               (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e)) "(" (mylang-error-file e) ")") (current-error-port))
+               (for-each (lambda (frame)
+                           (display
+                            (string-append
+                             "from"
+                             (frame-file frame)
+                             " at line "
+                             (number->string (frame-line frame))
+                             "\n") (current-error-port)))
+                         (mylang-error-call-stack e))
+               (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e))) (current-error-port))
                (newline (current-error-port))
                (exit 1)))
-
         (let*
             ((raw-tokens (lexar code))
              (types (sorting-types raw-tokens))
@@ -146,7 +136,7 @@
 
     (define (make-interp builtins);決まりきった引数を削り取ったやつ
       (let* ((env (make-env #f))
-             (interp (make-interp-raw '() env #f)));初期化用の、空スタック、親がいないenv(外側)、lineは#f を作る。
+             (interp (make-interp-raw '() env #f '())));初期化用の、空スタック、親がいないenv(外側)、lineは#f、call-stackは無 を作る。
         (for-each
          (lambda (entry);(name . proc)のリストをもらう
            (env-define env (car entry) (make-builtin-func (car entry) (cdr entry))))

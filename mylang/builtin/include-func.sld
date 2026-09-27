@@ -28,21 +28,11 @@
          ((not (file-exists? path)) (interp-error! interp "IOError" (string-append "no such file:" path)))
          (else
           (parameterize ((current-file path))
-            (guard (e
-                    ((mylang-error? e)
-                     (mylang-error-trace-set!
-                      e
-                    (cons
-                     (string-append "from " caller-file " at line " (number->string caller-line) "\n")
-                     (mylang-error-trace e)))
-                     (interp-token-line-set! interp caller-line);戻してあげる
-                     (raise e)))
-              
               (let* ((raw (lexar (read-all-text path)))
                      (types (sorting-types raw))
                      (structure (parse-paren types)))
                 (execute-body interp structure)
-                (interp-token-line-set! interp caller-line))))))))
+                (interp-token-line-set! interp caller-line)))))))
     
     (define include-func-dict
       `(("include" . ,include-func)))))
