@@ -21,25 +21,28 @@
     
     (define (include-func interp)
       (let* ((path (stack-pop! interp))
-             (caller-line (interp-token-line interp)))
+             (caller-line (interp-token-line interp))
+             (caller-file (current-file)))
         (cond
          ((not (string? path)) (interp-error! interp "TypeError" "the \"include\" func expects a string"))
          ((not (file-exists? path)) (interp-error! interp "IOError" (string-append "no such file:" path)))
          (else
-          (guard (e
-                  ((mylang-error? e)
-                   (mylang-error-trace-set!
-                    e
+          (parameterize ((current-file path))
+            (guard (e
+                    ((mylang-error? e)
+                     (mylang-error-trace-set!
+                      e
                     (cons
-                     (string-append "from " (current-file) " at line " (number->string (caller-line)))
+                     (string-append "from " caller-file " at line " (number->string caller-line) "\n")
                      (mylang-error-trace e)))
-                   (interp-token-line-set! interp caller-line);戻してあげる
-                   (raise e)))
-            (let* ((raw (lexar (read-all-text path)))
-                   (types (sorting-types raw))
-                   (structure (parse-paren types)))
-              (execute-body interp structure)
-              (interp-token-line-set! interp caller-line)))))))
+                     (interp-token-line-set! interp caller-line);戻してあげる
+                     (raise e)))
+              
+              (let* ((raw (lexar (read-all-text path)))
+                     (types (sorting-types raw))
+                     (structure (parse-paren types)))
+                (execute-body interp structure)
+                (interp-token-line-set! interp caller-line))))))))
     
     (define include-func-dict
       `(("include" . ,include-func)))))

@@ -81,7 +81,8 @@ cyclone
 (define mylang-code
   (get-code (target-file-path)))
 
-(interp-run mylang mylang-code)
+(parameterize ((current-file (target-file-path)))
+  (interp-run mylang mylang-code))
 
 (if (not (null? (interp-stack mylang)));安全確認　（これはいらないっていう人もいるかも）
     (begin

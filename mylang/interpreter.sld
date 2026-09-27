@@ -47,12 +47,13 @@
       (let*
           ((lambda-env (make-env(lambda-value-env lmb)));lambdaの中のenv
            (caller-line (interp-token-line interp))
+           (caller-file (current-file))
            (caller-env (interp-env interp)));interpが元々持っていたenv
         (guard (e
                 ((mylang-error? e)
                  (mylang-error-trace-set!
                   e
-                  (cons (string-append "at line" (number->string caller-line) "\n")
+                  (cons (string-append "from " caller-file" at line " (number->string caller-line) "\n")
                         (mylang-error-trace e)))
                  (interp-env-set! interp caller-env)
                  (interp-token-line-set! interp caller-line)
@@ -68,12 +69,13 @@
           (interp-token-line-set! interp caller-line))))
 
     (define (call-proc! interp proc)
-      (let ((caller-line (interp-token-line interp)))
+      (let ((caller-line (interp-token-line interp))
+            (caller-file (current-file)))
         (guard (e
                 ((mylang-error? e)
                  (mylang-error-trace-set!
                   e
-                  (cons (string-append "at line" (number->string caller-line) "\n")
+                  (cons (string-append "from " caller-file " at line " (number->string caller-line) "\n")
                         (mylang-error-trace e)))
                  (raise e)));終わったら上に流す)
           (exec-block (proc-value-body proc) interp))))
@@ -132,7 +134,7 @@
                (newline (current-error-port))
                (for-each (lambda (x) (display x (current-error-port)))
                          (mylang-error-trace e))
-               (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e)) "(" (mylang-error-file e)) (current-error-port))
+               (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e)) "(" (mylang-error-file e) ")") (current-error-port))
                (newline (current-error-port))
                (exit 1)))
 
