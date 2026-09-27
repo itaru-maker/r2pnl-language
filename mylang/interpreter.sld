@@ -7,7 +7,8 @@
    invoke!
    exec-block
    apply-callable!
-   interp-run)
+   interp-run
+   execute-body)
   
   (import
    (scheme base)
@@ -40,7 +41,7 @@
     
     (define (interp-error! interp error-name message . opt-line);builtinはこいつを投げる
       (let ((error-line (if (not (null? opt-line)) (car opt-line) (interp-token-line interp))))
-        (raise (make-mylang-error error-name message error-line '())))) ;一番最初に起動した時だから、traceは空
+        (raise (make-mylang-error error-name message error-line (current-file) '())))) ;一番最初に起動した時だから、traceは空
 
     (define (call-lambda! interp lmb)
       (let*
@@ -131,7 +132,7 @@
                (newline (current-error-port))
                (for-each (lambda (x) (display x (current-error-port)))
                          (mylang-error-trace e))
-               (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e))) (current-error-port))
+               (display (string-append (mylang-error-name e) ":" (mylang-error-message e) " at line " (number->string (mylang-error-line e)) "(" (mylang-error-file e)) (current-error-port))
                (newline (current-error-port))
                (exit 1)))
 

@@ -35,8 +35,9 @@
         'acc acc str i string-nth char-rot string-concat set
     } for
     acc
+    + + + +
 } fn let
-
+(
 !==============例1================
 'a "I can eat glass, it does not hurt me." rot13 let
 'b a rot13 let
@@ -56,3 +57,4 @@ newline
 d print
 newline
 !===============================
+)
