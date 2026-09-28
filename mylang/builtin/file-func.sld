@@ -12,7 +12,7 @@
     (define (file-exists?-func interp)
       (let* ((name (stack-pop! interp)))
         (if (string? name)
-            (stack-pop! interp (file-exists? name))
+            (stack-push! interp (file-exists? name))
             (interp-error! interp "TypeError" "the \"file-exists?\" func expects a string"))))
 
     (define file-func-dict

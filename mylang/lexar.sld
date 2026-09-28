@@ -14,7 +14,7 @@
                    (in-str? #f)
                    (comment-depth 0)
                    (in-line-cmt? #f)
-                   (line 0) ; 現在のline
+                   (line 1) ; 現在のline
                    (tokens '())); 返すやつ(逆向き)
           
           (define (flash-chars chars tokens line)
@@ -25,7 +25,7 @@
           (if (= i code-len) ;終了だったら、
               (begin
                 (if (> comment-depth 0);コメントが閉じているか
-                    (raise-mylang-error! "parse-error" "unclosed comment" line)
+                    (raise-mylang-error! "ParseError" "unclosed comment" line)
                     (reverse (flash-chars chars tokens line))))
               
               (let ((chr (string-ref plain-code i)))
@@ -45,7 +45,7 @@
                   (loop (+ i 1) '() #f 1 #f line (flash-chars chars tokens line)))
 
                  ((and (not in-str?) (not in-line-cmt?) (char=? #\) chr))
-                  (raise-mylang-error! "parse-error" "extra closing }!" line))
+                  (raise-mylang-error! "ParseError" "extra closing )!" line))
 
 
                  (in-line-cmt?
@@ -54,7 +54,13 @@
                       (loop (+ i 1) '() #f 0 #t line tokens)))
 
                  ((and (not in-str?) (= comment-depth 0) (char=? cmt-chr chr))
-                  (loop (+ i 1) '() #f 0 #t line (flash-chars chars tokens line)))
+                  (loop (+ i 1)
+                        '()
+                        #f
+                        0
+                        #t
+                        (if (char=? chr #\newline) (+ 1 line) line)
+                        (flash-chars chars tokens line)))
 
                  
                  ((char=? #\" chr)

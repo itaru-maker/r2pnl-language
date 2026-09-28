@@ -35,7 +35,6 @@
         'acc acc str i string-nth char-rot string-concat set
     } for
     acc
-    + + + +
 } fn let
 (
 !==============例1================

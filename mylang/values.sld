@@ -6,8 +6,8 @@
    make-block-value block-value? block-value-items block-value-items-set!
    block-value-append!
    make-builtin-func builtin-func? builtin-func-name builtin-func-proc
-   make-lambda-value lambda-value? lambda-value-body lambda-value-env lambda-value-line
-   make-proc-value proc-value? proc-value-body proc-value-line
+   make-lambda-value lambda-value? lambda-value-body lambda-value-env lambda-value-line lambda-value-file
+   make-proc-value proc-value? proc-value-body proc-value-line proc-value-file
    value->write-string
    value->display-string)
   (import (scheme base)
@@ -48,17 +48,19 @@
       (proc builtin-func-proc))
 
     (define-record-type <lambda-value>
-      (make-lambda-value body env line)
+      (make-lambda-value body env line file)
       lambda-value?
       (body lambda-value-body)
       (env lambda-value-env)
-      (line lambda-value-line))
+      (line lambda-value-line)
+      (file lambda-value-file))
 
     (define-record-type <proc-value>
-      (make-proc-value body line)
+      (make-proc-value body line file)
       proc-value?
       (body proc-value-body)
-      (line proc-value-line))
+      (line proc-value-line)
+      (file proc-value-file))
 
 
     (define (value->write-string value)
@@ -75,9 +77,9 @@
 	    ((builtin-func? value)
 	     (string-append "<builtin:" (builtin-func-name value) ">"))
 	    ((lambda-value? value)
-	     (string-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value)))) ">"))
+	     (string-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value))) "") ">"))
             ((proc-value? value)
-	     (string-append "<proc" (if (proc-value-line value) (string-append " at " (number->string (proc-value-line value)))) ">"))
+	     (string-append "<proc" (if (proc-value-line value) (string-append " at " (number->string (proc-value-line value))) "") ">"))
 	    ;;tokens
 	    ((r-paren? value) "<r-paren>")
 	    ((l-paren? value) "<l-paren>")
@@ -100,9 +102,9 @@
 	    ((builtin-func? value)
 	     (string-append "<builtin:" (builtin-func-name value) ">"))
 	    ((lambda-value? value)
-	     (string-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value)))) ">"))
+	     (string-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value))) "") ">"))
             ((proc-value? value)
-	     (string-append "<proc" (if (proc-value-line value) (string-append " at " (number->string (proc-value-line value)))) ">"))
+	     (string-append "<proc" (if (proc-value-line value) (string-append " at " (number->string (proc-value-line value))) "") ">"))
 	    ;;tokens
 	    ((r-paren? value) "<r-paren>")
 	    ((l-paren? value) "<l-paren>")

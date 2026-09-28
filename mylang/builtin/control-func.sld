@@ -144,11 +144,13 @@
              (body (stack-pop! interp)))
         (if (not (and (block-value? handler) (block-value? body)))
             (interp-error! interp "TypeError" "the \"try\" func expects two blocks")
-            (let ((saved-stack (interp-stack interp)));元の環境を汚さないためにコピーを作っておく
+            (let ((saved-stack (interp-stack interp));元の環境を汚さないためにコピーを作っておく
+                  (saved-env (interp-env interp)))
               (guard
                   (e
                    ((mylang-error? e)
                     (interp-stack-set! interp saved-stack)
+                    (interp-env-set! interp saved-env)
                     (stack-push! interp (mylang-error-name e))
                     (stack-push! interp (mylang-error-message e))
                     (exec-block handler interp)))
@@ -159,7 +161,7 @@
              (name (stack-pop! interp)))
         (if (not (and (string? msg) (string? name)))
             (interp-error! interp "TypeError" "the \"raise\" func expects two strings")
-            (raise-mylang-error! name msg (interp-token-line interp) (interp-call-stack interp)))))
+            (interp-error! interp name msg))))
 
 
     (define control-func-dict
