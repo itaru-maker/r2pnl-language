@@ -1,5 +1,5 @@
 'factorial {
-    'n swap let ! 引数としてもらって定義
+    'n swap let
     n 0 = {
         1
     } {

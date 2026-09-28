@@ -1,4 +1,4 @@
-!可読性が死んでるけど力技で無理やり実装
+!無理やり実装
 'def {
     ! bottom ( name params body ) top
     [ rot ]  !name body { params }
@@ -17,6 +17,3 @@
 
 'names { "Sato" "Suzuki" "Takahashi" "Tanaka" "Ito" "Watanabe" "Yamamoto" "Nakamura" "Kobayashi" "Kato" } let
 names { greet } each
-!names 'greet deref each
-!どっちがいいんだろう
-
