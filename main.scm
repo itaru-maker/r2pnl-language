@@ -39,11 +39,9 @@ cyclone
 
 (define mylang (make-interp all-builtins));インスタンス化
 
-(define (fatal-error! message)
+(define (fatal-error! name message)
   (newline)
-  (display "-====ERROR====-" (current-error-port))
-
-  (display message (current-error-port))
+  (display (string-append name ":" message) (current-error-port))
   (newline (current-error-port))
   (exit 1))
 
@@ -71,7 +69,7 @@ cyclone
             (if (eof-object? content)
                 ""
                 (string-copy content)))))
-        (fatal-error! (string-append "can't open file '" file-path "'"))))
+        (fatal-error! "IOError"(string-append "can't open file '" file-path "'"))))
 
 ;;V 将来的にはmain.scmをエントリポイントにして、その一つ後を受け取るようにしたい
 (define (target-file-path)

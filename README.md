@@ -1,3 +1,3 @@
 # r2pnl-language
 
-a programming language for me
+My stack-based programming language
