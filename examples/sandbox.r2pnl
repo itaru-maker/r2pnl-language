@@ -1,3 +1,0 @@
-"examples/rot13.r2pnl" include
-
-"hello world" rot13 print

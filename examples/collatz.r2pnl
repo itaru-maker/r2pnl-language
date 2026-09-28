@@ -1,0 +1,17 @@
+'collatz {
+    'n swap let
+    { 1 n /= } {
+        n print
+        newline
+        n even? {
+            'n n 2 / set
+        } {
+            'n n 3 * 1 + set
+        } if
+    } while
+    "1になった!" print
+} fn let
+
+!27 collatz
+
+931386509544713451 collatz
