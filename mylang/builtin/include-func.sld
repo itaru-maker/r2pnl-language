@@ -20,19 +20,15 @@
                   (loop (cons chr acc))))))))
     
     (define (include-func interp)
-      (let* ((path (stack-pop! interp))
-             (caller-line (interp-token-line interp))
-             (caller-file (current-file)))
+      (let* ((path (stack-pop! interp)))
         (cond
          ((not (string? path)) (interp-error! interp "TypeError" "the \"include\" func expects a string"))
          ((not (file-exists? path)) (interp-error! interp "IOError" (string-append "no such file:" path)))
          (else
-          (parameterize ((current-file path))
-              (let* ((raw (lexar (read-all-text path)))
-                     (types (sorting-types raw))
-                     (structure (parse-paren types)))
-                (execute-body interp structure)
-                (interp-token-line-set! interp caller-line)))))))
+          (let* ((structure (parse-paren (sorting-types (lexar (read-all-text path)))))
+                 (caller-line (cons (current-frame interp) (interp-call-stack interp))))
+            (call-with-frame interp path 1 "<toplevel>"
+                             (lambda () (execute-body interp structure))))))))
     
     (define include-func-dict
       `(("include" . ,include-func)))))

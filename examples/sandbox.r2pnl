@@ -1,5 +1,3 @@
-'f {
-    1 0 /
-} fn let
+"examples/rot13.r2pnl" include
 
-f
+"hello world" rot13 print

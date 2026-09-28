@@ -4,6 +4,7 @@
    stack-push! stack-pop!
    current-frame
    interp-error!
+   call-with-frame
    call-lambda!
    invoke!
    exec-block
@@ -56,18 +57,20 @@
             (saved-name (interp-name interp))
             (saved-line (interp-token-line interp))
             (saved-env (interp-env interp))
-            (saved-call-stack (interp-call-stack interp)))
+            (saved-call-stack (interp-call-stack interp))
+            (caller-frame (current-frame interp)))
         (dynamic-wind
           (lambda ()
             (interp-file-set! interp file)
             (interp-token-line-set! interp line)
             (interp-name-set! interp name)
-            (interp-call-stack-set! interp (cons (current-frame interp) saved-call-stack)))
+            (interp-call-stack-set! interp (cons caller-frame  saved-call-stack)))
           thunk;実行
           (lambda ();全部戻す（絶対）
             (interp-file-set! interp saved-file)
             (interp-token-line-set! interp saved-line)
             (interp-name-set! interp saved-name)
+            (interp-env-set! interp saved-env)
             (interp-call-stack-set! interp saved-call-stack)))))
 
     (define (call-lambda! interp lmb)

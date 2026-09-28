@@ -11,6 +11,7 @@
         } when
     } for
     found
+    kani
 } fn let
 
 !完成
