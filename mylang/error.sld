@@ -27,7 +27,7 @@
       (message mylang-error-message)
       (trace mylang-error-trace))
     
-    (define (raise-mylang-error! name message line);lineがわからないparser lexar用
+    (define (raise-mylang-error! name message line);lineがわからないparser lexer用
       (raise (make-mylang-error name message (list (make-frame #f line #f)))));#fになってるのはinterp側に任せる
     (define (mylang-error-unresolve? e)
       (not (frame-file (car (mylang-error-trace e)))));一番手前のファイルが未完成かどうか

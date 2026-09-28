@@ -17,7 +17,7 @@
                 (if (and (char=? current #\\) (< (+ i 1) len));esc?&nextは取れる？（取れないなら自動的に取らずに進める）
                     (let ((next (string-ref str (+ i 1))))
                       (case next
-                        ((#\') (loop (+ i 2) (cons #\" acc)));lexar複雑化したくなかった（ゆるして）
+                        ((#\') (loop (+ i 2) (cons #\" acc)));lexer複雑化したくなかった（ゆるして）
                         ((#\n) (loop (+ i 2) (cons #\newline acc)))
                         ((#\\) (loop (+ i 2) (cons #\\ acc)))
                         ((#\t) (loop (+ i 2) (cons #\tab acc)))

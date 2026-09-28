@@ -6,7 +6,7 @@
           (mylang values)
           (mylang tokens)
           (mylang error)
-          (mylang lexar)
+          (mylang lexer)
           (mylang parser)
           (mylang interpreter))
   (begin
@@ -25,7 +25,7 @@
          ((not (string? path)) (interp-error! interp "TypeError" "the \"include\" func expects a string"))
          ((not (file-exists? path)) (interp-error! interp "IOError" (string-append "no such file:" path)))
          (else
-          (let* ((structure (parse-paren (sorting-types (lexar (read-all-text path)))))
+          (let* ((structure (parse-paren (sorting-types (lexer (read-all-text path)))))
                  (caller-line (cons (current-frame interp) (interp-call-stack interp))))
             (call-with-frame interp path 1 "<toplevel>"
                              (lambda () (execute-body interp structure))))))))

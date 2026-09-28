@@ -31,7 +31,7 @@ cyclone
         (mylang values)
         (mylang tokens)
         (mylang env)
-        (mylang lexar)
+        (mylang lexer)
         (mylang parser)
         (mylang error)
         (mylang interpreter)
