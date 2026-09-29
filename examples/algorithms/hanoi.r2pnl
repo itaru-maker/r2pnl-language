@@ -1,0 +1,13 @@
+'hanoi {
+    { n source target auxiliary } args
+    n 1 = {
+        [ "円盤1を" source "->" target "へ移動\n" ] { print } each
+    } {
+        n 1 - source auxiliary target hanoi
+        [ "円盤" n "を" source "->" target "へ移動\n" ] { print } each
+        n 1 - auxiliary source target hanoi
+    } if 
+} fn let
+
+12 "A" "B" "C" hanoi
+"done" print
