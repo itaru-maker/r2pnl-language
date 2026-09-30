@@ -1,0 +1,74 @@
+'*stack* { } let
+
+'pop {
+    *stack* head '*stack* *stack* tail set
+} fn let
+
+'push {
+    '*stack* swap *stack* cons set
+} fn let
+
+! ========define commands=======
+!arithmetic
+'add-opr { pop pop + push } fn let
+'sub-opr { pop pop swap - push } fn let
+'mul-opr { pop pop * push } fn let
+'div-opr { pop pop swap / push } fn let
+'mod-opr { pop pop swap % push } fn let
+'power-opr { pop pop swap ** push } fn let
+!stack
+'dup-opr { pop dup push push } fn let
+'swap-opr { pop pop swap push push } fn let
+'drop-opr { pop } fn let
+!output
+'print-opr { pop print } fn let
+'print-stack-opr { *stack* print } fn let
+!ohter
+'clear-opr { '*stack* { } set } fn let
+! ==============================
+
+
+'opr-cond { { opr } args
+    {
+        !arithmetic
+        { opr "+" equal } { add-opr }
+        { opr "-" equal } { sub-opr }
+        { opr "*" equal } { mul-opr }
+        { opr "/" equal } { div-opr }
+        { opr "%" equal } { mod-opr }
+        { opr "**" equal } { power-opr }
+        !stack
+        { opr "dup" equal } { dup-opr }
+        { opr "swap" equal } { swap-opr }
+        { opr "drop" equal } { drop-opr }
+        !output
+        { opr "." equal } { print-opr }
+        { opr ".s" equal } { print-stack-opr }
+        !other
+        { opr "clear" equal } { clear-opr }
+        { #true } { "unknown operator" print }
+    } cond
+} fn let
+
+'eval-string { { str } args
+    str string->number {
+        str string->number push
+    } {
+        str opr-cond
+    } if 
+} fn let
+
+'repl {
+    'inp "" let
+    { inp "q" equal not } {
+        ">" print
+        'inp input set
+        inp "q" equal not {
+            inp eval-string
+        } when
+    } while
+} fn let
+
+repl !start
+
+newline
