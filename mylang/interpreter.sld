@@ -138,7 +138,7 @@
        sentence))
 
     (define (parse-code code file callers)
-      (guard (e ((and (mylang-error? e)) (mylang-error-resolve e file "<toplevel>" callers)))
+      (guard (e ((and (mylang-error? e)) (raise (mylang-error-resolve e file "<toplevel>" callers))))
         (parse-paren (sorting-types (lexer code)))))
 
     (define (line->string line)

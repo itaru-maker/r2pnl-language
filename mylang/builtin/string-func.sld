@@ -9,14 +9,22 @@
       (let* ((a (stack-pop! interp))
              (b (stack-pop! interp)))
         (if (not (and (string? b) (string? a)))
-            (interp-error! interp "TypeError" "The \"string-concat\" func expects two string")
+            (interp-error! interp
+                           "TypeError"
+                           (string-append "The \"string-concat\" func expects two string, but got "
+                                          (value->write-string a)
+                                          " and "
+                                          (value->write-string b)))
             (stack-push! interp (string-append b a)))))
 
     (define (string-length-func interp)
       (let* ((a (stack-pop! interp)))
         (if (string? a)
             (stack-push! interp (string-length a))
-            (interp-error! interp "TypeError" "The \"string-len func\" expects one string"))))
+            (interp-error! interp
+                           "TypeError"
+                           (string-append "The \"string-len func\" expects one string, but got "
+                                          (value->write-string a))))))
 
     (define (string-nth-func interp)
       (let* ((i (stack-pop! interp))

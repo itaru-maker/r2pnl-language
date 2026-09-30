@@ -37,4 +37,4 @@
         (make-mylang-error
          (mylang-error-name e)
          (mylang-error-message e)
-         (cons (make-frame file (frame-line inner) name) (mylang-error-trace e)))))))
+         (cons (make-frame file (frame-line inner) name) callers))))))
