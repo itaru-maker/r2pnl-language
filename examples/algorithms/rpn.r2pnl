@@ -23,7 +23,7 @@
 !output
 'print-opr { pop print } fn let
 'print-stack-opr { *stack* print } fn let
-!ohter
+!other
 'clear-opr { '*stack* { } set } fn let
 ! ==============================
 
