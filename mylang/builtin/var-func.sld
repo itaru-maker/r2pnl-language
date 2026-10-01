@@ -26,7 +26,7 @@
 	(if (symbol-value? name)
 	    (if (in-env? (interp-env interp) (symbol-value-token name))
 		(env-set! (interp-env interp) (symbol-value-token name) value)
-		(interp-error! interp "UnderfinedError" (string-append
+		(interp-error! interp "UndefinedError" (string-append
                                                          "the \"set\" func expects a defined symbol, but \""
                                                          (symbol-value-token name)
                                                          "\" is not defined yet") ))
@@ -39,7 +39,7 @@
         (if (symbol-value? name)
             (if (in-env? (interp-env interp)(symbol-value-token name))
                 (stack-push! interp (env-get (interp-env interp) (symbol-value-token name)))
-                (interp-error! interp "UnderfinedError" (string-append
+                (interp-error! interp "UndefinedError" (string-append
                                                          "the \"deref\" func expects a defined symbol, but \""
                                                          (symbol-value-token name)
                                                          "\" is not defined yet") ))
@@ -70,10 +70,37 @@
                   (else (env-define (interp-env interp) (symbol-value-token name) (stack-pop! interp))))))
              
              (reverse (block-value-items params))))))
-    
+
+    (define (inc-func interp)
+      (let* ((sym (stack-pop! interp)))
+        (cond
+         ((not (symbol-value? sym))
+          (interp-error! interp "TypeError" "the \"inc\" func expects a symbol"))
+         ((not (in-env? (interp-env interp) (symbol-value-token sym)))
+          (interp-error! interp "UndefinedError" "the \"inc\" func expects a defined symbol"))
+         ((not (number? (env-get (interp-env interp) (symbol-value-token sym))))
+          (interp-error! interp "TypeError" "the \"inc\" func expects number variable"))
+         (else
+          (env-set! (interp-env interp) (symbol-value-token sym) (+ 1 (env-get (interp-env interp) (symbol-value-token sym))))))))
+
+
+    (define (dec-func interp)
+      (let* ((sym (stack-pop! interp)))
+        (cond
+         ((not (symbol-value? sym))
+          (interp-error! interp "TypeError" "the \"dec\" func expects a symbol"))
+         ((not (in-env? (interp-env interp) (symbol-value-token sym)))
+          (interp-error! interp "UndefinedError" "the \"dec\" func expects a defined symbol"))
+         ((not (number? (env-get (interp-env interp) (symbol-value-token sym))))
+          (interp-error! interp "TypeError" "the \"dec\" func expects number variable"))
+         (else
+          (env-set! (interp-env interp) (symbol-value-token sym) (+ -1 (env-get (interp-env interp) (symbol-value-token sym))))))))
+
     
     (define var-func-dict
       `(("let" . ,let-func)
 	("set" . ,set-func)
         ("deref" . ,deref-func)
-        ("args" . ,args-func)))))
+        ("args" . ,args-func)
+        ("inc" . ,inc-func)
+        ("dec" . ,dec-func)))))
