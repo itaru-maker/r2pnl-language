@@ -1,0 +1,20 @@
+(ネタソートです)
+'sorted? { { lst } args
+    'ok #true let
+    'i 1 lst length 1 - {
+        lst i 1 - nth lst i nth > { 'ok #false set } when
+    } for
+    ok
+} fn let
+
+'thanos { { lst } args
+    'half 0 let
+    { lst sorted? not } {
+        'half lst length 2 / int set
+        'lst lst 0 half slice set
+    } while
+    lst
+} fn let
+
+
+{ 4 93 76 56 64 39 44 91 34 61 49 47 42 69 81 24 87 76 98 94 69 40 100 39 46 91 90 22 82 66 40 15 88 70 50 55 92 99 4 33 14 32 87 4 17 15 9 22 75 49 50 66 68 70 49 91 64 34 18 73 75 4 16 63 88 36 85 84 37 92 45 48 90 8 47 48 4 62 70 15 45 69 83 63 79 91 17 } thanos print

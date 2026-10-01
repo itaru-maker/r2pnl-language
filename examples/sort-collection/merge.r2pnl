@@ -1,0 +1,31 @@
+'merge-sort { { arr } args
+    arr length 1 <= {
+        arr
+    } {
+        'mid arr length 2 // let
+        'l arr 0 mid slice let
+        'r arr mid arr length slice let
+        l merge-sort r merge-sort merge
+    } if
+} fn let
+
+'merge { { l r } args
+    'result { } let
+    'i 0 let
+    'j 0 let
+    { l length i > r length j > and } {
+        l i nth r j nth <= {
+            'result result [ l i nth ] concat set
+            'i i 1 + set
+        } {
+            'result result [ r j nth ] concat set
+            'j j 1 + set
+        } if
+    } while
+    'result result l i l length slice concat set
+    'result result r j r length slice concat set
+    result
+} fn let
+
+
+{ 46 2 48 66 69 89 81 33 72 24 15 78 26 54 90 41 15 35 63 98 4 27 9 17 98 50 64 76 70 6 6 1 25 77 92 89 17 37 15 76 100 28 92 43 20 40 92 13 16 100 70 48 98 60 77 52 49 52 35 100 38 57 92 3 70 47 64 83 70 78 54 11 36 92 2 60 7 47 32 66 7 86 47 4 81 50 82 99 45 62 63 6 34 82 47 23 28 77 62 78 } merge-sort print
