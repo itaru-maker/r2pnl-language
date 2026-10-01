@@ -1,5 +1,4 @@
-'hanoi {
-    { n source target auxiliary } args
+'hanoi { { n source target auxiliary } args
     n 1 = {
         [ "円盤1を" source "->" target "へ移動\n" ] { print } each
     } {
