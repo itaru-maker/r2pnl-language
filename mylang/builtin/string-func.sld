@@ -57,7 +57,7 @@
 
          ((< end start)
           (interp-error! interp "IndexError" "The start value must be greater than the end value"))
-         ((<.(string-length str) end)
+         ((<= (string-length str) end)
           (interp-error! interp "IndexError" "string index out of range"))
          (else
           (stack-push! interp (substring str start end))))))
