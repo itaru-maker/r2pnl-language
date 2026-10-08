@@ -176,5 +176,5 @@
         (for-each
          (lambda (entry);(name . proc)のリストをもらう
            (env-define env (car entry) (make-builtin-func (car entry) (cdr entry))))
-         builtins)
+         (reverse builtins))
         interp))));for-eachは返さないから、interpを返す。
