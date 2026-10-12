@@ -60,15 +60,20 @@
 
 'repl {
     'inp "" let
-    { inp "q" equal? not } {
+    {
         ">" print
         'inp input set
-        inp "q" equal? not {
-            inp eval-string
-        } when
+        inp "q" equal?
+        inp "quit" equal?
+        inp "exit" equal?
+        or or
+        not
+    } {
+        inp eval-string
     } while
 } fn let
 
 repl !start
 
+"done." print
 newline
