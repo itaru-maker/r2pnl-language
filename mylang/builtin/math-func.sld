@@ -4,7 +4,7 @@
 	  (scheme write)
           (scheme inexact)
           (mylang values)
-	  (mylang interpreter))
+          (mylang interpreter))
   
   (begin
     (define (make-binary-math-func name opr)
@@ -24,12 +24,12 @@
     (define (make-div-math-func name opr)
       (lambda (interp)
         (let* ((a (stack-pop! interp))
-	       (b (stack-pop! interp)))
+               (b (stack-pop! interp)))
           (if (and (number? a) (number? b))
               (if (zero? a)
                   (interp-error! interp "ZeroDivisionError" "division by zero")
-	          (stack-push! interp (opr b a)))
-	      (interp-error! interp
+                  (stack-push! interp (opr b a)))
+              (interp-error! interp
                              "TypeError"
                              (string-append
                               "the \"" name "\" func expects two numbers, but got "
