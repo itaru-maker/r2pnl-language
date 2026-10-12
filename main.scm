@@ -85,14 +85,13 @@ loko
 
 (if (not (null? (interp-stack mylang)));安全確認　（これはいらないっていう人もいるかも）
     (begin
-      (display "-====WARNING====-\n" (current-error-port))
-      (display "stack is not empty at end of program\n" (current-error-port))
-      (display "-===top====-\n" (current-error-port))
+      (display "WARNING:stack is not empty at end of program\n" (current-error-port))
+      (display "==top===\n" (current-error-port))
       (for-each (lambda (v)
                   (display (value->write-string v)(current-error-port))
                   (newline (current-error-port)))
                 (interp-stack mylang))
-      (display "-==bottom==-" (current-error-port))
+      (display "=bottom=" (current-error-port))
       (exit 1)))
 
 (newline)
