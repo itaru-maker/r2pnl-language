@@ -9,7 +9,7 @@
     'numbers 2 limit 1 + range let
     'acc { } let
     'p 0 let
-    { numbers null-block? not } {
+    { numbers empty? not } {
         'p numbers head set
         'numbers numbers tail set
         'acc p acc cons set !生き残ってるやつは素数

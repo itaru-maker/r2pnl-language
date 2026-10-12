@@ -3,7 +3,7 @@
     'lst swap let
     'v swap let
     {
-        { lst null-block? } { [ v ] }
+        { lst empty? } { [ v ] }
         { v lst head <= } { v lst cons }
         { #true } { lst head v lst tail insert cons }
     } cond
@@ -12,7 +12,7 @@
 'sort {
     'lst swap let
     {
-        { lst null-block? } { { } }
+        { lst empty? } { { } }
         { #true } { lst head lst tail sort insert }
     } cond
 } fn let

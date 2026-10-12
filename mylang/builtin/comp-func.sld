@@ -5,7 +5,7 @@
           (mylang tokens)
           (mylang interpreter))
   (begin
-    (define (is-func interp)
+    (define (eq?-func interp)
       (let*
           ((a (stack-pop! interp))
            (b (stack-pop! interp)))
@@ -69,7 +69,7 @@
 
        (else #f)))
 
-    (define (equal-func interp)
+    (define (equal?-func interp)
       (let* ((a (stack-pop! interp))
              (b (stack-pop! interp)))
         (stack-push! interp (value-equal? a b))))
@@ -119,8 +119,8 @@
 
     
     (define comp-func-dict
-      `(("is" . ,is-func)
-        ("equal" . ,equal-func)
+      `(("eq?" . ,eq?-func)
+        ("equal?" . ,equal?-func)
         ("=" . ,eq-number-func)
         ("/=" . ,ne-number-func)
         ("<" . ,lt-func)

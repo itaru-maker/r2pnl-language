@@ -16,7 +16,7 @@
             (interp-error! interp
                            "TypeError"
                            (string-append
-                            "the \"exec\" func is expects a block, but got "
+                            "the \"do\" func is expects a block, but got "
                             (value->write-string block)))
             (exec-block block interp))))
 

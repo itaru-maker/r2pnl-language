@@ -31,21 +31,21 @@
 'opr-cond { { opr } args
     {
         !arithmetic
-        { opr "+" equal } { add-opr }
-        { opr "-" equal } { sub-opr }
-        { opr "*" equal } { mul-opr }
-        { opr "/" equal } { div-opr }
-        { opr "%" equal } { mod-opr }
-        { opr "**" equal } { power-opr }
+        { opr "+" equal? } { add-opr }
+        { opr "-" equal? } { sub-opr }
+        { opr "*" equal? } { mul-opr }
+        { opr "/" equal? } { div-opr }
+        { opr "%" equal? } { mod-opr }
+        { opr "**" equal? } { power-opr }
         !stack
-        { opr "dup" equal } { dup-opr }
-        { opr "swap" equal } { swap-opr }
-        { opr "drop" equal } { drop-opr }
+        { opr "dup" equal? } { dup-opr }
+        { opr "swap" equal? } { swap-opr }
+        { opr "drop" equal? } { drop-opr }
         !output
-        { opr "." equal } { print-opr }
-        { opr ".s" equal } { print-stack-opr }
+        { opr "." equal? } { print-opr }
+        { opr ".s" equal? } { print-stack-opr }
         !other
-        { opr "clear" equal } { clear-opr }
+        { opr "clear" equal? } { clear-opr }
         { #true } { "unknown operator" print }
     } cond
 } fn let
@@ -60,10 +60,10 @@
 
 'repl {
     'inp "" let
-    { inp "q" equal not } {
+    { inp "q" equal? not } {
         ">" print
         'inp input set
-        inp "q" equal not {
+        inp "q" equal? not {
             inp eval-string
         } when
     } while

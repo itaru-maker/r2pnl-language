@@ -71,7 +71,7 @@
                                                             (value->write-string b) " and " (value->write-string a))))))
   
   
-  (define (int-func interp)
+  (define (floor-func interp)
     (let* ((a (stack-pop! interp)))
       (if (number? a)
           (stack-push! interp (floor a))
@@ -144,7 +144,7 @@
       ("%" . ,mod-func)
       ("**" . ,expt-func)
       ("//" . ,floor-div-func)
-      ("int" . ,int-func)
+      ("floor" . ,floor-func)
       ("neg" . ,neg-func)
       ("sqrt" . ,sqrt-func)
       ("abs" . ,abs-func)

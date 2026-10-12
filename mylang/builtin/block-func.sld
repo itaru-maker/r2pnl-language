@@ -41,11 +41,11 @@
                   (loop (- count 1) (cons (cons (stack-pop! interp) (interp-token-line interp)) acc-block))))
             (interp-error! interp "TypeError" "The first arg of the \"pack\" func must be a positive integer"))))
 
-    (define (null-block?-func interp)
+    (define (empty?-func interp)
       (let* ((block (stack-pop! interp)))
         (if (block-value? block)
             (stack-push! interp (null? (block-value-items block)))
-            (interp-error! interp "TypeError" "the null-block? func expects 1 block-value"))))
+            (interp-error! interp "TypeError" "the empty? func expects 1 block-value"))))
 
     (define (block-cons-func interp)
       (let* ((block (stack-pop! interp))
@@ -140,7 +140,7 @@
       `(("head" . ,block-head-func)
         ("tail" . ,block-tail-func)
         ("pack" . ,block-pack-func)
-        ("null-block?" . ,null-block?-func)
+        ("empty?" . ,empty?-func)
         ("cons" . ,block-cons-func)
         ("concat" . ,block-concat-func)
         ("length" . , block-length-func)

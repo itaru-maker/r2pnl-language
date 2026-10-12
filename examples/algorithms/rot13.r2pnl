@@ -6,7 +6,7 @@
     'found #false let
 
     'i 0 103 {
-        chars i string-nth char equal found not and { !見つかってなくて、charと一緒
+        chars i string-nth char equal? found not and { !見つかってなくて、charと一緒
             'found i set
         } when
     } for
