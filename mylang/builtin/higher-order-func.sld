@@ -7,8 +7,12 @@
 
   (begin
     (define (callable? v)
-      (or (block-value? v) (builtin-func? v) (lambda-value? v)))
-    
+      (or 
+        (block-value? v) 
+        (builtin-func? v) 
+        (lambda-value? v)　
+        (proc-value? v)))
+     
     (define (map-func interp)
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
