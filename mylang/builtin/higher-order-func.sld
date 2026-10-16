@@ -10,7 +10,7 @@
       (or 
         (block-value? v) 
         (builtin-func? v) 
-        (lambda-value? v)　
+        (lambda-value? v) 
         (proc-value? v)))
      
     (define (map-func interp)
