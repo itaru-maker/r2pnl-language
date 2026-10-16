@@ -60,7 +60,7 @@
       ("*" . ,(make-binary-math-func "*" *))
       ("/" . ,(make-div-math-func "/" /))
       ("%" . ,(make-div-math-func "%" modulo))
-      ("**" . ,(make-div-math-func "**" expt))
+      ("**" . ,(make-binary-math-func "**" expt))
       ("//" . ,(make-div-math-func "//" (lambda (a b) (floor (/ a b)))))
       ("floor" . ,(make-unary-math-func "floor" floor))
       ("neg" . ,(make-unary-math-func "neg" -))
