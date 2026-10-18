@@ -45,7 +45,7 @@
               (interp-error! interp
                              "TypeError"
                              (string-append
-                              "the \"" name "\" func expects two numbers, but got "
+                              "the \"" name "\" func expects one numbers, but got "
                               (value->write-string a)))))))
     
   (define (sqrt-func interp)

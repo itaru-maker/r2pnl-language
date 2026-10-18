@@ -17,7 +17,7 @@
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
         (if (not (callable? proc))
-            (interp-error! interp  "TypeError" "the \"map\" func excepts a callable (block, lambda or builtin) as second arg.")
+            (interp-error! interp  "TypeError" "the \"map\" func expects a callable (block, lambda or builtin) as second arg.")
             (let loop ((items (block-value-items lst)) (acc '()))
               (if (null? items)
                   (stack-push! interp (make-block-value (reverse acc)))
@@ -31,7 +31,7 @@
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
         (if (not (callable? proc))
-            (interp-error! interp  "TypeError" "the \"each\" func excepts a callable (block, lambda or builtin) as second arg.")
+            (interp-error! interp  "TypeError" "the \"each\" func expects a callable (block, lambda or builtin) as second arg.")
             (let loop ((items (block-value-items lst)))
               (if (null? items)
                   '();何も返さない
