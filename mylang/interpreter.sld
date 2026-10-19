@@ -130,8 +130,8 @@
                        (stack-push! interp v)))
                  (interp-error! interp "NameError" (string-append "unknown-name:" (symbol-value-token item)))))
             
-            ((lazy-value? item)
-             (stack-push! interp (parse-one-token (lazy-value-token item) item-line)))
+            ((quote-value? item)
+             (stack-push! interp (parse-one-token (quote-value-token item) item-line)))
             
             (else
              (stack-push! interp item)))))

@@ -10,7 +10,7 @@
 'thanos { { lst } args
     'half 0 let
     { lst sorted? not } {
-        'half lst length 2 / int set
+        'half lst length 2 / floor set
         'lst lst 0 half slice set
     } while
     lst

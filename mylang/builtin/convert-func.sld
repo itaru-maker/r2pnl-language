@@ -4,7 +4,7 @@
           (mylang values)
           (mylang interpreter))
   (begin
-    (define (to-string-func interp)
+    (define (->string-func interp)
       (let* ((v (stack-pop! interp)))
         (stack-push! interp (value->write-string v))));displayの方がいい気がしてきた
 
@@ -29,7 +29,7 @@
             (interp-error! interp "TypeError" "the symbol->string func expects one symbol-value"))))
 
     (define convert-func-dict
-      `(("to-string" . ,to-string-func)
+      `(("->string" . ,->string-func)
         ("string->number" . ,string->number-func)
         ("string->symbol" . ,string->symbol-func)
         ("symbol->string" . ,symbol->string-func)))))

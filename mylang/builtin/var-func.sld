@@ -40,10 +40,10 @@
             (if (in-env? (interp-env interp)(symbol-value-token name))
                 (stack-push! interp (env-get (interp-env interp) (symbol-value-token name)))
                 (interp-error! interp "UndefinedError" (string-append
-                                                         "the \"deref\" func expects a defined symbol, but \""
+                                                         "the \"get\" func expects a defined symbol, but \""
                                                          (symbol-value-token name)
                                                          "\" is not defined yet") ))
-            (interp-error! interp "TypeError" (string-append "func \"deref\" expect symbol-value, but value "
+            (interp-error! interp "TypeError" (string-append "func \"get\" expect symbol-value, but value "
 							     (value->write-string name)
 							     " is passed as symbol")))))
 
@@ -100,7 +100,7 @@
     (define var-func-dict
       `(("let" . ,let-func)
 	("set" . ,set-func)
-        ("deref" . ,deref-func)
+        ("get" . ,get-func)
         ("args" . ,args-func)
         ("inc" . ,inc-func)
         ("dec" . ,dec-func)))))

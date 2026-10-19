@@ -54,9 +54,9 @@
 
 	 ((string=? item "'" )
 	  (raise-mylang-error! "ParseError" "value missing after single quote." item-line))
-	 ;;lazy
+	 ;;quote
 	 ((char=? (string-ref item 0) #\')
-	  (make-lazy-value (substring item 1 token-len)))
+	  (make-quote-value (substring item 1 token-len)))
 
 
          ;;tokenとか 

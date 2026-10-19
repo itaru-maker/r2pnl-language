@@ -2,7 +2,7 @@
   (export
    nil-value? the-nil ;にlは一つでいいので
    make-symbol-value symbol-value? symbol-value-token
-   make-lazy-value lazy-value? lazy-value-token
+   make-quote-value quote-value? quote-value-token
    make-block-value block-value? block-value-items block-value-items-set!
    block-value-append!
    make-builtin-func builtin-func? builtin-func-name builtin-func-proc
@@ -15,7 +15,7 @@
 	  (mylang tokens))
   (begin
     ;;float str true false はschemeの機能を借りる
-    ;;nil symbol lazy block lambdaは自作する
+    ;;nil symbol quote block lambdaは自作する
     (define-record-type <nil-value>
       (make-nil-value)
       nil-value?)
@@ -26,10 +26,10 @@
       symbol-value?
       (token symbol-value-token))
 
-    (define-record-type <lazy-value>
-      (make-lazy-value token)
-      lazy-value?
-      (token lazy-value-token))
+    (define-record-type <quote-value>
+      (make-quote-value token)
+      quote-value?
+      (token quote-value-token))
 
     (define-record-type <block-value>
       (make-block-value items)
@@ -69,7 +69,7 @@
 	    ((boolean? value) (if value "#true" "#false"))
 	    ((nil-value? value) "#nil")
 	    ((symbol-value? value) (symbol-value-token value))
-	    ((lazy-value? value) (string-append "'" (lazy-value-token value)))
+	    ((quote-value? value) (string-append "'" (quote-value-token value)))
             ((block-value? value)
              (string-append "{ "
 			    (apply string-append (map (lambda (pair) (string-append (value->write-string (car pair)) " ")) (block-value-items value)))
@@ -94,7 +94,7 @@
 	    ((boolean? value) (if value "#true" "#false"))
 	    ((nil-value? value) "#nil")
 	    ((symbol-value? value) (symbol-value-token value))
-	    ((lazy-value? value) (string-append "'" (lazy-value-token value)))
+	    ((quote-value? value) (string-append "'" (quote-value-token value)))
             ((block-value? value)
              (string-append "{ "
 			    (apply string-append (map (lambda (pair) (string-append (value->display-string (car pair)) " ")) (block-value-items value)))

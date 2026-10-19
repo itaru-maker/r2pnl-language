@@ -52,7 +52,7 @@
     (let* ((a (stack-pop! interp)))
       (if (and (number? a) (<= 0 a))
           (stack-push! interp (sqrt a))
-          (interp-error! interp "TypeError" (string-append "the \"sqrt\" func expects one positive numbers, but got "
+          (interp-error! interp "TypeError" (string-append "the \"sqrt\" func expects a non-negative numbers, but got "
                                                            (value->write-string a))))))
   (define math-func-dict
     `(("+" . ,(make-binary-math-func "+" +))

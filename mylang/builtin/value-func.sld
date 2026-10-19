@@ -25,8 +25,8 @@
     (define (symbol?-func interp)
       (stack-push! interp (symbol-value? (stack-pop! interp))))
 
-    (define (lazy?-func interp)
-      (stack-push! interp (lazy-value? (stack-pop! interp))))
+    (define (quote?-func interp)
+      (stack-push! interp (quote-value? (stack-pop! interp))))
 
     (define (block?-func interp)
       (stack-push! interp (block-value? (stack-pop! interp))))
@@ -53,7 +53,7 @@
         ("false?" . ,false?-func)
         ("nil?" . ,nil?-func)
         ("symbol?" .,symbol?-func)
-        ("lazy?" . ,lazy?-func)
+        ("quote?" . ,quote?-func)
         ("block?" . ,block?-func)
         ("builtin?" . ,builtin-func?-func)
         ("lambda?" . ,lambda?-func)

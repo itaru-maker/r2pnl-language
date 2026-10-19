@@ -40,8 +40,8 @@
         (equal? (symbol-value-token a) (symbol-value-token b)))
        ;;わざわざtoken取らなくてもいいのかな
 
-       ((and (lazy-value? a) (lazy-value? b))
-        (equal? (lazy-value-token a ) (lazy-value-token b)))
+       ((and (quote-value? a) (quote-value? b))
+        (equal? (quote-value-token a ) (quote-value-token b)))
        
        ((and (block-value? a) (block-value? b));違う行のものでもしっかり比較されるように修正済み
         (let ((items-a (block-value-items a)) (items-b (block-value-items b)))
@@ -53,13 +53,13 @@
                 items-b))))
            
        ((and (builtin-func? a) (builtin-func? b))
-        (equal? a b))
+        (eq? a b))
 
        ((and (lambda-value? a) (lambda-value? b))
-        (equal? a b))
+        (eq? a b))
 
        ((and (proc-value? a) (proc-value? b))
-        (equal? a b))
+        (eq? a b))
            
        ((and (r-paren? a) (r-paren? b))
         #t)
@@ -74,56 +74,26 @@
              (b (stack-pop! interp)))
         (stack-push! interp (value-equal? a b))))
 
-    (define (eq-number-func interp)
-      (let* ((a (stack-pop! interp))
-             (b (stack-pop! interp)))
-        (if (and (number? a) (number? b))
-            (stack-push! interp (= a b))
-            (interp-error! interp "TypeError" "the \"=\" func expects two number args"))))
+    (define (make-binary-math-func name opr)
+      (lambda (interp)
+        (let* ((a (stack-pop! interp))
+               (b (stack-pop! interp)))
+          (if (and (number? a) (number? b))
+              (stack-push! interp (opr b a))
+              (interp-error! interp
+                             "TypeError"
+                             (string-append
+                              "the \"" name "\" func expects two numbers, but got "
+                              (value->write-string b)
+                              " and "
+                              (value->write-string a)))))))
 
-    (define (ne-number-func interp)
-      (let* ((a (stack-pop! interp))
-             (b (stack-pop! interp)))
-        (if (and (number? a) (number? b))
-            (stack-push! interp (not (= a b)))
-            (interp-error! interp "TypeError" "/= func expects two number args"))))
-
-    
-    (define (lt-func interp)
-      (let* ((num-1 (stack-pop! interp))
-             (num-2 (stack-pop! interp)))
-        (if (not (and (number? num-1) (number? num-2)))
-            (interp-error! interp "TypeError" "< func expects two number args")
-            (stack-push! interp (< num-2 num-1)))))
-
-    (define (gt-func interp)
-      (let* ((num-1 (stack-pop! interp))
-             (num-2 (stack-pop! interp)))
-        (if (not (and (number? num-1) (number? num-2)))
-            (interp-error! interp "TypeError" "> func expects two number args")
-            (stack-push! interp (> num-2 num-1)))))
-
-    (define (le-func interp)
-      (let* ((num-1 (stack-pop! interp))
-             (num-2 (stack-pop! interp)))
-        (if (not (and (number? num-1) (number? num-2)))
-            (interp-error! interp "TypeError" "<= func expects two number args")
-            (stack-push! interp (<= num-2 num-1)))))
-
-    (define (ge-func interp)
-      (let* ((num-1 (stack-pop! interp))
-             (num-2 (stack-pop! interp)))
-        (if (not (and (number? num-1) (number? num-2)))
-            (interp-error! interp "TypeError" ">= func expects two number args")
-            (stack-push! interp (>= num-2 num-1)))))
-
-    
     (define comp-func-dict
       `(("eq?" . ,eq?-func)
         ("equal?" . ,equal?-func)
-        ("=" . ,eq-number-func)
-        ("/=" . ,ne-number-func)
-        ("<" . ,lt-func)
-        (">" . ,gt-func)
-        ("<=" . ,le-func)
-        (">=" . ,ge-func)))))
+        ("=" . ,(make-binary-math-func "=" =))
+        ("/=" . ,(make-binary-math-func "/=" (lambda (a b) (not (= a b)))))
+        ("<" . ,(make-binary-math-func "<" <))
+        (">" . ,(make-binary-math-func ">" >))
+        ("<=" . ,(make-binary-math-func "<=" <=))
+        (">=" . ,(make-binary-math-func ">=" >=))))))
