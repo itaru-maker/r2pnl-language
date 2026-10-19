@@ -1,7 +1,8 @@
 (define-library (mylang lexer)
   (export lexer)
   (import (scheme base)
-          (mylang error))
+          (mylang error)
+          (mylang values))
   (begin
 
     (define cmt-chr #\!)
@@ -25,7 +26,7 @@
           (if (= i code-len) ;終了だったら、
               (begin
                 (if (> comment-depth 0);コメントが閉じているか
-                    (raise-mylang-error! "ParseError" "unclosed comment" line)
+                    (raise-error-value! "ParseError" "unclosed comment" line)
                     (reverse (flash-chars chars tokens line))))
               
               (let ((chr (string-ref plain-code i)))
@@ -45,7 +46,7 @@
                   (loop (+ i 1) '() #f 1 #f line (flash-chars chars tokens line)))
 
                  ((and (not in-str?) (not in-line-cmt?) (char=? #\) chr))
-                  (raise-mylang-error! "ParseError" "extra closing )!" line))
+                  (raise-error-value! "ParseError" "extra closing )!" line))
 
 
                  (in-line-cmt?

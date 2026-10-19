@@ -46,6 +46,9 @@
     (define (l-paren?-func interp)
       (stack-push! interp (eq? the-l-paren (stack-pop! interp))))
 
+    (define (error?-func interp)
+      (stack-push! interp (error-value? (stack-pop! interp))))
+
     (define value-func-dict
       `(("number?" . ,number?-func)
         ("string?" . ,string?-func)
@@ -59,4 +62,5 @@
         ("lambda?" . ,lambda?-func)
         ("proc?" . ,proc?-func)
         ("r-paren?" . ,r-paren?-func)
-        ("l-paren?" . ,l-paren?-func)))))
+        ("l-paren?" . ,l-paren?-func)
+        ("error?" . ,error?-func)))))

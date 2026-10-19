@@ -6,7 +6,7 @@
   (begin
     (define (->string-func interp)
       (let* ((v (stack-pop! interp)))
-        (stack-push! interp (value->write-string v))));displayの方がいい気がしてきた
+        (stack-push! interp (value->display-string v))));displayの方がいい気がしてきた
 
     (define (string->number-func interp)
       (let* ((str (stack-pop! interp)))

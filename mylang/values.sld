@@ -8,6 +8,7 @@
    make-builtin-func builtin-func? builtin-func-name builtin-func-proc
    make-lambda-value lambda-value? lambda-value-body lambda-value-env lambda-value-line lambda-value-file
    make-proc-value proc-value? proc-value-body proc-value-line proc-value-file
+   error-value? error-value-name error-value-message error-value-trace
    value->write-string
    value->display-string)
   (import (scheme base)
@@ -62,6 +63,13 @@
       (line proc-value-line)
       (file proc-value-file))
 
+    (define-record-type <error-value>
+      (make-error-value error-name message trace)
+      error-value?
+      (error-name error-value-name)
+      (message error-value-message)
+      (trace error-value-trace))
+
 
     (define (value->write-string value)
       (cond ((number? value) (number->string value))
@@ -87,7 +95,7 @@
 	
   	    (else (write "debug:unknown-type") (write  value))))
 
-    ;;value->write-stringと比べて、string以外ほぼ変わってないので存在意義があるのかは不明
+    ;;value->write-stringと比べて、strpping以外ほぼ変わってないので存在意義があるのかは不明
     (define (value->display-string value)
       (cond ((number? value) (number->string value))
 	    ((string? value) value)

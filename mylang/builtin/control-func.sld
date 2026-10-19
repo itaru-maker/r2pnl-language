@@ -148,11 +148,11 @@
                   (saved-env (interp-env interp)))
               (guard
                   (e
-                   ((mylang-error? e)
+                   ((error-value? e)
                     (interp-stack-set! interp saved-stack)
                     (interp-env-set! interp saved-env)
-                    (stack-push! interp (mylang-error-name e))
-                    (stack-push! interp (mylang-error-message e))
+                    (stack-push! interp (error-value-name e))
+                    (stack-push! interp (error-value-message e))
                     (exec-block handler interp)))
                 (exec-block body interp))))))
     

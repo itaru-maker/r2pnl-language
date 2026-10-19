@@ -83,7 +83,7 @@
 	 ((null? rest)
 	  (if (null? (cdr stack));スタックに2以上あるなら、とじかっこが少ない（解決していない）
 	      (reverse (block-value-items (car (car stack))))
-	      (raise-mylang-error! "ParseError" "unclosed paren" (cdr (car stack)))))
+	      (raise-error-value! "ParseError" "unclosed paren" (cdr (car stack)))))
      
 	 ((l-paren? (car (car rest)));ペアの中の値をみる
 	  (loop (cdr rest)
@@ -91,7 +91,7 @@
 	 
 	 ((r-paren? (car (car rest)))
 	  (if (null? (cdr stack)) ;すでにblockが解決している場合
-	      (raise-mylang-error! "ParseError" "extra closing paren" (cdr (car rest)))
+	      (raise-error-value! "ParseError" "extra closing paren" (cdr (car rest)))
 	      (let ((new-block (car (car stack)))
 		    (rest-stack(cdr stack))
 		    (line (cdr (car rest)))) ;自身((car (car rest))) が持ってるline

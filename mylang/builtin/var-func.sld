@@ -34,7 +34,7 @@
 							     (value->write-string name)
 							     " is passed as symbol")))))
 
-    (define (deref-func interp)
+    (define (get-func interp)
       (let* ((name (stack-pop! interp)))
         (if (symbol-value? name)
             (if (in-env? (interp-env interp)(symbol-value-token name))

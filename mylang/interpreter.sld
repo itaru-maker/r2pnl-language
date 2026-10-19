@@ -138,7 +138,7 @@
        sentence))
 
     (define (parse-code code file callers)
-      (guard (e ((and (mylang-error? e)) (raise (mylang-error-resolve e file "<toplevel>" callers))))
+      (guard (e ((and (error-value? e)) (raise (error-value-resolve e file "<toplevel>" callers))))
         (parse-paren (sorting-types (lexer code)))))
 
     (define (line->string line)
@@ -156,14 +156,14 @@
                                     " in "
                                     (frame-name frame)
                                     "\n") port))
-                  (reverse (mylang-error-trace e)))
-        (display (string-append (mylang-error-name e)
+                  (reverse (error-value-trace e)))
+        (display (string-append (error-value-name e)
                                 ":"
-                                (mylang-error-message e)) port)))
+                                (error-value-message e)) port)))
 
     (define (interp-run interp code file)
       (guard (e
-              ((mylang-error? e)
+              ((error-value? e)
                (print-error e)
                (exit 1)))
         (interp-file-set! interp file)
