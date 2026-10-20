@@ -1,1 +1,11 @@
-3 4 + .
+3 number? .
+"漢字" string? .
+'unix symbol? .
+{ 3 4 5 6 } block? .
+
+newline
+
+3 builtin? .
+'+ get error? .
+{ dup * } proc lambda? .
+#true proc? .

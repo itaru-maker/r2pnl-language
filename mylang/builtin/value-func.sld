@@ -8,7 +8,7 @@
 
   (begin
     (define (make-pred pred)
-      (lambda (pred)
+      (lambda (interp)
         (stack-push! interp (pred (stack-pop! interp)))))
 
     (define value-func-dict
@@ -20,7 +20,7 @@
         ("symbol?" .,(make-pred symbol-value?))
         ("quote?" . ,(make-pred quote-value?))
         ("block?" . ,(make-pred block-value?))
-        ("builtin?" . ,(make-pred builtin-funck?))
+        ("builtin?" . ,(make-pred builtin-func?))
         ("lambda?" . ,(make-pred lambda-value?))
         ("proc?" . ,(make-pred proc-value?))
         ("r-paren?" . ,(make-pred (lambda (v) (eq? the-l-paren v))))
