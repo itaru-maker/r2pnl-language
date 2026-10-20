@@ -4,6 +4,7 @@
    stack-push! stack-pop!
    current-frame
    interp-error!
+   interp-throw!
    call-with-frame
    call-lambda!
    invoke!
@@ -40,7 +41,7 @@
     (define (stack-pop! interp)
       (let ((s (interp-stack interp)))
         (if (null? s)
-            (interp-error! interp "StackUnderflowError" "pop from empty stack")
+            (interp-error!pp interp "StackUnderflowError" "pop from empty stack")
             (begin (interp-stack-set! interp (cdr s))
                    (car s)))))
 
@@ -49,8 +50,11 @@
                   (interp-token-line interp)
                   (interp-name interp)))
     
+    (define (interp-throw! interp value)
+      (raise (make-raised value (cons (current-frame interp) (interp-call-stack interp)))))
+    
     (define (interp-error! interp error-name message);builtinはこいつを投げる
-      (raise (make-error-value error-name message (cons (current-frame interp) (interp-call-stack interp)))));一番最初に起動した時だから、traceは空
+      (interp-throw! interp (make-error-value error-name message)));一番最初に起動した時だから、traceは空
 
     (define (call-with-frame interp file line name thunk)
       (let ((saved-file (interp-file interp))
@@ -138,14 +142,15 @@
        sentence))
 
     (define (parse-code code file callers)
-      (guard (e ((and (error-value? e)) (raise (error-value-resolve e file "<toplevel>" callers))))
+      (guard (e ((and (raised? e)) (raise (raised-resolve e file "<toplevel>" callers))))
         (parse-paren (sorting-types (lexer code)))))
 
     (define (line->string line)
       (if line (number->string line) "?"))
 
     (define (print-error e)
-      (let ((port (current-error-port)))
+      (let ((port (current-error-port))
+            (v (raised-value e)))
         (newline port)
         (for-each (lambda (frame)
                     (display
@@ -156,14 +161,15 @@
                                     " in "
                                     (frame-name frame)
                                     "\n") port))
-                  (reverse (error-value-trace e)))
-        (display (string-append (error-value-name e)
-                                ":"
-                                (error-value-message e)) port)))
+                  (reverse (raised-trace e)))
+        (display (if (error-value? v)
+                     (string-append (error-value-name v) ":" (error-value-message v))
+                     (string-append "Uncaught Exception: " (value->write-string v)))
+                 port)))
 
     (define (interp-run interp code file)
       (guard (e
-              ((error-value? e)
+              ((raised? e)
                (print-error e)
                (exit 1)))
         (interp-file-set! interp file)

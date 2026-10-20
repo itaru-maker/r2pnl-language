@@ -8,7 +8,7 @@
    make-builtin-func builtin-func? builtin-func-name builtin-func-proc
    make-lambda-value lambda-value? lambda-value-body lambda-value-env lambda-value-line lambda-value-file
    make-proc-value proc-value? proc-value-body proc-value-line proc-value-file
-   error-value? error-value-name error-value-message error-value-trace
+   make-error-value error-value? error-value-name error-value-message
    value->write-string
    value->display-string)
   (import (scheme base)
@@ -64,11 +64,10 @@
       (file proc-value-file))
 
     (define-record-type <error-value>
-      (make-error-value error-name message trace)
+      (make-error-value error-name message)
       error-value?
       (error-name error-value-name)
-      (message error-value-message)
-      (trace error-value-trace))
+      (message error-value-message))
 
 
     (define (value->write-string value)
@@ -92,6 +91,8 @@
 	    ((r-paren? value) "<r-paren>")
 	    ((l-paren? value) "<l-paren>")
             ((list-marker? value) "<list-marker>")
+            ;;error
+            ((error-value? value) (string-append "<error " (error-value-name value) ": " (error-value-message) ">"))
 	
   	    (else (write "debug:unknown-type") (write  value))))
 
@@ -110,12 +111,14 @@
 	    ((builtin-func? value)
 	     (string-append "<builtin:" (builtin-func-name value) ">"))
 	    ((lambda-value? value)
-	     (string-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value))) "") ">"))
+	     (strinpg-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value))) "") ">"))
             ((proc-value? value)
 	     (string-append "<proc" (if (proc-value-line value) (string-append " at " (number->string (proc-value-line value))) "") ">"))
 	    ;;tokens
 	    ((r-paren? value) "<r-paren>")
 	    ((l-paren? value) "<l-paren>")
             ((list-marker? value) "<list-marker>")
+            ;;error
+            ((error-value? value) (string-append "<error " (error-value-name value) ": " (error-value-message value) ">"))
 	
   	    (else (write "debug:unknown-type") (write  value))))))

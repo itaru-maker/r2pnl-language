@@ -138,7 +138,6 @@
                         (loop (+ current-num 1))
                         (interp-env-set! interp caller-env)))))))))
 
-
     (define (try-func interp)
       (let* ((handler (stack-pop! interp))
              (body (stack-pop! interp)))
@@ -148,21 +147,17 @@
                   (saved-env (interp-env interp)))
               (guard
                   (e
-                   ((error-value? e)
+                   ((raised? e)
                     (interp-stack-set! interp saved-stack)
                     (interp-env-set! interp saved-env)
-                    (stack-push! interp (error-value-name e))
-                    (stack-push! interp (error-value-message e))
+                    (stack-push! interp (raised-value e))
                     (exec-block handler interp)))
                 (exec-block body interp))))))
     
     (define (raise-func interp)
-      (let* ((msg (stack-pop! interp))
-             (name (stack-pop! interp)))
-        (if (not (and (string? msg) (string? name)))
-            (interp-error! interp "TypeError" "the \"raise\" func expects two strings")
-            (interp-error! interp name msg))))
+      (interp-throw! interp (stack-pop! interp)))
 
+    
 
     (define control-func-dict
       `(("do" . ,do-func)
