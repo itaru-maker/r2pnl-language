@@ -50,7 +50,7 @@
                   (interp-name interp)))
     
     (define (interp-error! interp error-name message);builtinはこいつを投げる
-      (raise (make-mylang-error error-name message (cons (current-frame interp) (interp-call-stack interp)))));一番最初に起動した時だから、traceは空
+      (raise (make-error-value error-name message (cons (current-frame interp) (interp-call-stack interp)))));一番最初に起動した時だから、traceは空
 
     (define (call-with-frame interp file line name thunk)
       (let ((saved-file (interp-file interp))

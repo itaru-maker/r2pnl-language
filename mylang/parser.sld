@@ -24,7 +24,7 @@
                         ((#\b) (loop (+ i 2) (cons #\backspace acc)))
                         ((#\a) (loop (+ i 2) (cons #\alarm acc)))
                         ((#\newline) (loop (+ i 2) acc))
-                        (else (raise-mylang-error!
+                        (else (raise-error-value!
                                "ParseError"
                                (string-append
                                 "unknown escape:"
@@ -53,7 +53,7 @@
 	 ((string=? item "#nil") the-nil) ;nil
 
 	 ((string=? item "'" )
-	  (raise-mylang-error! "ParseError" "value missing after single quote." item-line))
+	  (raise-error-value! "ParseError" "value missing after single quote." item-line))
 	 ;;quote
 	 ((char=? (string-ref item 0) #\')
 	  (make-quote-value (substring item 1 token-len)))
