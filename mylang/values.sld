@@ -92,7 +92,7 @@
 	    ((l-paren? value) "<l-paren>")
             ((list-marker? value) "<list-marker>")
             ;;error
-            ((error-value? value) (string-append "<error " (error-value-name value) ": " (error-value-message) ">"))
+            ((error-value? value) (string-append "<error " (error-value-name value) ": " (error-value-message value) ">"))
 	
   	    (else (write "debug:unknown-type") (write  value))))
 
@@ -111,7 +111,7 @@
 	    ((builtin-func? value)
 	     (string-append "<builtin:" (builtin-func-name value) ">"))
 	    ((lambda-value? value)
-	     (strinpg-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value))) "") ">"))
+	     (string-append "<lambda" (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value))) "") ">"))
             ((proc-value? value)
 	     (string-append "<proc" (if (proc-value-line value) (string-append " at " (number->string (proc-value-line value))) "") ">"))
 	    ;;tokens

@@ -7,60 +7,22 @@
           (mylang interpreter))
 
   (begin
-    (define (number?-func interp)
-       (stack-push! interp (number? (stack-pop! interp))))
-
-    (define (string?-func interp)
-      (stack-push! interp (string? (stack-pop! interp))))
-
-    (define (true?-func interp)
-      (stack-push! interp (eq? #t (stack-pop! interp))))
-
-    (define (false?-func interp)
-      (stack-push! interp (eq? #f (stack-pop! interp))))
-
-    (define (nil?-func interp)
-      (stack-push! interp (eq? the-nil (stack-pop! interp))))
-
-    (define (symbol?-func interp)
-      (stack-push! interp (symbol-value? (stack-pop! interp))))
-
-    (define (quote?-func interp)
-      (stack-push! interp (quote-value? (stack-pop! interp))))
-
-    (define (block?-func interp)
-      (stack-push! interp (block-value? (stack-pop! interp))))
-
-    (define (builtin-func?-func interp)
-      (stack-push! interp (builtin-func? (stack-pop! interp))))
-
-    (define (lambda?-func interp)
-      (stack-push! interp (lambda-value? (stack-pop! interp))))
-
-    (define (proc?-func interp)
-      (stack-push! interp (proc-value? (stack-pop! interp))))
-
-    (define (r-paren?-func interp)
-      (stack-push! interp (eq? the-r-paren (stack-pop! interp))))
-    
-    (define (l-paren?-func interp)
-      (stack-push! interp (eq? the-l-paren (stack-pop! interp))))
-
-    (define (error?-func interp)
-      (stack-push! interp (error-value? (stack-pop! interp))))
+    (define (make-pred pred)
+      (lambda (pred)
+        (stack-push! interp (pred (stack-pop! interp)))))
 
     (define value-func-dict
-      `(("number?" . ,number?-func)
-        ("string?" . ,string?-func)
-        ("true?" . ,true?-func)
-        ("false?" . ,false?-func)
-        ("nil?" . ,nil?-func)
-        ("symbol?" .,symbol?-func)
-        ("quote?" . ,quote?-func)
-        ("block?" . ,block?-func)
-        ("builtin?" . ,builtin-func?-func)
-        ("lambda?" . ,lambda?-func)
-        ("proc?" . ,proc?-func)
-        ("r-paren?" . ,r-paren?-func)
-        ("l-paren?" . ,l-paren?-func)
-        ("error?" . ,error?-func)))))
+      `(("number?" . ,(make-pred number?))
+        ("string?" . ,(make-pred string?))
+        ("true?" . ,(make-pred (lambda (v) (eq? #t v))))
+        ("false?" . ,(make-pred (lambda (v) (eq? #f v))))
+        ("nil?" . ,(make-pred (lambda (v) (eq? the-nil v))))
+        ("symbol?" .,(make-pred symbol-value?))
+        ("quote?" . ,(make-pred quote-value?))
+        ("block?" . ,(make-pred block-value?))
+        ("builtin?" . ,(make-pred builtin-funck?))
+        ("lambda?" . ,(make-pred lambda-value?))
+        ("proc?" . ,(make-pred proc-value?))
+        ("r-paren?" . ,(make-pred (lambda (v) (eq? the-l-paren v))))
+        ("l-paren?" . ,(make-pred (lambda (v) (eq? the-r-paren v))))
+        ("error?" . ,(make-pred error-value?))))))

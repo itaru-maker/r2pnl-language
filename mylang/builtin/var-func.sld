@@ -37,16 +37,17 @@
     (define (get-func interp)
       (let* ((name (stack-pop! interp)))
         (if (symbol-value? name)
-            (if (in-env? (interp-env interp)(symbol-value-token name))
-                (stack-push! interp (env-get (interp-env interp) (symbol-value-token name)))
-                (interp-error! interp "UndefinedError" (string-append
-                                                         "the \"get\" func expects a defined symbol, but \""
-                                                         (symbol-value-token name)
-                                                         "\" is not defined yet") ))
+            (let ((result (env-lookup (interp-env interp) (symbol-value-token name))))
+              (if result
+                  (stack-push! interp (cdr result))
+                  (interp-error! interp "UndefinedError" (string-append
+                                                          "the \"get\" func expects a defined symbol, but \""
+                                                          (symbol-value-token name)
+                                                          "\" is not defined yet") )))
             (interp-error! interp "TypeError" (string-append "func \"get\" expect symbol-value, but value "
 							     (value->write-string name)
 							     " is passed as symbol")))))
-
+    
     (define (args-func interp)
       (let* ((params (stack-pop! interp)))
         (if (block-value? params)

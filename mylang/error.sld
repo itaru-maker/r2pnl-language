@@ -2,9 +2,7 @@
   (export
    make-frame frame? frame-file frame-line frame-name
    make-raised raised? raised-value raised-trace
-   raise-error-value!
-   error-value-unresolve?
-   error-value-resolve)
+   raise-error-value! raised-unresolve? raised-resolve)
   (import (scheme base)
           (mylang values))
   (begin

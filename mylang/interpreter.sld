@@ -127,27 +127,28 @@
            (interp-token-line-set! interp item-line)
            (cond
             ((symbol-value? item)
-             (if (in-env? (interp-env interp) (symbol-value-token item)) ;安全確認
-                 (let ((v (env-get (interp-env interp) (symbol-value-token item))))
-                   (if (or (builtin-func? v) (lambda-value? v) (proc-value? v))
-                       (invoke! interp v)
-                       (stack-push! interp v)))
-                 (interp-error! interp "NameError" (string-append "unknown-name:" (symbol-value-token item)))))
+             (let ((result (env-lookup (interp-env interp) (symbol-value-token item))))
+               (if result
+                   (let ((v (cdr result)))
+                     (if (or (builtin-func? v) (lambda-value? v) (proc-value? v))
+                         (invoke! interp v)
+                         (stack-push! interp v)))
+                   (interp-error! interp "UndefinedError" (string-append "unknown-name:" (symbol-value-token item))))))
             
-            ((quote-value? item)
-             (stack-push! interp (parse-one-token (quote-value-token item) item-line)))
+             ((quote-value? item)
+              (stack-push! interp (parse-one-token (quote-value-token item) item-line)))
             
-            (else
-             (stack-push! interp item)))))
-       sentence))
+             (else
+              (stack-push! interp item)))))
+         sentence))
 
     (define (parse-code code file callers)
       (guard (e ((and (raised? e)) (raise (raised-resolve e file "<toplevel>" callers))))
         (parse-paren (sorting-types (lexer code)))))
-
+    
     (define (line->string line)
       (if line (number->string line) "?"))
-
+    
     (define (print-error e)
       (let ((port (current-error-port))
             (v (raised-value e)))

@@ -3,6 +3,7 @@
    make-env
    env?
    in-env?
+   env-lookup
    env-define
    env-set!
    env-get)
@@ -23,6 +24,11 @@
       (cond ((assoc name (env-vars env)) #t) ;そのまま自分が持ってるなら#tを返す
 	    ((env-parent env) (in-env? (env-parent env) name));親がいるなら、親に探してもらう
 	    (else #f))) ;なかった!
+
+    (define (env-lookup env name)
+      (or (assoc name (env-vars env))
+          (and (env-parent env)
+               (env-lookup (env-parent env) name))))
 
     (define (env-define env name value)
       (env-vars-set! env
