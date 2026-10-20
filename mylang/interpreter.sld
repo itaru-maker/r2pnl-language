@@ -41,7 +41,7 @@
     (define (stack-pop! interp)
       (let ((s (interp-stack interp)))
         (if (null? s)
-            (interp-error!pp interp "StackUnderflowError" "pop from empty stack")
+            (interp-error! interp "StackUnderflowError" "pop from empty stack")
             (begin (interp-stack-set! interp (cdr s))
                    (car s)))))
 
