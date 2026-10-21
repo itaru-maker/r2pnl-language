@@ -1,11 +1,17 @@
-3 number? .
-"漢字" string? .
-'unix symbol? .
-{ 3 4 5 6 } block? .
+"" sempty? . newline
+{ } sempty? . newline
 
 newline
 
-3 builtin? .
-'+ get error? .
-{ dup * } proc lambda? .
-#true proc? .
+"hello, " "world!" sconcat . newline
+{ 1 2 3 } { 4 5 } sconcat . newline
+
+newline
+
+"hello" slength . newline
+{ 1 2 3 4 5 } slength . newline
+
+newline
+
+"VIOLET" 0 snth . newline
+"KHAKI" 2 snth . newline

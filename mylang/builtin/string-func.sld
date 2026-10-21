@@ -1,3 +1,4 @@
+;;廃止するかも？
 (define-library (mylang builtin string-func)
   (export string-func-dict)
   (import (scheme base)
@@ -5,40 +6,6 @@
           (mylang interpreter))
 
   (begin
-    (define (string-concat-func interp)
-      (let* ((a (stack-pop! interp))
-             (b (stack-pop! interp)))
-        (if (not (and (string? b) (string? a)))
-            (interp-error! interp
-                           "TypeError"
-                           (string-append "The \"string-concat\" func expects two string, but got "
-                                          (value->write-string a)
-                                          " and "
-                                          (value->write-string b)))
-            (stack-push! interp (string-append b a)))))
-
-    (define (string-length-func interp)
-      (let* ((a (stack-pop! interp)))
-        (if (string? a)
-            (stack-push! interp (string-length a))
-            (interp-error! interp
-                           "TypeError"
-                           (string-append "The \"string-len func\" expects one string, but got "
-                                          (value->write-string a))))))
-
-    (define (string-nth-func interp)
-      (let* ((i (stack-pop! interp))
-             (str (stack-pop! interp)))
-        (if (or
-             (not (and (string? str) (number? i)))
-             (not (integer? i))
-             (< i 0))
-            (interp-error! interp "TypeError" "The string-nth func expects one string and one positive integer")
-            (begin
-              (if (<= (string-length str) i)
-                  (interp-error! interp "IndexError" "string index out of range")
-                  (stack-push! interp (string (string-ref str (exact i)))))))))
-
     (define (substring-func interp)
       (let* ((end (stack-pop! interp))
              (start (stack-pop! interp))
@@ -64,7 +31,4 @@
 
 
     (define string-func-dict
-      `(("string-concat" . ,string-concat-func)
-        ("string-length" . ,string-length-func)
-        ("string-nth" . ,string-nth-func)
-        ("substring" . ,substring-func)))))
+      `(("substring" . ,substring-func)))))

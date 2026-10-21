@@ -6,7 +6,7 @@
     'found #false let
 
     'i 0 103 {
-        chars i string-nth char equal? found not and { !見つかってなくて、charと一緒
+        chars i nth char equal? found not and { !見つかってなくて、charと一緒
             'found i set
         } when
     } for
@@ -19,7 +19,7 @@
     'idx char find-idx let
 
     idx false? not { !falseでなければ
-        chars idx 26 + string-nth
+        chars idx 26 + nth
     } {
         char
     } if
@@ -28,11 +28,11 @@
 !完成
 'rot13 {
     'str swap let
-    'len str string-length let
+    'len str length let
     'acc "" let
 
     'i 0 len 1 - {
-        'acc acc str i string-nth char-rot string-concat set
+        'acc acc str i nth char-rot concat set
     } for
     acc
 } fn let

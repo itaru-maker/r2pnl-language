@@ -41,12 +41,6 @@
                   (loop (- count 1) (cons (cons (stack-pop! interp) (interp-token-line interp)) acc-block))))
             (interp-error! interp "TypeError" "The first arg of the \"pack\" func must be a positive integer"))))
 
-    (define (empty?-func interp)
-      (let* ((block (stack-pop! interp)))
-        (if (block-value? block)
-            (stack-push! interp (null? (block-value-items block)))
-            (interp-error! interp "TypeError" "the empty? func expects 1 block-value"))))
-
     (define (block-cons-func interp)
       (let* ((block (stack-pop! interp))
              (value (stack-pop! interp)))
@@ -58,33 +52,6 @@
             (interp-error!
              interp
              "TypeError" "The second arg of the \"cons\" func must be a block"))))
-
-
-    (define (block-concat-func interp)
-      (let* ((block2 (stack-pop! interp))
-             (block1 (stack-pop! interp)))
-        (if (not (and (block-value? block1) (block-value? block2)))
-            (interp-error! interp "TypeError" "the \"concat\" func expects two block-value")
-            (stack-push! interp (make-block-value (append (block-value-items block1) (block-value-items block2)))))))
-
-    (define (block-length-func interp)
-      (let* ((block (stack-pop! interp)))
-        (if (block-value? block)
-            (stack-push! interp (length (block-value-items block)))
-            (interp-error! interp "TypeError" "the \"length\" func expects one block-value"))))
-
-    (define (block-nth-func interp)
-      (let* ((i (stack-pop! interp))
-             (block (stack-pop! interp)))
-        (if (or
-             (not (and (block-value? block) (number? i)))
-             (not (integer? i))
-             (< i 0))
-            (interp-error! interp "TypeError" "The \"nth\" func expects one block-value and one positive integer")
-            (begin
-              (if (<= (length (block-value-items block)) i)
-                  (interp-error! interp "IndexError" "block index out of range")
-                  (stack-push! interp (car (list-ref (block-value-items block) (exact i)))))))))
 
     (define (block-slice-func interp)
       (let* ((end (stack-pop! interp))
@@ -140,11 +107,7 @@
       `(("head" . ,block-head-func)
         ("tail" . ,block-tail-func)
         ("pack" . ,block-pack-func)
-        ("empty?" . ,empty?-func)
         ("cons" . ,block-cons-func)
-        ("concat" . ,block-concat-func)
-        ("length" . , block-length-func)
-        ("nth" . ,block-nth-func)
         ("slice" . ,block-slice-func)
         ("range" . ,range-func)
         ("reverse" . ,reverse-func)

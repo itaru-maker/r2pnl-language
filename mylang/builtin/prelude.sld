@@ -8,6 +8,7 @@
 	  (mylang builtin stack-func)
 	  (mylang builtin control-func)
           (mylang builtin lambda-func)
+          (mylang builtin seq-func)
           (mylang builtin comp-func)
           (mylang builtin block-func)
           (mylang builtin value-func)
@@ -17,7 +18,8 @@
           (mylang builtin logic-func)
           (mylang builtin convert-func)
           (mylang builtin file-func)
-          (mylang builtin include-func))
+          (mylang builtin include-func)
+          )
 
   (begin
     (define all-builtins
@@ -28,6 +30,7 @@
        stack-func-dict
        control-func-dict
        lambda-func-dict
+       seq-func-dict
        comp-func-dict
        block-func-dict
        value-func-dict
