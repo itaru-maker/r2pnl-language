@@ -1,9 +1,12 @@
 (define-library (mylang builtin include-func)
-  (export include-func-dict)
+  (export include-func-dict
+          include-file!
+          load-lib!)
   (import (scheme base)
           (scheme write)
           (scheme file)
           (mylang values)
+          (mylang env)
           (mylang tokens)
           (mylang error)
           (mylang lexer)
@@ -18,17 +21,28 @@
               (if (eof-object? chr)
                   (list->string (reverse acc))
                   (loop (cons chr acc))))))))
-    
-    (define (include-func interp)
-      (let* ((path (stack-pop! interp)))
+
+    (define (include-file! interp path)
         (cond
-         ((not (string? path)) (interp-error! interp "TypeError" "the \"include\" func expects a string"))
          ((not (file-exists? path)) (interp-error! interp "IOError" (string-append "no such file:" path)))
          (else
           (let* ((structure (parse-paren (sorting-types (lexer (read-all-text path)))))
                  (caller-line (cons (current-frame interp) (interp-call-stack interp))))
             (call-with-frame interp path 1 "<toplevel>"
-                             (lambda () (execute-body interp structure))))))))
+                             (lambda () (execute-body interp structure)))))))
+
+    (define (load-lib! interp)
+      (let ((lib-env (make-env (interp-env interp))))
+        (interp-env-set! interp lib-env)
+        (include-file! interp "lib/std.r2pnl")))
     
+    (define (include-func interp)
+      (let* ((path (stack-pop! interp)))
+        (if (not (string? path))
+            (interp-error! interp "TypeError" "the \"include\" func expects a string")
+            (include-file! interp path))))
+
+
+
     (define include-func-dict
       `(("include" . ,include-func)))))

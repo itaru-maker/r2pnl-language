@@ -36,20 +36,6 @@
             (exec-block false-then interp)
             (exec-block true-then interp)))))
 
-    (define (when-func interp)
-      (let* ((true-then (stack-pop! interp))
-            (condition (stack-pop! interp)))
-        (if (block-value? true-then)
-            (if (or (eq? #f condition) (eq? the-nil condition))
-               '();何もしない
-               (exec-block true-then interp))
-            (interp-error!
-             interp
-             "TypeError"
-             (string-append "the \"when\" func expects a any value and a block, but got "
-                            (value->write-string true-then))))))
-
-    
 
     (define (while-func interp)
       (let*
@@ -162,7 +148,6 @@
     (define control-func-dict
       `(("do" . ,do-func)
         ("if" . ,if-func)
-        ("when" . ,when-func)
         ("while" . ,while-func)
         ("repeat" . ,repeat-func)
         ("cond" . , cond-func)

@@ -1,0 +1,29 @@
+! stack
+'nip { swap drop } proc let
+'tuck { swap over } proc let
+'2drop { drop drop } proc let
+'2dup { over over } proc let
+'noop { } proc let
+
+!control
+'when { { } if } proc let
+'unless { { } swap if } proc let
+
+!var
+'args { reverse { swap let } each } proc let
+'inc { dup get 1 + set } proc let
+'dec { dup get 1 - set } proc let
+
+!comp
+'/= { = not } proc let
+'<= { > not } proc let
+'>= { < not } proc let
+
+
+!math 
+'even? { 2 % 0 = } proc let
+'odd? { even? not } proc let
+'min { 2dup > { nip } { drop } if } proc let
+'max { 2dup < { nip } { drop } if } proc let
+'neg { 0 swap - } proc let
+

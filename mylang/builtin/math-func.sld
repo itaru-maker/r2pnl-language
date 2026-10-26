@@ -63,11 +63,6 @@
       ("**" . ,(make-binary-math-func "**" expt))
       ("//" . ,(make-div-math-func "//" (lambda (a b) (floor (/ a b)))))
       ("floor" . ,(make-unary-math-func "floor" floor))
-      ("neg" . ,(make-unary-math-func "neg" -))
       ("sqrt" . ,sqrt-func)
-      ("abs" . ,(make-unary-math-func "abs" abs))
-      ("even?" . ,(make-unary-math-func "even?" even?))
-      ("odd?" . ,(make-unary-math-func "odd?" odd?))
-      ("min" . ,(make-binary-math-func "min" min))
-      ("max" . ,(make-binary-math-func "max" max))))))
+      ("abs" . ,(make-unary-math-func "abs" abs))))))
 

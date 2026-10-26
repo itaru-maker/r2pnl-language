@@ -37,7 +37,8 @@ loko
         (mylang parser)
         (mylang error)
         (mylang interpreter)
-        (mylang builtin prelude))
+        (mylang builtin prelude)
+        (mylang builtin include-func))
 
 (define mylang (make-interp all-builtins));インスタンス化
 
@@ -80,7 +81,10 @@ loko
 
 (define mylang-code
   (get-code (target-file-path)))
-  (interp-run mylang mylang-code  (target-file-path))
+
+(load-lib! mylang);libを定義
+;;ここで実行
+(interp-run mylang mylang-code (target-file-path))
 
 (if (not (null? (interp-stack mylang)));安全確認　（これはいらないっていう人もいるかも）
     (begin
