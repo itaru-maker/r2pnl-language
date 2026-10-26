@@ -20,6 +20,16 @@
                             (value->write-string block)))
             (exec-block block interp))))
 
+    (define (call-func interp)
+      (let ((v (stack-pop! interp)))
+        (if (not (or (builtin-func? v) (lambda-value? v) (proc-value? v)))
+            (interp-error! interp
+                           "TypeError"
+                           (string-append
+                            "the \"call\" func expects a callable (builtin, lambda or proc), but got "
+                            (value->write-string v)))
+            (invoke! interp v))))
+
     (define (if-func interp)
       (let*
           ((false-then (stack-pop! interp))
@@ -143,10 +153,9 @@
     (define (raise-func interp)
       (interp-throw! interp (stack-pop! interp)))
 
-    
-
     (define control-func-dict
       `(("do" . ,do-func)
+        ("call" . ,call-func)
         ("if" . ,if-func)
         ("while" . ,while-func)
         ("repeat" . ,repeat-func)

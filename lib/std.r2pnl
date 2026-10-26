@@ -5,6 +5,32 @@
 '2dup { over over } proc let
 'noop { } proc let
 
+!logic
+'not { { #false } { #true } if } proc let
+'or {
+    {
+        { dup } { drop drop #true }
+        { drop dup } { drop #true }
+        { #true } { drop #false }
+    } cond  
+} proc let
+
+'and {
+    {
+        { #true } { #false } if
+    } {
+        drop #false
+    } if
+} proc let
+
+'xor {
+    {
+        { #false } { #true } if
+    } {
+        { #true } { #false } if 
+    } if
+} proc let
+
 !control
 'when { { } if } proc let
 'unless { { } swap if } proc let
@@ -19,11 +45,15 @@
 '<= { > not } proc let
 '>= { < not } proc let
 
-
-!math 
+!math
+'%% { % 0 = } proc let
 'even? { 2 % 0 = } proc let
 'odd? { even? not } proc let
+'positive? { 0 > } proc let
+'negative? { 0 < } proc let !absより上に置くべし
+'zero? { 0 = } proc let
+'neg { 0 swap - } proc let !absより上に置くべし
+'abs { dup negative? { neg } when } proc let
 'min { 2dup > { nip } { drop } if } proc let
 'max { 2dup < { nip } { drop } if } proc let
-'neg { 0 swap - } proc let
-
+'// { / floor } proc let
