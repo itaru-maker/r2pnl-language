@@ -15,9 +15,10 @@
             (stack-push! interp
                          (make-lambda-value
                           body
-                          (interp-env interp);現在のenv
+                          (interp-env interp)
                           (interp-token-line interp)
-                          (interp-file interp))))));現在のline
+                          (interp-file interp)
+                          #f)))));名前はわからない
     
     ;;スコープを作らずに、ただblock-valueをcallableにするだけ
     (define (proc-func interp)
@@ -28,9 +29,10 @@
             (stack-push! interp
                          (make-proc-value
                           body
-                          (interp-token-line interp);現在のline
-                          (interp-file interp))))))
+                          (interp-token-line interp)
+                          (interp-file interp)
+                          #f)))))
     
-    (define lambda-func-dict ;これを変えす
+    (define lambda-func-dict ;これを返す
       `(("fn" . ,fn-func)
         ("proc" . ,proc-func)))))
