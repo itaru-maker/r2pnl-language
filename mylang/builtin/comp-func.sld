@@ -1,5 +1,6 @@
 (define-library (mylang builtin comp-func)
-  (export comp-func-dict)
+  (export comp-func-dict
+          value-equal?)
   (import (scheme base)
           (mylang values)
           (mylang tokens)

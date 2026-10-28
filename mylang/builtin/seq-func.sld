@@ -71,9 +71,20 @@
                          "TypeError"
                          (string-append "the \"nth\" func expects a string or a block as sequence, but got "
                                         (value->write-string seq)))))))
+
+    (define (reverse-func interp)
+      (let* ((seq (stack-pop! interp)))
+        (cond
+         ((string? seq)
+          (stack-push! interp (list->string (reverse (string->list seq)))))
+         ((block-value? seq)
+          (stack-push! interp (make-block-value (reverse (block-value-items seq)))))
+         (else
+          (interp-error! interp "TypeError" "the \"reverse\" func expects a block or a string")))))
     
     (define seq-func-dict
       `(("empty?" . ,empty?-func)
         ("concat" . ,concat-func)
         ("length" . ,length-func)
-        ("nth" . ,nth-func)))))
+        ("nth" . ,nth-func)
+        ("reverse" . ,reverse-func)))))

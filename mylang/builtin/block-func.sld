@@ -78,13 +78,6 @@
                   (stack-push! interp (make-block-value (reverse acc)))
                   (loop (+ current 1) (cons (cons current (interp-token-line interp)) acc)))))))
 
-
-    (define (reverse-func interp)
-      (let* ((block (stack-pop! interp)))
-        (if (block-value? block)
-            (stack-push! interp (make-block-value (reverse (block-value-items block))))
-            (interp-error! interp "TypeError" "the \"reverse\" func expects a block" ))))
-
     (define (set-nth-func interp)
       (let* ((v (stack-pop! interp))
              (i (stack-pop! interp))
@@ -110,7 +103,6 @@
         ("cons" . ,block-cons-func)
         ("slice" . ,block-slice-func)
         ("range" . ,range-func)
-        ("reverse" . ,reverse-func)
         ("set-nth" . ,set-nth-func)))))
 
 

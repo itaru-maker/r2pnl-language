@@ -11,11 +11,10 @@
 100 fizzbuzz
 !こうなる(forで少し可読性up)
 
-!'i 1 100 { { { i 15 % 0 = } { 'fizzbuzz } { i 5 % 0 = } { 'buzz } { i 3 % 0 = } { 'fizz } { 1 } { i } } cond . newline } for
 !codegolf、普通に弱い
 
-!'i 1 100 { i 15 % 0 = { 'fizzbuzz } { i 5 % 0 = { 'buzz } { i 3 % 0 = { 'fizz } { i } if } if } if . newline } for
-!こっちの方が短かった（144B）
+!'i 1 100 { i 15 %% { 'fizzbuzz } { i 5 %% { 'buzz } { i 3 %% { 'fizz } { i } if } if } if . newline } for
+!こっちの方が短かった（105B?）
 
 
 

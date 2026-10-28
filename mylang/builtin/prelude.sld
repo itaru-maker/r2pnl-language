@@ -19,7 +19,7 @@
           (mylang builtin convert-func)
           (mylang builtin file-func)
           (mylang builtin include-func)
-          )
+          (mylang builtin plist-func))
 
   (begin
     (define all-builtins
@@ -40,4 +40,5 @@
        logic-func-dict
        convert-func-dict
        file-func-dict
-       include-func-dict))))
+       include-func-dict
+       plist-func-dict))))

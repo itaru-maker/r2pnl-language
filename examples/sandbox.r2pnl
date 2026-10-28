@@ -1,1 +1,6 @@
-swap
+'plist-1 { key1 "hello" key2 "hi" } let
+'plist-1  plist-1 'key3 "hiya" define-plist set
+
+plist-1 'key1 plist-get . newline
+plist-1 'key2 plist-get . newline
+plist-1 'key3 plist-get . newline

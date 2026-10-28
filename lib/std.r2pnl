@@ -41,8 +41,9 @@
 
 !var
 'args { reverse { swap let } each } proc let
-'inc { dup get 1 + set } proc let
-'dec { dup get 1 - set } proc let
+'update { swap dup set rot do set } proc let
+'inc { { 1 + } update } proc let
+'dec { { 1 - } update } proc let
 
 !comp
 '/= { = not } proc let
