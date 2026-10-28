@@ -23,6 +23,6 @@
         ("builtin?" . ,(make-pred builtin-func?))
         ("lambda?" . ,(make-pred lambda-value?))
         ("proc?" . ,(make-pred proc-value?))
-        ("r-paren?" . ,(make-pred (lambda (v) (eq? the-l-paren v))))
-        ("l-paren?" . ,(make-pred (lambda (v) (eq? the-r-paren v))))
+        ("r-paren?" . ,(make-pred (lambda (v) (eq? the-r-paren v))))
+        ("l-paren?" . ,(make-pred (lambda (v) (eq? the-l-paren v))))
         ("error?" . ,(make-pred error-value?))))))

@@ -1,4 +1,8 @@
 ! stack
+'swap { 1 roll } proc let
+'dup { 0 pick } proc let
+'rot { 2 roll } proc let
+'over { 1 pick } proc let
 'nip { swap drop } proc let
 'tuck { swap over } proc let
 '2drop { drop drop } proc let
@@ -50,9 +54,9 @@
 'even? { 2 % 0 = } proc let
 'odd? { even? not } proc let
 'positive? { 0 > } proc let
-'negative? { 0 < } proc let !absより上に置くべし
+'negative? { 0 < } proc let
 'zero? { 0 = } proc let
-'neg { 0 swap - } proc let !absより上に置くべし
+'neg { 0 swap - } proc let
 'abs { dup negative? { neg } when } proc let
 'min { 2dup > { nip } { drop } if } proc let
 'max { 2dup < { nip } { drop } if } proc let

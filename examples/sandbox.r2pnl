@@ -1,3 +1,0 @@
-#true #true xor .
-#true #false xor .
-#false #false xor .
