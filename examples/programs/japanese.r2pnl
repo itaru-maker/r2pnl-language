@@ -1,0 +1,79 @@
+!==========定義部==========
+!助詞
+{ と との が で の を に へ する し し、 して それ 。 、 ！ } { 'noop get let } each
+
+!算術
+'和 { + } proc let
+'差 { - } proc let
+'積 { * } proc let
+'商 { / } proc let
+'足す { + } proc let
+'引く { - } proc let
+'掛ける { * } proc let
+'割る { / } proc let
+'割ったあまり { % } proc let
+
+!入出力
+'表示 { print } proc let
+'入力 { input } proc let
+'改行 { newline } proc let
+
+!変数
+'定義 { let } proc let
+'書き換え { set } proc let
+
+!配列
+'ここから { [ } proc let
+'ここまで { ] } proc let
+'こと { ] } proc let
+
+!制御
+'ならば { } proc let
+'でなければ { } proc let
+'分岐 { if } proc let
+'回繰り返し { swap repeat } proc let
+
+!スタック
+'複製 { dup } proc let
+'破棄 { drop } proc let
+'入れ替え { swap } proc let
+
+!その他
+'等しい { equal? } proc let
+'手続き化 { proc } proc let
+'関数 { fn } proc let
+'実行 { do } proc let
+!=======================
+
+!============ここから実行==================
+
+'変数1 を 4 と 定義 する
+変数1 と 6 の 和 を 表示 し、 改行 する
+
+変数1 と 複製 の 積 と 、 48 と 変数1 の 商 との 差 が 、 変数1 と 等しい ならば
+ここから
+    "こんにちは" と '表示 する こと を
+でなければ ここから
+    "さようなら" と '表示 する こと と
+分岐 し、 改行 する
+
+
+ここから
+    10 '回繰り返し する
+こと を
+手続き化 し、
+'10回  と 入れ替え 、
+定義 する
+
+ここから
+    "emacsを使ってください" を '表示 し、 '改行 する
+こと を
+10回 する
+
+'2倍 へ ここから
+    2 を '掛ける
+こと を 定義 する
+
+1 へ 、
+2倍 を
+100 回繰り返し 、 表示 する
