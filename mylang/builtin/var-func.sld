@@ -9,7 +9,7 @@
       (let* ((value (stack-pop! interp))
 	     (name (stack-pop! interp)))
 	(if (symbol-value? name)
-	    (if (in-env? (interp-env interp) (symbol-value-token name))
+	    (if (in-current-env? (interp-env interp) (symbol-value-token name))
 		(interp-error! interp "AlreadyDefinedError" (string-append
                                                              "the \"let\" func expects an undefined symbol, but \""
                                                              (symbol-value-token name)

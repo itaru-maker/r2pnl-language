@@ -1,6 +1,7 @@
-'collatz {
-    'n swap let
+'collatz { { n } args
+    'step 0 let
     { 1 n /= } {
+        'step inc
         n print
         newline
         n even? {
@@ -9,9 +10,11 @@
             'n n 3 * 1 + set
         } if
     } while
-    "1になった!" print
+    n print newline
+    "step:" print
+    step print
 } fn let
 
-!27 collatz
-
 931386509544713451 collatz
+
+newline

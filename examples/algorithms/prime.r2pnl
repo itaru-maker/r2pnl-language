@@ -1,22 +1,24 @@
-! その辺に転がってたpythonのコードをそのまま訳したので汚いどころじゃないです。今度（気が向いたら）直す
-'divisible? {
-    % 0 =
+'prime? { { n } args
+    {
+        { n 1 <= } { #false }
+        { n 2 = } { #true }
+        { n even? } { #false }
+        { #true } {
+            'ok #true let
+            'd 3 let !割る数
+            { d d * n <= ok and } {
+                n d %% {
+                    'ok #false set
+                } when
+                'd d 2 + set
+            } while
+            ok
+        } 
+    } cond
 } fn let
 
-
-'sieve {
-    'limit swap let
-    'numbers 2 limit 1 + range let
-    'acc { } let
-    'p 0 let
-    { numbers empty? not } {
-        'p numbers head set
-        'numbers numbers tail set
-        'acc p acc cons set !生き残ってるやつは素数
-
-        'numbers numbers { p divisible? not } filter set
-    } while
-    acc reverse
+'make-prime-list { { limit } args
+    1 limit 1 + range { prime? } filter
 } fn let
 
-100 sieve print
+100 make-prime-list .

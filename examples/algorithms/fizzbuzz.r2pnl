@@ -9,13 +9,3 @@
     } for
 } fn let
 100 fizzbuzz
-!こうなる(forで少し可読性up)
-
-!codegolf、普通に弱い
-
-!'i 1 100 { i 15 %% { 'fizzbuzz } { i 5 %% { 'buzz } { i 3 %% { 'fizz } { i } if } if } if . newline } for
-!こっちの方が短かった（105B?）
-
-
-
-
