@@ -1,6 +1,4 @@
-'insert { ! ソート済みのlstに対し、vを追加する
-    'lst swap let
-    'v swap let
+'insert { { v lst } args ! ソート済みのlstに対し、vを追加する
     {
         { lst empty? } { [ v ] }
         { v lst head <= } { v lst cons }

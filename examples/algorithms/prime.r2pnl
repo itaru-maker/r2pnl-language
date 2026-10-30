@@ -10,7 +10,7 @@
                 n d %% {
                     'ok #false set
                 } when
-                'd d 2 + set
+                'd { 2 + } update
             } while
             ok
         } 

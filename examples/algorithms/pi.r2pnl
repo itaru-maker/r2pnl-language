@@ -1,5 +1,4 @@
-'pi {
-    'n swap let
+'pi { { n } args
     'total 0 let
     'i 1 let
     n {

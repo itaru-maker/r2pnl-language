@@ -10,43 +10,43 @@
 
 ! ========define commands=======
 !arithmetic
-'add-opr { pop pop + push } fn let
-'sub-opr { pop pop swap - push } fn let
-'mul-opr { pop pop * push } fn let
-'div-opr { pop pop swap / push } fn let
-'mod-opr { pop pop swap % push } fn let
-'power-opr { pop pop swap ** push } fn let
+'add-cmd { pop pop + push } fn let
+'sub-cmd { pop pop swap - push } fn let
+'mul-cmd { pop pop * push } fn let
+'div-cmd { pop pop swap / push } fn let
+'mod-cmd { pop pop swap % push } fn let
+'power-cmd { pop pop swap ** push } fn let
 !stack
-'dup-opr { pop dup push push } fn let
-'swap-opr { pop pop swap push push } fn let
-'drop-opr { pop } fn let
+'dup-cmd { pop dup push push } fn let
+'swap-cmd { pop pop swap push push } fn let
+'drop-cmd { pop } fn let
 !output
-'print-opr { pop print } fn let
-'print-stack-opr { *stack* print } fn let
+'print-cmd { pop print } fn let
+'print-stack-cmd { *stack* print } fn let
 !other
-'clear-opr { '*stack* { } set } fn let
+'clear-cmd { '*stack* { } set } fn let
 ! ==============================
 
 
-'opr-cond { { opr } args
+'eval-cmd { { cmd } args
     {
         !arithmetic
-        { opr "+" equal? } { add-opr }
-        { opr "-" equal? } { sub-opr }
-        { opr "*" equal? } { mul-opr }
-        { opr "/" equal? } { div-opr }
-        { opr "%" equal? } { mod-opr }
-        { opr "**" equal? } { power-opr }
+        { cmd "+" equal? } { add-cmd }
+        { cmd "-" equal? } { sub-cmd }
+        { cmd "*" equal? } { mul-cmd }
+        { cmd "/" equal? } { div-cmd }
+        { cmd "%" equal? } { mod-cmd }
+        { cmd "**" equal? } { power-cmd }
         !stack
-        { opr "dup" equal? } { dup-opr }
-        { opr "swap" equal? } { swap-opr }
-        { opr "drop" equal? } { drop-opr }
+        { cmd "dup" equal? } { dup-cmd }
+        { cmd "swap" equal? } { swap-cmd }
+        { cmd "drop" equal? } { drop-cmd }
         !output
-        { opr "." equal? } { print-opr }
-        { opr ".s" equal? } { print-stack-opr }
+        { cmd "." equal? } { print-cmd }
+        { cmd ".s" equal? } { print-stack-cmd }
         !other
-        { opr "clear" equal? } { clear-opr }
-        { #true } { "unknown operator" print }
+        { cmd "clear" equal? } { clear-cmd }
+        { #true } { "unknown operator: " cmd concat print }
     } cond
 } fn let
 
@@ -54,8 +54,16 @@
     str string->number {
         str string->number push
     } {
-        str opr-cond
+        str eval-cmd
     } if 
+} fn let
+
+'eval-sentence { 
+    dup empty? {
+        drop
+    } {
+        { eval-string } each
+    } if
 } fn let
 
 'repl {
@@ -69,7 +77,7 @@
         or or
         not
     } {
-        inp eval-string
+        inp " " split eval-sentence
     } while
 } fn let
 

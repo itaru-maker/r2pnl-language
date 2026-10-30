@@ -41,7 +41,7 @@
 
 !var
 'args { reverse { swap let } each } proc let
-'update { swap dup set rot do set } proc let
+'update { swap dup get rot do set } proc let
 'inc { { 1 + } update } proc let
 'dec { { 1 - } update } proc let
 
@@ -62,3 +62,27 @@
 'min { 2dup > { nip } { drop } if } proc let
 'max { 2dup < { nip } { drop } if } proc let
 '// { / floor } proc let
+
+!string
+!結構便利だったので標準ライブラリに
+'split { { str c } args
+    'i 0 let
+    'acc { } let
+    'cur "" let
+    { i str length < } {
+        str i nth c equal? {
+            cur empty? {
+                'acc cur acc cons set
+                'cur "" set
+            } unless
+        } {
+            'cur cur str i nth concat set
+        } if
+        'i inc
+    } while
+    cur empty? not {
+        'acc cur acc cons set
+    } when
+    acc reverse
+} fn let
+
