@@ -38,6 +38,8 @@
 !control
 'when { { } if } proc let
 'unless { { } swap if } proc let
+'dip { swap 1 pack concat do } proc let
+'bi { { { dup } dip dip } dip do } proc let
 
 !var
 'args { reverse { swap let } each } proc let
@@ -76,13 +78,14 @@
                 'cur "" set
             } unless
         } {
-            'cur cur str i nth concat set
+            'cur { str i nth concat } update
         } if
         'i inc
     } while
-    cur empty? not {
+    cur empty? {
         'acc cur acc cons set
-    } when
+    } unless
     acc reverse
 } fn let
+
 

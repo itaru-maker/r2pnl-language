@@ -1,9 +1,9 @@
-'fib { { n } args
+'fib {
     {
-        { n 0 <= } { 0 }
-        { n 1 = } { 1 }
-        { #true } { n 1 - fib n 2 - fib + }
+        { dup 0 <= } { drop 0 }
+        { dup 1 = } { drop 1 }
+        { #true } { dup 1 - fib swap 2 - fib + }
     } cond
 } fn let
 
-17 fib print
+20 fib print

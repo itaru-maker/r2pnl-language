@@ -1,13 +1,13 @@
-'pi { { n } args
-    'total 0 let
-    'i 1 let
-    n {
-        'total 1 i / total + set
-        'i i 2 + set
-        'total total 1 i / - set
-        'i i 2 + set
+'pi2 { 
+    0.0 1 !total i
+    rot { !count
+        1 over / rot + swap
+        2 +
+        1 over / rot swap - swap
+        2 +
     } repeat
-    total 4.0 *
-} fn let
+    drop 4 *
+} proc let
 
-10000 pi print
+
+10000 pi2 print
