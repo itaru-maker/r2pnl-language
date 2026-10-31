@@ -1,17 +1,20 @@
-'insert { { v lst } args ! ソート済みのlstに対し、vを追加する
+! ソート済みのlstに対し、vを追加する
+'insert { !v lst -> newlst
     {
-        { lst empty? } { [ v ] }
-        { v lst head <= } { v lst cons }
-        { #true } { lst head v lst tail insert cons }
+        { dup empty? } { drop 1 pack }
+        { 2dup head <= } { cons }
+        { #true } { dup head rot rot tail insert cons }
     } cond
-} fn let
+} proc let
 
 'sort {
-    'lst swap let
     {
-        { lst empty? } { { } }
-        { #true } { lst head lst tail sort insert }
+        { dup empty? } { drop { } }
+        { #true } { dup head swap tail sort insert }
     } cond
-} fn let
+} proc let
 
 { 67 2 95 89 14 61 42 20 91 90 17 34 36 49 78 2 97 11 59 76 62 35 21 10 51 25 92 25 25 84 43 44 66 1 20 32 70 53 38 84 62 95 1 64 32 58 68 73 68 43 67 60 62 62 96 35 89 39 90 19 38 76 99 16 71 16 65 77 41 91 24 43 79 42 42 35 44 72 51 74 20 93 83 97 77 60 78 51 39 71 52 100 42 51 6 52 92 86 12 29 } sort print
+
+
+

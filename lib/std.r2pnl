@@ -64,6 +64,9 @@
 'min { 2dup > { nip } { drop } if } proc let
 'max { 2dup < { nip } { drop } if } proc let
 '// { / floor } proc let
+'sum {
+    0 { + } fold 
+} proc let
 
 !string
 !結構便利だったので標準ライブラリに

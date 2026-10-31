@@ -1,14 +1,12 @@
-'quick {
-    'lst swap let
-    lst length dup 1 = swap 0 = or {
-        lst
+'quick { { arr } args
+    arr length { zero? } { 1 = } bi or {
+        arr
     } {
-        'pivot lst lst length 2 // nth let
-        'l lst { pivot < } filter let
-        'm lst { pivot = } filter let
-        'r lst { pivot > } filter let
-
-        l quick m r quick concat concat
+        'pivot arr head let
+        arr { pivot < } filter quick
+        arr { pivot = } filter 
+        arr { pivot > } filter quick
+        concat concat 
     } if
 } fn let
 

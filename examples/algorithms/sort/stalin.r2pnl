@@ -3,13 +3,13 @@
 'stalin { { arr } args
     'max 0 let
     'acc { } let
-    'n 0 let
     arr {
-        'n swap set
-        n max >= {
-            'acc n acc cons set
-            'max n set
-        } when
+        dup max >= {
+            'acc over acc cons set
+            'max swap set
+        } {
+            drop
+        } if
     } each
     acc reverse
 } fn let

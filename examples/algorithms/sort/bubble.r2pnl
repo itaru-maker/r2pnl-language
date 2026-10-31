@@ -1,5 +1,4 @@
-'bubble {
-    'lst swap let
+'bubble { { lst } args
     'i 0 lst length 1 - {
         'j 0 lst length i - 2 - {
             lst j nth lst j 1 + nth > {
