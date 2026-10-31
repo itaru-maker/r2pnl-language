@@ -1,4 +1,4 @@
-'pi2 { 
+'pi { 
     0.0 1 !total i
     rot { !count
         1 over / rot + swap
@@ -10,4 +10,4 @@
 } proc let
 
 
-10000 pi2 print
+10000 pi print
