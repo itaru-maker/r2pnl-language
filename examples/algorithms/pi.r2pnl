@@ -1,13 +1,12 @@
 'pi { 
-    0.0 1 !total i
-    rot { !count
-        1 over / rot + swap
-        2 +
-        1 over / rot swap - swap
-        2 +
+    1 0.0 !i total 
+    rot {
+        1 2 pick / +
+        { 2 + } dip
+        1 2 pick / - 
+        { 2 + } dip
     } repeat
-    drop 4 *
+    nip 4 *
 } proc let
 
-
-10000 pi print
+100000 pi print
