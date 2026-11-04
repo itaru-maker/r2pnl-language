@@ -1,0 +1,13 @@
+'collatz { !n ->
+    0 swap !step n
+    { dup 1 > } {
+        dup . newline
+        dup even? { 2 / } { 3 * 1 + } if
+        { 1+ } dip
+    } while
+    . newline
+    "step: " print .
+} fn
+
+27 collatz
+newline

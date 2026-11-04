@@ -4,6 +4,6 @@
     } {
         dup 1 - factorial *
     } if
-} fn let
+} fn
 
 10 factorial print !-> 3628800

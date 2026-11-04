@@ -6,7 +6,6 @@
    make-block-value block-value? block-value-items block-value-items-set!
    block-value-append!
    make-builtin-func builtin-func? builtin-func-name builtin-func-proc
-   make-lambda-value lambda-value? lambda-value-body lambda-value-env lambda-value-line lambda-value-file lambda-value-name lambda-value-name-set!
    make-proc-value proc-value? proc-value-body proc-value-line proc-value-file proc-value-name proc-value-name-set!
    name-callable
    make-error-value error-value? error-value-name error-value-message
@@ -49,15 +48,6 @@
       (name builtin-func-name)
       (proc builtin-func-proc))
 
-    (define-record-type <lambda-value>
-      (make-lambda-value body env line file name)
-      lambda-value?
-      (body lambda-value-body)
-      (env lambda-value-env)
-      (line lambda-value-line)
-      (file lambda-value-file)
-      (name lambda-value-name lambda-value-name-set!))
-
     (define-record-type <proc-value>
       (make-proc-value body line file name)
       proc-value?
@@ -68,8 +58,7 @@
 
     (define (name-callable callable name)
       (if (proc-value? callable)
-          (proc-value-name-set! callable name)
-          (lambda-value-name-set! callable name)))
+          (proc-value-name-set! callable name)))
 
     (define-record-type <error-value>
       (make-error-value error-name message)
@@ -91,10 +80,6 @@
 			    "}"))
 	    ((builtin-func? value)
 	     (string-append "<builtin:" (builtin-func-name value) ">"))
-	    ((lambda-value? value)
-	     (string-append "<lambda"
-                            (if (lambda-value-name value) (string-append " \"" (lambda-value-name value)"\"") "?")
-                            (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value))) "") ">"))
             ((proc-value? value)
 	     (string-append "<proc"
                             (if (proc-value-name value) (string-append " \"" (proc-value-name value) "\"") "?")
@@ -122,10 +107,6 @@
                             "}"))
 	    ((builtin-func? value)
 	     (string-append "<builtin:" (builtin-func-name value) ">"))
-	    ((lambda-value? value)
-	     (string-append "<lambda"
-                            (if (lambda-value-name value) (string-append "\"" (lambda-value-name value)"\"") "?")
-                            (if (lambda-value-line value) (string-append " at " (number->string (lambda-value-line value))) "") ">"))
             ((proc-value? value)
 	     (string-append "<proc "
                             (if (proc-value-name value) (string-append "\"" (proc-value-name value)"\"") "?")

@@ -82,7 +82,7 @@ loko
 (define mylang-code
   (get-code (target-file-path)))
 
-(load-lib! mylang);libを定義
+(interp-run mylang (get-code "lib/std.r2pnl") "lib/std.r2pnl")
 ;;ここで実行
 (interp-run mylang mylang-code (target-file-path))
 
@@ -96,7 +96,5 @@ loko
                 (interp-stack mylang))
       (display "=bottom=" (current-error-port))
       (exit 1)))
-
-(newline)
 
 

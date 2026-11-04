@@ -1,9 +1,0 @@
-'gcd { { a b } args
-    { b 0 /= } {
-        'a b 'b a b % set set !先に定義するとずれるので貯めてから
-    } while
-    a
-} fn let
-
-24 36 gcd print
-newline

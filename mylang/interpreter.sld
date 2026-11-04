@@ -6,8 +6,6 @@
    interp-error!
    interp-throw!
    call-with-frame
-   call-lambda!
-   invoke!
    exec-block
    apply-callable!
    interp-run
@@ -60,7 +58,6 @@
       (let ((saved-file (interp-file interp))
             (saved-name (interp-name interp))
             (saved-line (interp-token-line interp))
-            (saved-env (interp-env interp))
             (saved-call-stack (interp-call-stack interp))
             (caller-frame (current-frame interp)))
         (dynamic-wind
@@ -74,18 +71,7 @@
             (interp-file-set! interp saved-file)
             (interp-token-line-set! interp saved-line)
             (interp-name-set! interp saved-name)
-            (interp-env-set! interp saved-env)
             (interp-call-stack-set! interp saved-call-stack)))))
-
-    (define (call-lambda! interp lmb)
-      (call-with-frame
-       interp
-       (lambda-value-file lmb)
-       (lambda-value-line lmb)
-       (value->write-string lmb)
-       (lambda ()
-         (interp-env-set! interp (make-env (lambda-value-env lmb)));親にして、新しいenvを作る(自動で戻してくれる)
-         (execute-body interp (block-value-items (lambda-value-body lmb))))))
 
     (define (call-proc! interp proc)
       (call-with-frame
@@ -96,13 +82,6 @@
        (lambda ()
          (execute-body interp (block-value-items (proc-value-body proc))))))
 
-    (define (invoke! interp call-func)
-      (cond
-       ((builtin-func? call-func) ((builtin-func-proc call-func) interp))
-       ((lambda-value? call-func) (call-lambda! interp call-func) )
-       ((proc-value? call-func) (call-proc! interp call-func))
-       (else (interp-error! interp "TypeError" "not callable value is passd"))))
-
     (define (exec-block block interp);execute-bodyの超々薄いラッパーなので、もしかしたら統合するかも
       ;;blockを実行（外には渡さない）
       (execute-body interp (block-value-items block)))
@@ -111,8 +90,6 @@
       (cond
        ((block-value? value)
         (exec-block value interp))
-       ((lambda-value? value)
-        (call-lambda! interp value))
        ((builtin-func? value)
         ((builtin-func-proc value) interp))
        ((proc-value? value)
@@ -130,8 +107,8 @@
              (let ((result (env-lookup (interp-env interp) (symbol-value-token item))))
                (if result
                    (let ((v (cdr result)))
-                     (if (or (builtin-func? v) (lambda-value? v) (proc-value? v))
-                         (invoke! interp v)
+                     (if (or (proc-value? v) (builtin-func? v))
+                         (apply-callable! interp v)
                          (stack-push! interp v)))
                    (interp-error! interp "UndefinedError" (string-append "unknown-name:" (symbol-value-token item))))))
             
@@ -178,10 +155,10 @@
         (execute-body interp (parse-code code file '()))))
 
     (define (make-interp builtins);決まりきった引数を削り取ったやつ
-      (let* ((env (make-env #f))
-             (interp (make-interp-raw '() env #f "<unknown>" "<toplevel>" '())));初期化用の、空スタック、親がいないenv(外側)、lineは#f、call-stackは無 を作る。
+      (let* ((env (make-env))
+             (interp (make-interp-raw '() env #f "<unknown>" "<toplevel>" '())));初期化用の、空スタック、env、lineは#f、call-stackは無 を作る。
         (for-each
          (lambda (entry);(name . proc)のリストをもらう
            (env-define env (car entry) (make-builtin-func (car entry) (cdr entry))))
          (reverse builtins))
-        interp))));for-eachは返さないから、interpを返す。
+        interp))));完成したinterpを返す

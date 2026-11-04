@@ -3,56 +3,55 @@
    make-env
    env?
    in-env?
-   in-current-env?
    env-lookup
    env-define
    env-set!
-   env-get)
+   env-get
+   env-delete!)
   (import (scheme base)
 	  (scheme write))
 
   (begin
     (define-record-type <env>
-      (make-env-raw vars parent)
+      (make-env-raw vars)
       env?
-      (vars env-vars env-vars-set!)
-      (parent env-parent))
+      (vars env-vars env-vars-set!))
 
-    (define (make-env parent)
-      (make-env-raw '() parent))
+    (define (make-env)
+      (make-env-raw '()))
 
     (define (in-env? env name)
-      (cond ((assoc name (env-vars env)) #t) ;そのまま自分が持ってるなら#tを返す
-	    ((env-parent env) (in-env? (env-parent env) name));親がいるなら、親に探してもらう
-	    (else #f))) ;なかった!
-
-    (define (in-current-env? env name)
       (if (assoc name (env-vars env)) #t #f))
 
     (define (env-lookup env name)
-      (or (assoc name (env-vars env))
-          (and (env-parent env)
-               (env-lookup (env-parent env) name))))
+      (assoc name (env-vars env)))
 
     (define (env-define env name value)
       (env-vars-set! env
         (cons (cons name value) (env-vars env))))
 
     (define (env-set! env name value)
-      (let loop ((now-env env))
-	(if (not now-env) ;親がいないなら
-	    #f
-	    (if (assoc name (env-vars now-env))
-		(begin
-		  (set-cdr! (assoc name (env-vars now-env)) value)
-		  #t);成功(#t)
-		(loop (env-parent now-env))))))
+      (let ((pair (assoc name (env-vars env))))
+        (if pair
+            (set-cdr! pair value))))
 
 
     (define (env-get env name)
-      (let loop ((now-env env))
-	(if (not now-env) ;親がいないなら
-	    (begin (write (env-vars env))(write name)(error "unknownname"));とりあえず適当にプリント（debug
-	    (if (assoc name (env-vars now-env))
-		(cdr (assoc name (env-vars now-env)))
-		(loop (env-parent now-env))))))))
+      (if (assoc name (env-vars env))
+	  (cdr (assoc name (env-vars env)))
+	  #f))
+    
+    (define (env-delete! env name)
+      (let loop ((rest (env-vars env)) (acc '()))
+        (cond
+         ((null? rest) #f)
+         ((equal? name (caar rest))
+          (env-vars-set! env (append (reverse acc) (cdr rest))) #t)
+         (else (loop (cdr rest) (cons (car rest) acc))))))
+
+    (define (env-snapshot env) (env-vars env))))
+
+
+
+
+

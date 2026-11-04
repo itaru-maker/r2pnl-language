@@ -1,0 +1,18 @@
+'palindrome? { dup reverse equal? } fn
+
+"wasitacaroracatisaw" palindrome? .
+"しんぶんし" palindrome? .
+"onomimono" palindrome? .
+"繧" palindrome? .
+"㍊" palindrome? .
+"" palindrome? .
+
+newline
+
+"アノマロカリス" palindrome? .
+"ばんそうこう" palindrome? .
+"bomb" palindrome? .
+"rentalcar" palindrome? .
+"わたしたちたわしだわ" palindrome? .
+
+newline

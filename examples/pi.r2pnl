@@ -7,6 +7,6 @@
         { 2 + } dip
     } repeat
     nip 4 *
-} proc let
+} fn
 
 100000 pi print

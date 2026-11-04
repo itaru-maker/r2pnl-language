@@ -4,6 +4,6 @@
         { dup 1 = } { drop 1 }
         { #true } { dup 1 - fib swap 2 - fib + }
     } cond
-} fn let
+} fn
 
 20 fib print

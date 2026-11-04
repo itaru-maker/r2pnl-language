@@ -1,7 +1,6 @@
 (define-library (mylang builtin include-func)
   (export include-func-dict
-          include-file!
-          load-lib!)
+          include-file!)
   (import (scheme base)
           (scheme write)
           (scheme file)
@@ -31,11 +30,6 @@
             (call-with-frame interp path 1 "<toplevel>"
                              (lambda () (execute-body interp structure)))))))
 
-    (define (load-lib! interp)
-      (let ((lib-env (make-env (interp-env interp))))
-        (interp-env-set! interp lib-env)
-        (include-file! interp "lib/std.r2pnl")))
-    
     (define (include-func interp)
       (let* ((path (stack-pop! interp)))
         (if (not (string? path))

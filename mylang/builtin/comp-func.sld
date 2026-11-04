@@ -56,9 +56,6 @@
        ((and (builtin-func? a) (builtin-func? b))
         (eq? a b))
 
-       ((and (lambda-value? a) (lambda-value? b))
-        (eq? a b))
-
        ((and (proc-value? a) (proc-value? b))
         (eq? a b))
            

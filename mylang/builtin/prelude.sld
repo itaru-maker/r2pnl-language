@@ -7,7 +7,6 @@
 	  (mylang builtin var-func)
 	  (mylang builtin stack-func)
 	  (mylang builtin control-func)
-          (mylang builtin lambda-func)
           (mylang builtin seq-func)
           (mylang builtin comp-func)
           (mylang builtin block-func)
@@ -18,8 +17,7 @@
           (mylang builtin convert-func)
           (mylang builtin file-func)
           (mylang builtin include-func)
-          (mylang builtin plist-func)
-          (mylang builtin error-func))
+          (mylang builtin plist-func))
 
   (begin
     (define all-builtins
@@ -29,7 +27,6 @@
        var-func-dict
        stack-func-dict
        control-func-dict
-       lambda-func-dict
        seq-func-dict
        comp-func-dict
        block-func-dict
@@ -40,5 +37,4 @@
        convert-func-dict
        file-func-dict
        include-func-dict
-       plist-func-dict
-       error-func-dict))))
+       plist-func-dict))))

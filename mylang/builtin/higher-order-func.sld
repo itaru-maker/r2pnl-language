@@ -9,15 +9,13 @@
     (define (callable? v)
       (or 
         (block-value? v) 
-        (builtin-func? v) 
-        (lambda-value? v) 
-        (proc-value? v)))
+        (builtin-func? v)))
      
     (define (map-func interp)
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
         (if (not (callable? proc))
-            (interp-error! interp  "TypeError" "the \"map\" func expects a callable (block, lambda or builtin) as second arg.")
+            (interp-error! interp  "TypeError" "the \"map\" func expects a callable as second arg.")
             (let loop ((items (block-value-items lst)) (acc '()))
               (if (null? items)
                   (stack-push! interp (make-block-value (reverse acc)))
@@ -31,7 +29,7 @@
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
         (if (not (callable? proc))
-            (interp-error! interp  "TypeError" "the \"each\" func expects a callable (block, lambda or builtin) as second arg.")
+            (interp-error! interp  "TypeError" "the \"each\" func expects a callable as second arg.")
             (let loop ((items (block-value-items lst)))
               (if (null? items)
                   '();何も返さない
@@ -44,7 +42,7 @@
       (let* ((proc (stack-pop! interp))
              (lst (stack-pop! interp)))
         (if (not (callable? proc))
-            (interp-error! interp "TypeError" "the \"filter\" func expects a callable (block, lambda or builtin) as second arg.")
+            (interp-error! interp "TypeError" "the \"filter\" func expects a callable as second arg.")
             (let ((items (block-value-items lst)))
               (let loop ((rest items) (acc '()))
                 (if (null? rest)
@@ -63,9 +61,9 @@
              (lst (stack-pop! interp)))
         (cond
          ((not (callable? proc))
-          (interp-error! interp "TypeError" "the \"fold\" func expects a callable (block, lambda or builtin) as third arg "))
+          (interp-error! interp "TypeError" "the \"fold\" func expects a callable as third arg "))
          ((not (block-value? lst))
-          (interp-error! interp "TypeError" "the \"fold\" func expects a block-value as first arg"))
+          (interp-error! interp "TypeError" "the \"fold\" func expects a block"))
          (else
           (let loop ((rest (block-value-items lst)) (acc init))
             (if (null? rest)
@@ -80,6 +78,6 @@
 
     (define higher-order-func-dict
       `(("map" . ,map-func)
-         ("each" . , each-func)
+        ("each" . , each-func)
         ("filter" . ,filter-func)
         ("fold" . ,fold-func)))))

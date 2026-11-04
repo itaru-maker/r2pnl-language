@@ -1,0 +1,43 @@
+'chars "abcdefghijklmnopqrstuvwxyzabcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLM" var
+
+'find-idx { !char -> num
+    #false !char found
+    0 78 range {
+        chars over nth 3 pick equal? 2 pick not and {
+            nip
+        } {
+            drop
+        } if
+    } each
+    nip
+} fn
+
+'rot-char { !char -> newchar
+    dup find-idx !char idx
+
+    dup {
+        { drop } dip
+        chars swap 13 + nth
+    } {
+        drop !char
+    } if 
+} fn
+
+
+'rot13 { !str -> newstr
+    0 "" !str i acc
+    
+    { over 3 pick length < } { ! i < len str
+        2 pick 2 pick nth rot-char concat
+        { 1+ } dip !inc
+    } while
+    nip nip
+} fn
+
+[
+    "I can eat glass, it doesn't hurt me."
+    "Why don't you give Emacs a try?"
+    "Common Lisp（コモン・リスプ）はプログラミング言語であり、Lisp方言の一つである。"
+    "啓蟄"
+    ""
+] { rot13 dup . newline rot13 . newline } each

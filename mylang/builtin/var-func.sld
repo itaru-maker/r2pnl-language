@@ -5,50 +5,49 @@
 	  (mylang interpreter)
 	  (mylang env))
   (begin
-    (define  (let-func interp)
-      (let* ((value (stack-pop! interp))
+    (define  (fn-func interp)
+      (let* ((block (stack-pop! interp))
 	     (name (stack-pop! interp)))
-	(if (symbol-value? name)
-	    (if (in-current-env? (interp-env interp) (symbol-value-token name))
+	(if (and (symbol-value? name) (block-value? block))
+	    (if (in-env? (interp-env interp) (symbol-value-token name))
 		(interp-error! interp "AlreadyDefinedError" (string-append
-                                                             "the \"let\" func expects an undefined symbol, but \""
+                                                             "the \"fn\" func expects an undefined symbol, but \""
                                                              (symbol-value-token name)
                                                              "\" is already defined!"))
 		(env-define (interp-env interp)
                             (symbol-value-token name)
-                            (if (or (proc-value? value) (lambda-value? value))
-                                (begin (name-callable value (symbol-value-token name))
-                                       value)
-                                value)))
+                            (make-proc-value
+                             block
+                             (interp-token-line interp)
+                             (interp-file interp)
+                             (symbol-value-token name))))
 	    (interp-error!
-	     interp "TypeError" (string-append "the \"let\" func expect symbol-value and any-value, but value "
-					       (value->write-string name)
-					       " is passed as symbol")))))
+	     interp "TypeError" "the \"fn\" func expect a symbol and a block "))))
     
-    (define (set-func interp)
-      (let* ((value (stack-pop! interp))
+    (define (redefine-func interp)
+      (let* ((block (stack-pop! interp))
 	     (name (stack-pop! interp)))
-	(if (symbol-value? name)
+	(if (or (symbol-value? name) (block-value? block)) 
 	    (if (in-env? (interp-env interp) (symbol-value-token name))
-		(env-set! (interp-env interp) (symbol-value-token name)
-                          (if (or (lambda-value? value) (proc-value? value))
-                              (begin (name-callable value (symbol-value-token name))
-                                     value)
-                              value))
+		(env-set! (interp-env interp)
+                          (symbol-value-token name)
+                          (make-proc-value
+                           block
+                           (interp-token-line interp)
+                           (interp-file interp)
+                           (symbol-value-token name)))
 		(interp-error! interp "UndefinedError" (string-append
-                                                         "the \"set\" func expects a defined symbol, but \""
+                                                         "the \"redefine\" func expects a defined symbol, but \""
                                                          (symbol-value-token name)
                                                          "\" is not defined yet") ))
-	    (interp-error! interp "TypeError" (string-append "func \"set\" expect symbol-value and any-value, but value "
-							     (value->write-string name)
-							     " is passed as symbol")))))
+	    (interp-error! interp "TypeError" "the \"redefine\" func expect a symbol and a block"))))
 
     (define (get-func interp)
       (let* ((name (stack-pop! interp)))
         (if (symbol-value? name)
             (let ((result (env-lookup (interp-env interp) (symbol-value-token name))))
               (if result
-                  (stack-push! interp (cdr result))
+                  (stack-push! interp (proc-value-body (cdr result)))
                   (interp-error! interp "UndefinedError" (string-append
                                                           "the \"get\" func expects a defined symbol, but \""
                                                           (symbol-value-token name)
@@ -56,8 +55,35 @@
             (interp-error! interp "TypeError" (string-append "func \"get\" expect symbol-value, but value "
 							     (value->write-string name)
 							     " is passed as symbol")))))
+
+    (define (var-func interp)
+      (let* ((v (stack-pop! interp))
+             (name (stack-pop! interp)))
+        (if (not (symbol-value? name))
+            (interp-error!
+	     interp "TypeError" "the \"var\" func expect a symbol and a value ")
+            (env-define (interp-env interp) (symbol-value-token name) v))))
+
+    (define (set-func interp)
+      (let* ((v (stack-pop! interp))
+             (name (stack-pop! interp)))
+        (if (not (symbol-value? name))
+            (interp-error!
+	     interp "TypeError" "the \"set\" func expect a symbol and a value ")
+            (env-set! (interp-env interp) (symbol-value-token name) v))))
+
+    (define (forget-func interp)
+      (let* ((name (stack-pop! interp)))
+        (if (not (symbol-value? name))
+            (interp-error!
+	     interp "TypeError" "the \"forget\" func expect a symbol")
+            (env-delete! (interp-env interp) (symbol-value-token name)))))
+    
     
     (define var-func-dict
-      `(("let" . ,let-func)
-	("set" . ,set-func)
-        ("get" . ,get-func)))))
+      `(("fn" . ,fn-func)
+	("redefine" . ,redefine-func)
+        ("get" . ,get-func)
+        ("var" . ,var-func)
+        ("set" . ,set-func)
+        ("forget" . ,forget-func)))))

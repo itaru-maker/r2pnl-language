@@ -1,23 +1,24 @@
 ! stack
-'swap { 1 roll } proc let
-'dup { 0 pick } proc let
-'rot { 2 roll } proc let
-'over { 1 pick } proc let
-'nip { swap drop } proc let
-'tuck { swap over } proc let
-'2drop { drop drop } proc let
-'2dup { over over } proc let
-'noop { } proc let
+'swap { 1 roll } fn
+'dup { 0 pick } fn
+'rot { 2 roll } fn
+'over { 1 pick } fn
+'nip { swap drop } fn
+'tuck { swap over } fn
+'2drop { drop drop } fn
+'2dup { over over } fn
+'noop { } fn
 
 !logic
-'not { { #false } { #true } if } proc let
+'not { { #false } { #true } if } fn
+
 'or {
     {
-        { dup } { drop drop #true }
-        { drop dup } { drop #true }
-        { #true } { drop #false }
-    } cond  
-} proc let
+        drop #true
+    } {
+        { #true } { #false } if
+    }
+} fn
 
 'and {
     {
@@ -25,7 +26,7 @@
     } {
         drop #false
     } if
-} proc let
+} fn
 
 'xor {
     {
@@ -33,61 +34,43 @@
     } {
         { #true } { #false } if 
     } if
-} proc let
+} fn
 
 !control
-'when { { } if } proc let
-'unless { { } swap if } proc let
-'dip { swap 1 pack concat do } proc let
-'bi { { { dup } dip dip } dip do } proc let
-
-!var
-'args { reverse { swap let } each } proc let
-'update { swap dup get rot do set } proc let
-'inc { { 1 + } update } proc let
-'dec { { 1 - } update } proc let
+'do { call } fn
+'when { { } if } fn
+'unless { { } swap if } fn
+'dip { swap 1 pack concat do } fn
+'bi { { { dup } dip dip } dip do } fn
 
 !comp
-'/= { = not } proc let
-'<= { > not } proc let
-'>= { < not } proc let
+'/= { = not } fn
+'<= { > not } fn
+'>= { < not } fn
 
 !math
-'%% { % 0 = } proc let
-'even? { 2 % 0 = } proc let
-'odd? { even? not } proc let
-'positive? { 0 > } proc let
-'negative? { 0 < } proc let
-'zero? { 0 = } proc let
-'neg { 0 swap - } proc let
-'abs { dup negative? { neg } when } proc let
-'min { 2dup > { nip } { drop } if } proc let
-'max { 2dup < { nip } { drop } if } proc let
-'// { / floor } proc let
+'%% { % 0 = } fn
+'even? { 2 % 0 = } fn
+'odd? { even? not } fn
+'positive? { 0 > } fn
+'negative? { 0 < } fn
+'zero? { 0 = } fn
+'neg { 0 swap - } fn
+'abs { dup negative? { neg } when } fn
+'min { 2dup > { nip } { drop } if } fn
+'max { 2dup < { nip } { drop } if } fn
+'// { / floor } fn
 'sum {
     0 { + } fold 
-} proc let
+} fn
+'1+ { 1 + } fn
+'1- { 1 - } fn
 
-!string
-!結構便利だったので標準ライブラリに
-'split { { str c } args
-    'i 0 let
-    'acc { } let
-    'cur "" let
-    { i str length < } {
-        str i nth c equal? {
-            cur empty? {
-                'acc cur acc cons set
-                'cur "" set
-            } unless
-        } {
-            'cur { str i nth concat } update
-        } if
-        'i inc
-    } while
-    cur empty? {
-        'acc cur acc cons set
-    } unless
-    acc reverse
-} fn let
+!block
+'uncons { { head } { tail } bi } fn
+'1block { 1 pack } fn
 
+!higher order
+'partition {
+    2dup filter { { not } concat filter } dip swap
+} fn

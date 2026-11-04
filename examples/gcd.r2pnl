@@ -1,0 +1,5 @@
+'gcd {
+    dup 0 = { drop } { tuck % gcd } if
+} fn
+
+48 18 gcd print newline

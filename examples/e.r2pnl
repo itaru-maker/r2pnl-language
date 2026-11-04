@@ -1,0 +1,5 @@
+'e {
+    dup 1.0 swap / 1.0 + swap **
+} fn
+
+10000 e 1 * print

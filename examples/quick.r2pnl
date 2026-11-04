@@ -1,0 +1,14 @@
+'quick {
+    dup empty? { noop } {
+        uncons
+        !pivot rest
+        over 1block { < } concat
+        partition
+        !pivot less greater
+        rot 1block swap
+        concat concat
+    } if
+} fn
+
+
+{ 3 9 8 6 5 1 2 4 67 } quick .

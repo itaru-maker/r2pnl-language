@@ -9,26 +9,15 @@
           (mylang parser))
 
   (begin
-    (define (do-func interp)
-      ;;一つのブロックを実行する
-      (let ((block (stack-pop! interp)))
-        (if (not (block-value? block))
-            (interp-error! interp
-                           "TypeError"
-                           (string-append
-                            "the \"do\" func is expects a block, but got "
-                            (value->write-string block)))
-            (exec-block block interp))))
-
     (define (call-func interp)
       (let ((v (stack-pop! interp)))
-        (if (not (or (builtin-func? v) (lambda-value? v) (proc-value? v)))
+        (if (not (or (builtin-func? v) (block-value? v)))
             (interp-error! interp
                            "TypeError"
                            (string-append
-                            "the \"call\" func expects a callable (builtin, lambda or proc), but got "
+                            "the \"call\" func expects a callable (builtin or block), but got "
                             (value->write-string v)))
-            (invoke! interp v))))
+            (apply-callable! interp v))))
 
     (define (if-func interp)
       (let*
@@ -108,31 +97,6 @@
                                   (loop (cddr rest))
                                   (exec-block body interp))))))))))))
 
-    (define (for-func interp)
-      (let* ((body (stack-pop! interp))
-             (end (stack-pop! interp))
-             (start (stack-pop! interp))
-             (label (stack-pop! interp)))
-        (if (not (and
-                  (block-value? body)
-                  (number? end)
-                  (number? start)
-                  (symbol-value? label)))
-            (interp-error! interp "TypeError" "the \"for\" func expects a symbol, two numbers and a block")
-            (let*
-                ((caller-env (interp-env interp));一旦interp側のenvを退避
-                 (loop-env (make-env caller-env)));退避させたやつを親にしたenvを作る
-              (let ((var-name (symbol-value-token label)))
-                (env-define loop-env var-name start)
-                (interp-env-set! interp loop-env)
-                (let loop ((current-num start))
-                  (if (< end current-num)
-                      (interp-env-set! interp caller-env);戻す
-                      (begin
-                        (env-set! loop-env var-name current-num)
-                        (exec-block body interp)
-                        (loop (+ current-num 1))
-                        (interp-env-set! interp caller-env)))))))))
 
     (define (try-func interp)
       (let* ((handler (stack-pop! interp))
@@ -140,12 +104,12 @@
         (if (not (and (block-value? handler) (block-value? body)))
             (interp-error! interp "TypeError" "the \"try\" func expects two blocks")
             (let ((saved-stack (interp-stack interp));元の環境を汚さないためにコピーを作っておく
-                  (saved-env (interp-env interp)))
+                  (saved-env (env-snapshot (interp-env interp))))
               (guard
                   (e
                    ((raised? e)
                     (interp-stack-set! interp saved-stack)
-                    (interp-env-set! interp saved-env)
+                    (env-restore! (interp-env interp) saved-env)
                     (stack-push! interp (raised-value e))
                     (exec-block handler interp)))
                 (exec-block body interp))))))
@@ -153,15 +117,24 @@
     (define (raise-func interp)
       (interp-throw! interp (stack-pop! interp)))
 
+    (define (scope-func interp)
+      (let* ((body (stack-pop! interp)))
+        (if (not (block-value? body))
+            (interp-error! interp "TypeError" "the \"scope\" func expects a block")
+            (let ((snap (env-snapshot (interp-env env))))
+              (dynamic-wind ;絶対全部やる
+                (lambda () '())
+                (lambda () (exec-block body interp))
+                (lambda () (env-restore! (interp-env interp) snap)))))))
+
     (define control-func-dict
-      `(("do" . ,do-func)
-        ("call" . ,call-func)
+      `(("call" . ,call-func)
         ("if" . ,if-func)
         ("while" . ,while-func)
         ("repeat" . ,repeat-func)
         ("cond" . , cond-func)
-        ("for" . ,for-func)
         ("try" . ,try-func)
-        ("raise" . ,raise-func)))))
+        ("raise" . ,raise-func)
+        ("scope" . ,scope-func)))))
 
 
