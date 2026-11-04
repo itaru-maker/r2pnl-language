@@ -80,6 +80,6 @@
 
     (define higher-order-func-dict
       `(("map" . ,map-func)
-        ("each" . , each-func)
+         ("each" . , each-func)
         ("filter" . ,filter-func)
         ("fold" . ,fold-func)))))

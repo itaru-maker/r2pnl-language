@@ -1,9 +1,9 @@
 'fizzbuzz {
     'i 1 rot {
         {
-            { i 15 % 0 = } { "fizzbuzz" }
-            { i 5 % 0 = } { "buzz" }
-            { i 3 % 0 = } { "fizz" }
+            { i 15 %% } { "fizzbuzz" }
+            { i 5 %% } { "buzz" }
+            { i 3 %% } { "fizz" }
             { #true } { i }
         } cond print newline
     } for

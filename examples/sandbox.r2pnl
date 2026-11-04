@@ -1,0 +1,15 @@
+!まだ未完成
+'each2 { !arr proc ->
+    swap !proc arr
+    { dup empty? not } {
+        2dup head swap
+        dup block? {
+            do
+        } {
+            call
+        } if
+        tail
+    } while
+    2drop
+} proc let
+

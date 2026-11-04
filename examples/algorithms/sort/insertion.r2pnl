@@ -7,10 +7,10 @@
     } cond
 } proc let
 
-'sort {
+'sort { !lst -> newlst
     {
         { dup empty? } { drop { } }
-        { #true } { dup head swap tail sort insert }
+        { #true } { { head } { tail sort } bi insert }
     } cond
 } proc let
 
