@@ -79,7 +79,7 @@
                         in-str?
                         0
                         #f
-                        line
+                        (if (char=? #\newline chr) (+ 1 line) line)
                         tokens))
 
                  ((char=? #\newline chr)
