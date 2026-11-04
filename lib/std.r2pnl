@@ -60,9 +60,7 @@
 'min { 2dup > { nip } { drop } if } fn
 'max { 2dup < { nip } { drop } if } fn
 '// { / floor } fn
-'sum {
-    0 { + } fold 
-} fn
+'sum { 0 { + } fold } fn
 '1+ { 1 + } fn
 '1- { 1 - } fn
 
