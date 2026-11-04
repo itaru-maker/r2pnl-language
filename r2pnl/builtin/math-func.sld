@@ -1,10 +1,10 @@
-(define-library (mylang builtin math-func)
+(define-library (r2pnl builtin math-func)
   (export math-func-dict)
   (import (scheme base)
 	  (scheme write)
           (scheme inexact)
-          (mylang values)
-          (mylang interpreter))
+          (r2pnl values)
+          (r2pnl interpreter))
   
   (begin
     (define (make-binary-math-func name opr)

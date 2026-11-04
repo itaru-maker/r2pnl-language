@@ -1,9 +1,9 @@
-(define-library (mylang builtin var-func)
+(define-library (r2pnl builtin var-func)
   (export var-func-dict)
   (import (scheme base)
-	  (mylang values)
-	  (mylang interpreter)
-	  (mylang env))
+	  (r2pnl values)
+	  (r2pnl interpreter)
+	  (r2pnl env))
   (begin
     (define  (fn-func interp)
       (let* ((block (stack-pop! interp))

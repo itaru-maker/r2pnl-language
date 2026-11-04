@@ -1,8 +1,8 @@
-(define-library (mylang lexer)
+(define-library (r2pnl lexer)
   (export lexer)
   (import (scheme base)
-          (mylang error)
-          (mylang values))
+          (r2pnl error)
+          (r2pnl values))
   (begin
 
     (define cmt-chr #\!)

@@ -1,0 +1,11 @@
+'greet {
+    {
+        'name swap var
+        [ "Hello, " name "!" ] { print } each
+        newline
+    } scope
+} fn
+
+'name [ "田中" "鈴木" "高橋" "斎藤" "佐藤" "渡辺" "伊藤" "山本" ] var
+
+name { greet } each

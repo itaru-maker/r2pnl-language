@@ -1,4 +1,4 @@
-(define-library (mylang env)
+(define-library (r2pnl env)
   (export
    make-env
    env?
@@ -7,7 +7,9 @@
    env-define
    env-set!
    env-get
-   env-delete!)
+   env-delete!
+   env-snapshot
+   env-restore!)
   (import (scheme base)
 	  (scheme write))
 
@@ -49,9 +51,7 @@
           (env-vars-set! env (append (reverse acc) (cdr rest))) #t)
          (else (loop (cdr rest) (cons (car rest) acc))))))
 
-    (define (env-snapshot env) (env-vars env))))
+    (define (env-snapshot env) (env-vars env))
 
-
-
-
+    (define (env-restore! env snap) (env-vars-set! env snap))))
 

@@ -1,9 +1,9 @@
-(define-library (mylang builtin io-func)
+(define-library (r2pnl builtin io-func)
   (export io-func-dict)
   (import (scheme base)
 	  (scheme write)
-	  (mylang values)
-	  (mylang interpreter))
+	  (r2pnl values)
+	  (r2pnl interpreter))
   (begin
     (define  (write-func interp)
       (display

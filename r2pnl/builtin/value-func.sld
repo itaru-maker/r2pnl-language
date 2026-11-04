@@ -1,10 +1,10 @@
-(define-library (mylang builtin value-func)
+(define-library (r2pnl builtin value-func)
   (export value-func-dict)
   (import (scheme base)
           (scheme write)
-          (mylang values)
-          (mylang tokens)
-          (mylang interpreter))
+          (r2pnl values)
+          (r2pnl tokens)
+          (r2pnl interpreter))
 
   (begin
     (define (make-pred pred)

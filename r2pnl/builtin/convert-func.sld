@@ -1,8 +1,8 @@
-(define-library (mylang builtin convert-func)
+(define-library (r2pnl builtin convert-func)
   (export convert-func-dict)
   (import (scheme base)
-          (mylang values)
-          (mylang interpreter))
+          (r2pnl values)
+          (r2pnl interpreter))
   (begin
     (define (->string-func interp)
       (let* ((v (stack-pop! interp)))

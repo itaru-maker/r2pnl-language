@@ -1,12 +1,12 @@
-(define-library (mylang builtin file-func)
+(define-library (r2pnl builtin file-func)
   (export file-func-dict)
   (import (scheme base)
           (scheme write)
           (scheme file)
-          (mylang values)
-          (mylang tokens)
-          (mylang interpreter)
-          (mylang error))
+          (r2pnl values)
+          (r2pnl tokens)
+          (r2pnl interpreter)
+          (r2pnl error))
 
   (begin
     (define (file-exists?-func interp)

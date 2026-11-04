@@ -1,9 +1,9 @@
-(define-library (mylang builtin list-func)
+(define-library (r2pnl builtin list-func)
   (export list-func-dict)
   (import (scheme base)
-          (mylang values)
-          (mylang tokens)
-          (mylang interpreter))
+          (r2pnl values)
+          (r2pnl tokens)
+          (r2pnl interpreter))
 
   (begin
     ;;動的に配列を作りやすくするために作った。（{ }はparse時にやるので { 2 3 + } が3要素になってしまう ）

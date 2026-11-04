@@ -1,10 +1,10 @@
-(define-library (mylang builtin comp-func)
+(define-library (r2pnl builtin comp-func)
   (export comp-func-dict
           value-equal?)
   (import (scheme base)
-          (mylang values)
-          (mylang tokens)
-          (mylang interpreter))
+          (r2pnl values)
+          (r2pnl tokens)
+          (r2pnl interpreter))
   (begin
     (define (eq?-func interp)
       (let*

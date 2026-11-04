@@ -1,12 +1,12 @@
-(define-library (mylang builtin block-func)
+(define-library (r2pnl builtin block-func)
   (export
    block-func-dict)
   
   (import (scheme base)
           (scheme write)
-          (mylang values)
-          (mylang parser)
-          (mylang interpreter))
+          (r2pnl values)
+          (r2pnl parser)
+          (r2pnl interpreter))
   (begin
     (define (block-head-func interp)
       (let* ((a (stack-pop! interp)))

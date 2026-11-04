@@ -1,12 +1,12 @@
-(define-library (mylang parser)
+(define-library (r2pnl parser)
   (export parse-one-token
 	  sorting-types
 	  parse-paren)
   (import (scheme base)
 	  (scheme write)
-	  (mylang values)
-	  (mylang tokens)
-	  (mylang error))
+	  (r2pnl values)
+	  (r2pnl tokens)
+	  (r2pnl error))
   (begin
     (define (remove-esc str line)
       (let ((len (string-length str)))

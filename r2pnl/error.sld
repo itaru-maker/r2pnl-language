@@ -1,10 +1,10 @@
-(define-library (mylang error)
+(define-library (r2pnl error)
   (export
    make-frame frame? frame-file frame-line frame-name
    make-raised raised? raised-value raised-trace
    raise-error-value! raised-unresolve? raised-resolve)
   (import (scheme base)
-          (mylang values))
+          (r2pnl values))
   (begin
     (define-record-type <frame>
       (make-frame file line name)

@@ -1,8 +1,8 @@
-(define-library (mylang builtin stack-func)
+(define-library (r2pnl builtin stack-func)
   (export stack-func-dict)
   (import (scheme base)
 	  (scheme write)
-	  (mylang interpreter))
+	  (r2pnl interpreter))
 
   (begin
     (define (pick-func interp)

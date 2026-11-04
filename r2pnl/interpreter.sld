@@ -1,4 +1,4 @@
-(define-library (mylang interpreter)
+(define-library (r2pnl interpreter)
   (export
    make-interp make-interp-raw interp? interp-stack interp-stack-set! interp-env interp-env-set! interp-token-line interp-token-line-set! interp-call-stack interp-call-stack-set! interp-file interp-file-set! interp-name interp-name-set!
    stack-push! stack-pop!
@@ -15,12 +15,12 @@
    (scheme base)
    (scheme write)
    (scheme process-context)
-   (mylang values)
-   (mylang tokens)
-   (mylang env)
-   (mylang lexer)
-   (mylang parser)
-   (mylang error))
+   (r2pnl values)
+   (r2pnl tokens)
+   (r2pnl env)
+   (r2pnl lexer)
+   (r2pnl parser)
+   (r2pnl error))
   
   (begin
     (define-record-type <interp>

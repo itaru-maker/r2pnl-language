@@ -1,4 +1,4 @@
-(define-library (mylang values)
+(define-library (r2pnl values)
   (export
    nil-value? the-nil ;にlは一つでいいので
    make-symbol-value symbol-value? symbol-value-token
@@ -13,7 +13,7 @@
    value->display-string)
   (import (scheme base)
 	  (scheme write)
-	  (mylang tokens))
+	  (r2pnl tokens))
   (begin
     ;;float str true false はschemeの機能を借りる
     ;;nil symbol quote block lambdaは自作する

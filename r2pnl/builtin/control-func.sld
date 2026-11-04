@@ -1,12 +1,12 @@
-(define-library (mylang builtin control-func)
+(define-library (r2pnl builtin control-func)
   (export control-func-dict)
   (import (scheme base)
-          (mylang values)
-          (mylang error)
-          (mylang env)
-          (mylang tokens)
-          (mylang interpreter)
-          (mylang parser))
+          (r2pnl values)
+          (r2pnl error)
+          (r2pnl env)
+          (r2pnl tokens)
+          (r2pnl interpreter)
+          (r2pnl parser))
 
   (begin
     (define (call-func interp)
@@ -121,7 +121,7 @@
       (let* ((body (stack-pop! interp)))
         (if (not (block-value? body))
             (interp-error! interp "TypeError" "the \"scope\" func expects a block")
-            (let ((snap (env-snapshot (interp-env env))))
+            (let ((snap (env-snapshot (interp-env interp))))
               (dynamic-wind ;絶対全部やる
                 (lambda () '())
                 (lambda () (exec-block body interp))

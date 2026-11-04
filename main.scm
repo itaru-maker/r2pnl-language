@@ -30,17 +30,17 @@ loko
         (scheme write)
         (scheme file)
         (scheme process-context)
-        (mylang values)
-        (mylang tokens)
-        (mylang env)
-        (mylang lexer)
-        (mylang parser)
-        (mylang error)
-        (mylang interpreter)
-        (mylang builtin prelude)
-        (mylang builtin include-func))
+        (r2pnl values)
+        (r2pnl tokens)
+        (r2pnl env)
+        (r2pnl lexer)
+        (r2pnl parser)
+        (r2pnl error)
+        (r2pnl interpreter)
+        (r2pnl builtin prelude)
+        (r2pnl builtin include-func))
 
-(define mylang (make-interp all-builtins));インスタンス化
+(define r2pnl (make-interp all-builtins));インスタンス化
 
 (define (fatal-error! name message)
   (newline)
@@ -79,21 +79,21 @@ loko
   (let ((user-command (command-line)))
     (last-item user-command)))
 
-(define mylang-code
+(define r2pnl-code
   (get-code (target-file-path)))
 
-(interp-run mylang (get-code "lib/std.r2pnl") "lib/std.r2pnl")
+(interp-run r2pnl (get-code "lib/std.r2pnl") "lib/std.r2pnl")
 ;;ここで実行
-(interp-run mylang mylang-code (target-file-path))
+(interp-run r2pnl r2pnl-code (target-file-path))
 
-(if (not (null? (interp-stack mylang)));安全確認　（これはいらないっていう人もいるかも）
+(if (not (null? (interp-stack r2pnl)));安全確認　（これはいらないっていう人もいるかも）
     (begin
       (display "WARNING:stack is not empty at end of program\n" (current-error-port))
       (display "==top===\n" (current-error-port))
       (for-each (lambda (v)
                   (display (value->write-string v)(current-error-port))
                   (newline (current-error-port)))
-                (interp-stack mylang))
+                (interp-stack r2pnl))
       (display "=bottom=" (current-error-port))
       (exit 1)))
 

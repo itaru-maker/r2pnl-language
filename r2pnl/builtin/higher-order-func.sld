@@ -1,9 +1,9 @@
-(define-library (mylang builtin higher-order-func)
+(define-library (r2pnl builtin higher-order-func)
   (export higher-order-func-dict)
   (import (scheme base)
           (scheme write)
-          (mylang values)
-          (mylang interpreter))
+          (r2pnl values)
+          (r2pnl interpreter))
 
   (begin
     (define (callable? v)

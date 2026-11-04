@@ -1,9 +1,9 @@
 ;;廃止するかも？
-(define-library (mylang builtin string-func)
+(define-library (r2pnl builtin string-func)
   (export string-func-dict)
   (import (scheme base)
-          (mylang values)
-          (mylang interpreter))
+          (r2pnl values)
+          (r2pnl interpreter))
 
   (begin
     (define (substring-func interp)

@@ -1,11 +1,11 @@
-(define-library (mylang builtin plist-func)
+(define-library (r2pnl builtin plist-func)
   (export plist-func-dict)
   (import
    (scheme base)
    (scheme write)
-   (mylang values)
-   (mylang interpreter)
-   (mylang builtin comp-func))
+   (r2pnl values)
+   (r2pnl interpreter)
+   (r2pnl builtin comp-func))
   (begin
     (define (plist-has? plist key interp)
       (let ((items (block-value-items plist)))
