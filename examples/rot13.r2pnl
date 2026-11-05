@@ -2,7 +2,7 @@
 
 'find-idx { !char -> num
     #false !char found
-    0 78 range {
+    0 65 range {
         chars over nth 3 pick equal? 2 pick not and {
             nip
         } {

@@ -17,7 +17,8 @@
           (r2pnl builtin convert-func)
           (r2pnl builtin file-func)
           (r2pnl builtin include-func)
-          (r2pnl builtin plist-func))
+          (r2pnl builtin plist-func)
+          (r2pnl builtin error-func))
 
   (begin
     (define all-builtins
@@ -37,4 +38,5 @@
        convert-func-dict
        file-func-dict
        include-func-dict
-       plist-func-dict))))
+       plist-func-dict
+       error-func-dict))))

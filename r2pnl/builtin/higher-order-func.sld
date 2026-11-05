@@ -74,8 +74,6 @@
                   (apply-callable! interp proc)
                   (loop (cdr rest) (stack-pop! interp)))))))))
 
-
-
     (define higher-order-func-dict
       `(("map" . ,map-func)
         ("each" . , each-func)
