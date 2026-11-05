@@ -72,3 +72,7 @@
 'partition {
     2dup filter { { not } concat filter } dip swap
 } fn
+
+'member? { !list v
+    { equal? } cons filter length zero? not
+} fn
