@@ -11,6 +11,11 @@
 *.sld#*
 .#*.sld
 
+# ---> CommonLisp
+*.lisp~
+*.lisp#*
+.#*.lisp
+
 # ---> r2pnl
 *.r2pnl~
 *.r2pnl#*
