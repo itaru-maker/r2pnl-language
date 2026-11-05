@@ -1,0 +1,32 @@
+(define-library (r2pnl builtin error-func)
+  (export error-func-dict)
+  (import (scheme base)
+          (scheme write)
+          (r2pnl values)
+          (r2pnl tokens)
+          (r2pnl error)
+          (r2pnl interpreter))
+  (begin
+    (define (error-func interp)
+      (let* ((msg (stack-pop! interp))
+             (name (stack-pop! interp)))
+        (if (not (and (string? msg) (string? name)))
+            (interp-error! interp "TypeError" "the \"error\" func expects two strings")
+            (stack-push! interp (make-error-value name msg)))))
+
+    (define (error-name-func interp)
+      (let* ((er (stack-pop! interp)))
+        (if (error-value? er)
+            (stack-push! interp (error-value-name er))
+            (interp-error! interp "TypeError" "the \"error-name\" func expects an error"))))
+    
+    (define (error-message-func interp)
+      (let* ((er (stack-pop! interp)))
+        (if (error-value? er)
+            (stack-push! interp (error-value-message er))
+            (interp-error! interp "TypeError" "the \"error-message\" func expects an error"))))
+
+    (define error-func-dict
+      `(("error" . ,error-func)
+        ("error-name" . ,error-name-func)
+        ("error-message" . ,error-message-func)))))
