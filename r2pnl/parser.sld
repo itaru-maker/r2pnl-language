@@ -52,7 +52,7 @@
 	 ((string=? item "#false") #f) ;false
 	 ((string=? item "#nil") the-nil) ;nil
 
-	 ((string=? item "'" )
+         ((string=? item "'" )
 	  (raise-error-value! "ParseError" "value missing after single quote." item-line))
 	 ;;quote
 	 ((char=? (string-ref item 0) #\')

@@ -91,7 +91,7 @@
                         (+ line 1)
                         (flash-chars chars tokens line)))
 
-                 ((or (char=? #\space chr) (char=? #\tab chr) (char=? #\, chr));試験的に,も
+                 ((or (char=? #\space chr) (char=? #\tab chr))
                   (loop (+ i 1)
                         '()
                         #f

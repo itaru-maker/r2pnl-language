@@ -35,18 +35,31 @@
             (stack-push! interp (plist-lookup plist key interp))
             (interp-error! interp "TypeError" "the \"plist-lookup\" func expects a plist and an any value"))))
     
-    ;;V今度隠蔽するやつじゃなく、書き換えるやつにする(今のままだとremoveが使えない)
     (define (define-plist plist key value interp)
-      (let ((items (block-value-items plist)))
-        (make-block-value (cons (cons key (interp-token-line interp)) (cons (cons value (interp-token-line interp)) items)))))
+      (let ((items (block-value-items plist))
+            (line (interp-token-line interp)))
+        (if (not (plist-has? plist key interp))
+            (make-block-value
+             (cons (cons key (interp-token-line interp))
+                   (cons (cons value (interp-token-line interp)) items)))
+            (let loop ((acc '()) (rest items))
+              (if (value-equal? key (caar rest))
+                  (make-block-value
+                   (append (reverse acc)
+                           (cons (car rest) 
+                                 (cons (cons value line)
+                                       (cddr rest)))))
+                  (loop (cons (cadr rest) (cons (car rest) acc))
+                        (cddr rest)))))))
 
+    
     (define (plist-has?-func interp)
       (let* ((key (stack-pop! interp))
              (plist (stack-pop! interp)))
         (if (block-value? plist)
             (stack-push! interp (plist-has? plist key interp))
             (interp-error! interp "TypeError" "the \"plist-has?\" func expects a plist and an any value"))))
-
+    
     (define (define-plist-func interp)
       (let* ((value (stack-pop! interp))
              (key (stack-pop! interp))

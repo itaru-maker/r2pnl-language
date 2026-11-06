@@ -41,6 +41,7 @@
 'when { { } if } fn
 'unless { { } swap if } fn
 'dip { swap 1 pack concat do } fn
+'2dip { swap rot 2 pack concat do } fn
 'bi { { { dup } dip dip } dip do } fn
 
 !comp
