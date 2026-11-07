@@ -17,7 +17,7 @@
         drop #true
     } {
         { #true } { #false } if
-    }
+    } if
 } fn
 
 'and {
