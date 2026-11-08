@@ -43,4 +43,27 @@
                  (cdr pair)))
        tokens))
 
+(defun parse-paren (types)
+  (let ((rest types)
+        (stack (list (cons (make-block-value '() nil)))))
+    (loop while (not (null rest)) do
+          (cond
+           ((lparen-p (car stack))
+            (setq stack (cons (cons (make-block-value '()) (cdr (car rest))) stack))
+            (setq rest (cdr rest)))
+
+           ((rparen-p (caar rest))
+            (if (null (cdr stack))
+                (error "とじカッコが多すぎる！")
+              (let ((new-block (caar stack))
+                    (rest-stack (cdr stack))
+                    (line (cdar rest)))
+                (block-value-item-set! new-block (reverse (block-value-items new-block)))
+                (block-value-append! (caar rest-stack) (cons new-block line))))
+            (setq rest (cdr rest)))
+
+           (t
+            (block-value-append! (caar stack) (car rest))
+            (setq rest (cdr rest))))))
+
 

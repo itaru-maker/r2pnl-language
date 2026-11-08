@@ -69,7 +69,10 @@
              (name (stack-pop! interp)))
         (if (not (symbol-value? name))
             (interp-error!
-	     interp "TypeError" "the \"set\" func expect a symbol and a value ")
+	     interp "TypeError" (string-append "the \"set\" func expect a symbol and a value, but got "
+                                               (value->write-string v)
+                                               " and "
+                                               (value->write-string name)))
             (env-set! (interp-env interp) (symbol-value-token name) v))))
 
     (define (forget-func interp)
