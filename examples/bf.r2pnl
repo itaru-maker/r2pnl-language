@@ -1,0 +1,100 @@
+'make-jmp-map {
+    string->list
+    {
+        'jump-table { } var
+        'stack { } var
+
+        dup length 0 swap range {!list i
+            {
+                { over over nth "[" equal? } { 'stack over stack cons set }
+                { over over nth "]" equal? } {
+                    stack empty? {
+                        "開きカッコがたりません" raise
+                    } when
+
+                    stack head !list i start
+                    'stack stack tail set
+
+                    'jump-table jump-table 2 pick 4 pick define-plist set
+                    swap
+                    'jump-table jump-table 2 pick 4 roll define-plist set
+                }
+                { #true } { noop }
+            } cond
+            drop
+        } each
+        stack empty? not {
+            "とじカッコがたりません" raise
+        } when
+        drop
+        jump-table
+    } scope
+} fn
+
+!==========define-cmd=============
+
+!jmp-map memory ptr
+'bf> { 1+ } fn
+'bf< { 1- } fn
+
+'bf+ {
+    {
+        'ptr swap var
+        'memory swap var
+        'memory memory
+        ptr memory ptr nth 1+
+        set-nth set
+        memory ptr
+    } scope
+} fn
+
+'bf- {
+    {
+        'ptr swap var
+        'memory swap var
+        'memory memory
+        ptr memory ptr nth 1-
+        set-nth set
+        memory ptr
+    } scope
+} fn
+
+'bf. { 2dup nth integer->char print } fn
+
+!===================================
+
+'run-bf {
+    {
+        dup make-jmp-map 'jmp-map swap var
+        string->list 'prog swap var
+        'pc 0 var
+
+        { } 10000 { 0 swap cons } repeat
+        0
+        { pc prog length < } {
+            prog pc nth !cur
+            {
+                { dup "+" equal? } { drop bf+ }
+                { dup "-" equal? } { drop bf- }
+                { dup ">" equal? } { drop bf> }
+                { dup "<" equal? } { drop bf< }
+                { dup "." equal? } { drop bf. }
+                { dup "[" equal? } {
+                    drop
+                    2dup nth zero? { 'pc jmp-map pc plist-get set } when
+                }
+                { dup "]" equal? } {
+                    drop
+                    2dup nth zero? not { 'pc jmp-map pc plist-get set } when
+                }
+                { #true } { drop }
+            } cond
+            'pc pc 1+ set
+        } while
+        2drop
+    } scope
+} fn
+
+"
+++++++++[>+++++++++<-]>.<++++[>+++++++<-]>+.<>+++++++.<>.<>+++.<++++++[>-------<-]>.<+++++[>++++++++<-]>.<+++[>----<-]>.<>++.<++++[>++++<-]>.<
+" run-bf
