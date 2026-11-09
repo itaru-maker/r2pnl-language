@@ -1,0 +1,3 @@
+"aiueoaiueo" quote { quote? . } { print } bi newline
+
+''a unquote string? .

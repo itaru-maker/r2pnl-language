@@ -2,7 +2,8 @@
   (export convert-func-dict)
   (import (scheme base)
           (r2pnl values)
-          (r2pnl interpreter))
+          (r2pnl interpreter)
+          (r2pnl parser))
   (begin
     (define (->string-func interp)
       (let* ((v (stack-pop! interp)))
@@ -50,6 +51,15 @@
                            (string->list s))))
             (interp-error! interp "TypeError" "the \"string->list\" func expects a string" ))))
 
+    (define (quote-func interp)
+      (stack-push! interp (make-quote-value (stack-pop! interp))))
+
+    (define (unquote-func interp)
+      (let* ((quo (stack-pop! interp)))
+        (if (not (quote-value? quo))
+            (interp-error! interp "TypeError" "the \"unquote\" func expects a quote")
+            (stack-push! interp (parse-one-token (quote-value-token quo) (interp-token-line interp))))))
+
     (define convert-func-dict
       `(("->string" . ,->string-func)
         ("string->number" . ,string->number-func)
@@ -57,4 +67,6 @@
         ("symbol->string" . ,symbol->string-func)
         ("char->integer" . ,char->integer-func)
         ("integer->char" . ,integer->char-func)
-        ("string->list" . ,string->list-func)))))
+        ("string->list" . ,string->list-func)
+        ("quote" . ,quote-func)
+        ("unquote" . ,unquote-func)))))

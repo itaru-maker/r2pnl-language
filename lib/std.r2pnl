@@ -45,6 +45,10 @@
 'dip { swap 1 pack concat do } fn
 '2dip { swap rot 2 pack concat do } fn
 'bi { { { dup } dip dip } dip do } fn
+'bi* { { dip } dip call } fn
+'bi@ { dup bi* } fn
+'tri { { { keep } dip keep } dip call } fn
+'keep { over { call } dip } fn
 
 !comp
 '/= { = not } fn
@@ -71,11 +75,28 @@
 'uncons { { head } { tail } bi } fn
 '1block { 1 pack } fn
 
+!var
+'lfn {
+    1block { scope } concat fn
+} fn
+
+'bind {
+    reverse { swap var } each
+} fn
+
+!block
+'iota { 0 swap range } fn
+'1to { 1 swap 1+ range } fn !1からの閉
+'to { 1+ range } fn !閉区間
+
 !higher order
 'partition {
     2dup filter { { not } concat filter } dip swap
 } fn
 
-'member? { !list v
-    { equal? } cons filter length zero? not
-} fn
+'member? { { lst v } bind
+    lst { v equal? } any?
+} lfn
+
+'any? { filter empty? not } fn
+'all? { { not } concat any? not } fn 
