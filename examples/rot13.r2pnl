@@ -1,28 +1,28 @@
-'chars "abcdefghijklmnopqrstuvwxyzabcdefghijklmABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLM" var
+'alphabet? { !num -> boolean
+    {
+        { 65 >= } { 90 <= } bi and
+    } {
+        { 97 >= } { 122 <= } bi and
+    } bi or
+} fn
 
-'find-idx { !char -> num
-    #false !char found
-    0 65 range {
-        chars over nth 3 pick equal? 2 pick not and {
-            nip
-        } {
-            drop
-        } if
-    } each
-    nip
+'upper? {
+    { 65 >= } { 90 <= } bi and
 } fn
 
 'rot-char { !char -> newchar
-    dup find-idx !char idx
-
-    dup {
-        { drop } dip
-        chars swap 13 + nth
+    char->integer
+    dup alphabet? {
+        dup upper? {
+            65 - 13 + 26 % 65 +
+        } {
+            97 - 13 + 26 % 97 +
+        } if
     } {
-        drop !char
-    } if 
+        noop
+    } if
+    integer->char
 } fn
-
 
 'rot13 { !str -> newstr
     0 "" !str i acc
@@ -40,4 +40,5 @@
     "Common Lisp（コモン・リスプ）はプログラミング言語であり、Lisp方言の一つである。"
     "啓蟄"
     ""
+    "abcdefghijklmnopqrstuvwxyz"
 ] { rot13 dup . newline rot13 . newline } each
