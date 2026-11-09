@@ -1,5 +1,5 @@
 'fizzbuzz {
-    1 swap 1 + range {
+    1to {
         {
             { dup 15 %% } { drop "fizzbuzz" }
             { dup 5 %% } { drop "buzz" }

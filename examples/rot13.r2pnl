@@ -25,13 +25,8 @@
 } fn
 
 'rot13 { !str -> newstr
-    0 "" !str i acc
-    
-    { over 3 pick length < } { ! i < len str
-        2 pick 2 pick nth rot-char concat
-        { 1+ } dip !inc
-    } while
-    nip nip
+    string->list { rot-char } map
+    "" { concat } fold
 } fn
 
 [

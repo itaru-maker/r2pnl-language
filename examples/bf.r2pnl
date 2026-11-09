@@ -1,35 +1,34 @@
 'make-jmp-map {
     string->list
-    {
-        'jump-table { } var
-        'stack { } var
-
-        dup length 0 swap range {!list i
-            {
-                { over over nth "[" equal? } { 'stack over stack cons set }
-                { over over nth "]" equal? } {
-                    stack empty? {
-                        "開きカッコがたりません" raise
-                    } when
-
-                    stack head !list i start
-                    'stack stack tail set
-
-                    'jump-table jump-table 2 pick 4 pick define-plist set
-                    swap
-                    'jump-table jump-table 2 pick 4 roll define-plist set
-                }
-                { #true } { noop }
-            } cond
-            drop
-        } each
-        stack empty? not {
-            "とじカッコがたりません" raise
-        } when
+    'jump-table { } var
+    'stack { } var
+    
+    dup length iota {!list i
+        {
+            { over over nth "[" equal? } { 'stack over stack cons set }
+            { over over nth "]" equal? } {
+                stack empty? {
+                    "開きカッコがたりません" raise
+                } when
+                
+                stack head !list i start
+                'stack stack tail set
+                
+                'jump-table jump-table 2 pick 4 pick define-plist set
+                swap
+                'jump-table jump-table 2 pick 4 roll define-plist set
+            }
+            { #true } { noop }
+        } cond
         drop
-        jump-table
-    } scope
-} fn
+    } each
+    stack empty? not {
+        "とじカッコがたりません" raise
+    } when
+    drop
+    jump-table
+    
+} lfn
 
 !==========define-cmd=============
 
@@ -37,27 +36,19 @@
 'bf> { 1+ } fn
 'bf< { 1- } fn
 
-'bf+ {
-    {
-        'ptr swap var
-        'memory swap var
+'bf+ { { memory ptr } bind
         'memory memory
         ptr memory ptr nth 1+
         set-nth set
         memory ptr
-    } scope
-} fn
+} lfn
 
-'bf- {
-    {
-        'ptr swap var
-        'memory swap var
+'bf- { { memory ptr } bind
         'memory memory
         ptr memory ptr nth 1-
         set-nth set
         memory ptr
-    } scope
-} fn
+} lfn
 
 'bf. { 2dup nth integer->char print } fn
 
@@ -65,7 +56,8 @@
 
 'run-bf {
     {
-        dup make-jmp-map 'jmp-map swap var
+        dup make-jmp-map
+        'jmp-map swap var
         string->list 'prog swap var
         'pc 0 var
 

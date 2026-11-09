@@ -1,5 +1,4 @@
-'prime? {
-    'n swap var
+'prime? { 'n swap var
     {
         { n 1 <= } { #false }
         { n 2 = } { #true }
@@ -8,11 +7,10 @@
             2 n range { n swap %% } filter empty?
         }
     } cond
-    'n forget
-} fn
+} lfn
 
 'make-prime-list {
-    2 swap 1+ range { prime? } filter
+    2 swap to { prime? } filter
 } fn
 
 100 make-prime-list .

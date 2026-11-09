@@ -1,1 +1,1 @@
-1 101 range { dup 15 %% { drop 'fizzbuzz } { dup 5 %% { drop 'buzz } { dup 3 %% { drop 'fizz } { } if } if } if . newline } each
+100 1to { dup 15 %% { drop 'fizzbuzz } { dup 5 %% { drop 'buzz } { dup 3 %% { drop 'fizz } { } if } if } if . newline } each
