@@ -9,6 +9,7 @@
 '2dup { over over } fn
 'noop { } fn
 '2pick { 2 pick } fn
+'ndrop { { drop } repeat } fn
 
 !logic
 'not { { #false } { #true } if } fn

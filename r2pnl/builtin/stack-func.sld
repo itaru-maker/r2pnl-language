@@ -30,9 +30,13 @@
                      (loop (+ i 1) (car rest) (cons cur acc) (cdr rest))))))))
     
      (define (drop-func interp)
-      (stack-pop! interp))
+       (stack-pop! interp))
+
+     (define (clear-func interp)
+       (interp-stack-set! interp '()))
 
     (define stack-func-dict
       `(("pick" . ,pick-func)
         ("roll" . ,roll-func)
-        ("drop" . ,drop-func)))))
+        ("drop" . ,drop-func)
+        ("clear" . ,clear-func)))))
