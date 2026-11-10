@@ -1,0 +1,21 @@
+'table {
+    { 1 1 1 }
+    { 1 1 1 }
+    { 1 0 1 }
+} var
+
+{
+    table {
+        {
+            zero? {
+                "0を見つけた" raise
+            } when
+        } each
+    } each
+} {
+    dup "0を見つけた" equal? {
+        drop "終了" print
+    } {
+        "予期せぬエラー:" print print
+    } if
+} try

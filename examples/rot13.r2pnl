@@ -36,4 +36,4 @@
     "啓蟄"
     ""
     "abcdefghijklmnopqrstuvwxyz"
-] { rot13 dup . newline rot13 . newline } each
+] { rot13 { . newline } { rot13 . newlien } bi  } each
