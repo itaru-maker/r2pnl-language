@@ -99,4 +99,7 @@
 } lfn
 
 'any? { filter empty? not } fn
-'all? { { not } concat any? not } fn 
+'all? { { not } concat any? not } fn
+
+!io
+'newline { "\n" print } fn

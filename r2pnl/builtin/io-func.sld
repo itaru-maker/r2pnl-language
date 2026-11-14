@@ -15,9 +15,6 @@
        (value->display-string
         (stack-pop! interp))))
 
-    (define (newline-func interp)
-      (display "\n"))
-
     (define (write-stack-func interp)
       (display "\n=====debug=====\nbottom\n")
         (for-each (lambda (item) (display (value->write-string item)) (newline))
@@ -32,6 +29,5 @@
     (define io-func-dict
       `(("." . ,write-func)
         ("print" . ,print-func)
-        ("newline" . ,newline-func)
         (".s" . ,write-stack-func)
         ("input" . ,input-func)))))
