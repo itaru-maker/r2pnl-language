@@ -1,9 +1,5 @@
 'factorial {
-    dup 0 = {
-       drop 1
-    } {
-        dup 1 - factorial *
-    } if
+    1to 1 { * } fold
 } fn
 
-10 factorial print !-> 3628800
+10 factorial .

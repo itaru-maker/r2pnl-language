@@ -22,7 +22,6 @@
 
 100000 fib-loop . newline
 
-
 'fib-memo { { n memo } bind
     {
         { memo n plist-has? } { memo n plist-get }
@@ -37,5 +36,3 @@
 
 20 { } fib-memo . newline
 !plistはo(n)なので対して速くならない（というか遅くなる）
-
-
