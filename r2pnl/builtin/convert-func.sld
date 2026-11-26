@@ -15,19 +15,19 @@
             (if (string->number str)
                 (stack-push! interp (string->number str))
                 (stack-push! interp #f))
-            (interp-error! interp "TypeError" "the string->number func expects one string."))))
+            (interp-error! interp "TypeError" "the \"string->number\" func expects one string."))))
 
     (define (string->symbol-func interp)
       (let* ((str (stack-pop! interp)))
         (if (string? str)
             (stack-push! interp (make-symbol-value str))
-            (interp-error! interp "TypeError" "the string->symbol func expects one string."))))
+            (interp-error! interp "TypeError" "the \"string->symbol\" func expects one string."))))
 
     (define (symbol->string-func interp);string経由で変なsymbolも作れちゃうのは内緒
       (let* ((sym (stack-pop! interp)))
         (if (symbol-value? sym)
             (stack-push! interp (symbol-value-token sym))
-            (interp-error! interp "TypeError" "the symbol->string func expects one symbol-value"))))
+            (interp-error! interp "TypeError" "the \"symbol->string\" func expects one symbol-value"))))
 
     (define (char->integer-func interp)
       (let* ((ch (stack-pop! interp)))
@@ -39,7 +39,7 @@
       (let* ((i (stack-pop! interp)))
         (if (and (number? i) (not (negative? i)))
             (stack-push! interp (string (integer->char (exact i))))
-            (interp-error! interp "TypeError" "the \"char->integer\" func expects a non-negative integer."))))
+            (interp-error! interp "TypeError" "the \"integer->char\" func expects a non-negative integer."))))
 
     (define (string->list-func interp)
       (let* ((s (stack-pop! interp)))
